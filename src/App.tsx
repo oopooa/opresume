@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResumeStore } from '@/store/resume';
+import { useThemeEffect } from '@/hooks/useThemeEffect';
 
 function App() {
   const { config, loading, error, load } = useResumeStore();
   const { t } = useTranslation();
+  useThemeEffect();
 
   useEffect(() => {
     load();

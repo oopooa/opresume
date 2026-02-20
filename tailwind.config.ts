@@ -50,6 +50,10 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        resume: {
+          primary: 'var(--resume-primary)',
+          tag: 'var(--resume-tag)',
+        },
       },
     },
   },
