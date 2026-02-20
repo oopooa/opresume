@@ -12,4 +12,3 @@ export type {
 } from './resume';
 
 export type { ThemeConfig, PresetTheme } from './theme';
-export { PRESET_THEMES } from './theme';
