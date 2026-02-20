@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import i18n from '@/i18n';
 import type { ThemeConfig } from '@/types';
 
 interface UIStore {
@@ -23,7 +24,10 @@ export const useUIStore = create<UIStore>()(
 
       setTemplate: (template) => set({ template }),
 
-      setLang: (lang) => set({ lang }),
+      setLang: (lang) => {
+        i18n.changeLanguage(lang);
+        set({ lang });
+      },
     }),
     {
       name: 'opresume_ui',
@@ -32,6 +36,11 @@ export const useUIStore = create<UIStore>()(
         template: state.template,
         lang: state.lang,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.lang) {
+          i18n.changeLanguage(state.lang);
+        }
+      },
     },
   ),
 );

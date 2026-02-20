@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import i18n from '@/i18n';
 import type { ResumeConfig } from '@/types';
 import { loadConfig, saveConfig } from '@/services/resume';
 
@@ -24,7 +25,7 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
       const config = await loadConfig();
       set({ config, loading: false });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : '加载简历数据失败';
+      const msg = e instanceof Error ? e.message : i18n.t('common.loadError');
       set({ loading: false, error: msg });
     }
   },
@@ -35,7 +36,7 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     const next = { ...prev, ...partial };
     set({ config: next, saveError: null });
     saveConfig(next).catch((e) => {
-      const msg = e instanceof Error ? e.message : '保存失败';
+      const msg = e instanceof Error ? e.message : i18n.t('common.saveError');
       set({ saveError: msg });
     });
   },
