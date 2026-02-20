@@ -63,21 +63,21 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'time-range': {
       const arr = (value as [string?, string?]) ?? ['', ''];
       return (
-        <div>
+        <div className="min-w-0">
           <span className="mb-1 block text-xs text-gray-600">{label}</span>
           <div className="flex items-center gap-2">
             <input
               type="text"
               placeholder={t('field.startTime')}
-              className="flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
+              className="min-w-0 flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
               value={arr[0] ?? ''}
               onChange={(e) => onChange([e.target.value, arr[1] ?? ''])}
             />
-            <span className="text-gray-400">-</span>
+            <span className="shrink-0 text-gray-400">-</span>
             <input
               type="text"
               placeholder={t('field.endTime')}
-              className="flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
+              className="min-w-0 flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
               value={arr[1] ?? ''}
               onChange={(e) => onChange([arr[0] ?? '', e.target.value])}
             />
