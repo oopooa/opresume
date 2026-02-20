@@ -5,6 +5,7 @@ CLAUDE.md
 # 依赖包和构建输出
 node_modules
 dist
+*.tsbuildinfo
 
 # 环境变量
 *.local
