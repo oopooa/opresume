@@ -7,9 +7,12 @@ interface UIStore {
   theme: ThemeConfig;
   template: string;
   lang: string;
+  editingModule: string | null;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
+  openEditor: (module: string) => void;
+  closeEditor: () => void;
 }
 
 export const useUIStore = create<UIStore>()(
@@ -18,6 +21,7 @@ export const useUIStore = create<UIStore>()(
       theme: { color: '#2f5785', tagColor: '#8bc34a' },
       template: 'template1',
       lang: 'zh-CN',
+      editingModule: null,
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -28,6 +32,9 @@ export const useUIStore = create<UIStore>()(
         i18n.changeLanguage(lang);
         set({ lang });
       },
+
+      openEditor: (module) => set({ editingModule: module }),
+      closeEditor: () => set({ editingModule: null }),
     }),
     {
       name: 'opresume_ui',

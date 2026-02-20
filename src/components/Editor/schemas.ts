@@ -1,0 +1,120 @@
+export type FieldType = 'text' | 'textarea' | 'markdown' | 'number' | 'time-range' | 'select';
+
+export interface FieldDef {
+  key: string;
+  labelKey: string;
+  type: FieldType;
+  options?: { labelKey: string; value: string }[];
+}
+
+export interface ModuleSchema {
+  module: string;
+  dataKey: string;
+  isList: boolean;
+  fields: FieldDef[];
+  defaultItem?: () => Record<string, unknown>;
+}
+
+let _id = Date.now();
+function uid(prefix: string) {
+  return `${prefix}-${++_id}`;
+}
+
+export const schemas: ModuleSchema[] = [
+  {
+    module: 'profile',
+    dataKey: 'profile',
+    isList: false,
+    fields: [
+      { key: 'name', labelKey: 'field.name', type: 'text' },
+      { key: 'positionTitle', labelKey: 'field.positionTitle', type: 'text' },
+      { key: 'mobile', labelKey: 'field.mobile', type: 'text' },
+      { key: 'email', labelKey: 'field.email', type: 'text' },
+      { key: 'github', labelKey: 'field.github', type: 'text' },
+      { key: 'zhihu', labelKey: 'field.zhihu', type: 'text' },
+      { key: 'workPlace', labelKey: 'field.workPlace', type: 'text' },
+      { key: 'workExpYear', labelKey: 'field.workExpYear', type: 'text' },
+    ],
+  },
+  {
+    module: 'educationList',
+    dataKey: 'educationList',
+    isList: true,
+    fields: [
+      { key: 'school', labelKey: 'field.school', type: 'text' },
+      { key: 'major', labelKey: 'field.major', type: 'text' },
+      { key: 'academicDegree', labelKey: 'field.academicDegree', type: 'text' },
+      { key: 'eduTime', labelKey: 'field.eduTime', type: 'time-range' },
+    ],
+    defaultItem: () => ({ id: uid('edu'), school: '', major: '', academicDegree: '', eduTime: ['', ''] }),
+  },
+  {
+    module: 'workExpList',
+    dataKey: 'workExpList',
+    isList: true,
+    fields: [
+      { key: 'companyName', labelKey: 'field.companyName', type: 'text' },
+      { key: 'departmentName', labelKey: 'field.departmentName', type: 'text' },
+      { key: 'workTime', labelKey: 'field.workTime', type: 'time-range' },
+      { key: 'workDesc', labelKey: 'field.workDesc', type: 'markdown' },
+    ],
+    defaultItem: () => ({ id: uid('work'), companyName: '', departmentName: '', workTime: ['', ''], workDesc: '' }),
+  },
+  {
+    module: 'projectList',
+    dataKey: 'projectList',
+    isList: true,
+    fields: [
+      { key: 'projectName', labelKey: 'field.projectName', type: 'text' },
+      { key: 'projectRole', labelKey: 'field.projectRole', type: 'text' },
+      { key: 'projectTime', labelKey: 'field.projectTime', type: 'time-range' },
+      { key: 'projectDesc', labelKey: 'field.projectDesc', type: 'textarea' },
+      { key: 'projectContent', labelKey: 'field.projectContent', type: 'markdown' },
+    ],
+    defaultItem: () => ({ id: uid('proj'), projectName: '', projectRole: '', projectTime: ['', ''], projectDesc: '', projectContent: '' }),
+  },
+  {
+    module: 'skillList',
+    dataKey: 'skillList',
+    isList: true,
+    fields: [
+      { key: 'skillName', labelKey: 'field.skillName', type: 'text' },
+      { key: 'skillLevel', labelKey: 'field.skillLevel', type: 'number' },
+      { key: 'skillDesc', labelKey: 'field.skillDesc', type: 'text' },
+    ],
+    defaultItem: () => ({ id: uid('skill'), skillName: '', skillLevel: 50, skillDesc: '' }),
+  },
+  {
+    module: 'awardList',
+    dataKey: 'awardList',
+    isList: true,
+    fields: [
+      { key: 'awardInfo', labelKey: 'field.awardInfo', type: 'text' },
+      { key: 'awardTime', labelKey: 'field.awardTime', type: 'text' },
+    ],
+    defaultItem: () => ({ id: uid('award'), awardInfo: '', awardTime: '' }),
+  },
+  {
+    module: 'workList',
+    dataKey: 'workList',
+    isList: true,
+    fields: [
+      { key: 'workName', labelKey: 'field.workName', type: 'text' },
+      { key: 'workDesc', labelKey: 'field.workItemDesc', type: 'textarea' },
+      { key: 'visitLink', labelKey: 'field.visitLink', type: 'text' },
+    ],
+    defaultItem: () => ({ id: uid('portfolio'), workName: '', workDesc: '', visitLink: '' }),
+  },
+  {
+    module: 'aboutme',
+    dataKey: 'aboutme',
+    isList: false,
+    fields: [
+      { key: 'aboutmeDesc', labelKey: 'field.aboutmeDesc', type: 'markdown' },
+    ],
+  },
+];
+
+export function getSchema(module: string) {
+  return schemas.find((s) => s.module === module);
+}

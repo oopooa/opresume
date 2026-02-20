@@ -4,6 +4,7 @@ import { useResumeStore } from '@/store/resume';
 import { useThemeEffect } from '@/hooks/useThemeEffect';
 import { Toolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
+import { Editor } from '@/components/Editor';
 
 function App() {
   const { config, loading, error, load } = useResumeStore();
@@ -43,6 +44,7 @@ function App() {
       <main className="flex flex-1 justify-center overflow-auto py-8 print:overflow-visible print:py-0">
         <ResumeView config={config} />
       </main>
+      <Editor />
     </div>
   );
 }
