@@ -4,7 +4,7 @@ import { LayoutTemplate } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 
-const TEMPLATES = ['template1', 'template2', 'template3'] as const;
+const TEMPLATES = ['template1', 'template2', 'template3', 'template4'] as const;
 
 export function TemplateSelector() {
   const { t } = useTranslation();
