@@ -12,6 +12,7 @@ export interface ModuleSchema {
   dataKey: string;
   isList: boolean;
   fields: FieldDef[];
+  titleKey?: string;
   defaultItem?: () => Record<string, unknown>;
 }
 
@@ -40,6 +41,7 @@ export const schemas: ModuleSchema[] = [
     module: 'educationList',
     dataKey: 'educationList',
     isList: true,
+    titleKey: 'school',
     fields: [
       { key: 'school', labelKey: 'field.school', type: 'text' },
       { key: 'major', labelKey: 'field.major', type: 'text' },
@@ -52,6 +54,7 @@ export const schemas: ModuleSchema[] = [
     module: 'workExpList',
     dataKey: 'workExpList',
     isList: true,
+    titleKey: 'companyName',
     fields: [
       { key: 'companyName', labelKey: 'field.companyName', type: 'text' },
       { key: 'departmentName', labelKey: 'field.departmentName', type: 'text' },
@@ -64,6 +67,7 @@ export const schemas: ModuleSchema[] = [
     module: 'projectList',
     dataKey: 'projectList',
     isList: true,
+    titleKey: 'projectName',
     fields: [
       { key: 'projectName', labelKey: 'field.projectName', type: 'text' },
       { key: 'projectRole', labelKey: 'field.projectRole', type: 'text' },
@@ -77,6 +81,7 @@ export const schemas: ModuleSchema[] = [
     module: 'skillList',
     dataKey: 'skillList',
     isList: true,
+    titleKey: 'skillName',
     fields: [
       { key: 'skillName', labelKey: 'field.skillName', type: 'text' },
       { key: 'skillLevel', labelKey: 'field.skillLevel', type: 'number' },
@@ -88,6 +93,7 @@ export const schemas: ModuleSchema[] = [
     module: 'awardList',
     dataKey: 'awardList',
     isList: true,
+    titleKey: 'awardInfo',
     fields: [
       { key: 'awardInfo', labelKey: 'field.awardInfo', type: 'text' },
       { key: 'awardTime', labelKey: 'field.awardTime', type: 'text' },
@@ -98,6 +104,7 @@ export const schemas: ModuleSchema[] = [
     module: 'workList',
     dataKey: 'workList',
     isList: true,
+    titleKey: 'workName',
     fields: [
       { key: 'workName', labelKey: 'field.workName', type: 'text' },
       { key: 'workDesc', labelKey: 'field.workItemDesc', type: 'textarea' },

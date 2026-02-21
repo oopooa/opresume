@@ -8,6 +8,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "delete": "Delete",
+    "confirmDelete": "Confirm Delete",
+    "deleteHint": "Are you sure you want to delete <bold>{{name}}</bold>?",
     "add": "Add",
     "edit": "Edit",
     "dragSort": "Drag to sort",
