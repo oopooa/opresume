@@ -1,8 +1,7 @@
 import type { ResumeConfig } from '@/types';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle } from '../shared';
 
 interface Template2Props {
   config: ResumeConfig;
@@ -31,10 +30,8 @@ export function Template2({ config }: Template2Props) {
               <img
                 src={avatar.src}
                 alt={profile?.name ?? ''}
-                className={cn(
-                  'mx-auto mb-2 h-16 w-16 object-cover',
-                  avatar.shape === 'square' ? 'rounded-md' : 'rounded-full',
-                )}
+                className="mx-auto mb-2 object-cover"
+                style={avatarStyle(avatar)}
               />
             )}
             <h1 className="text-lg font-bold text-gray-900">{profile?.name}</h1>

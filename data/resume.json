@@ -1,7 +1,9 @@
 {
   "avatar": {
-    "shape": "circle",
-    "hidden": false
+    "width": 90,
+    "height": 90,
+    "borderRadius": 0,
+    "hidden": true
   },
   "profile": {
     "name": "张三",
@@ -15,7 +17,10 @@
   "educationList": [
     {
       "id": "edu-1",
-      "eduTime": ["2014.09", "2018.06"],
+      "eduTime": [
+        "2014.09",
+        "2018.06"
+      ],
       "school": "北京大学",
       "major": "计算机科学与技术",
       "academicDegree": "本科"
@@ -26,7 +31,10 @@
       "id": "work-1",
       "companyName": "某科技有限公司",
       "departmentName": "前端团队",
-      "workTime": ["2020.03", "至今"],
+      "workTime": [
+        "2020.03",
+        "至今"
+      ],
       "workDesc": "- 负责公司核心产品的前端架构设计与开发\n- 主导前端工程化建设，搭建 CI/CD 流水线\n- 推动组件库建设，提升团队开发效率"
     }
   ],
@@ -35,20 +43,51 @@
       "id": "proj-1",
       "projectName": "企业级管理后台",
       "projectRole": "前端负责人",
-      "projectTime": ["2022.01", "2023.06"],
+      "projectTime": [
+        "2022.01",
+        "2023.06"
+      ],
       "projectDesc": "基于 React + TypeScript 的企业级中后台管理系统",
       "projectContent": "- 设计并实现了可配置的动态表单引擎\n- 基于 RBAC 模型实现细粒度权限控制\n- 性能优化：首屏加载时间从 4s 降至 1.2s"
     }
   ],
   "skillList": [
-    { "id": "skill-1", "skillName": "React / TypeScript", "skillLevel": 90, "skillDesc": "熟练掌握" },
-    { "id": "skill-2", "skillName": "Vue / Nuxt", "skillLevel": 80, "skillDesc": "熟练使用" },
-    { "id": "skill-3", "skillName": "Node.js", "skillLevel": 70, "skillDesc": "能独立开发" },
-    { "id": "skill-4", "skillName": "CSS / Tailwind", "skillLevel": 85, "skillDesc": "熟练掌握" }
+    {
+      "id": "skill-1",
+      "skillName": "React / TypeScript",
+      "skillLevel": 90,
+      "skillDesc": "熟练掌握"
+    },
+    {
+      "id": "skill-2",
+      "skillName": "Vue / Nuxt",
+      "skillLevel": 80,
+      "skillDesc": "熟练使用"
+    },
+    {
+      "id": "skill-3",
+      "skillName": "Node.js",
+      "skillLevel": 70,
+      "skillDesc": "能独立开发"
+    },
+    {
+      "id": "skill-4",
+      "skillName": "CSS / Tailwind",
+      "skillLevel": 85,
+      "skillDesc": "熟练掌握"
+    }
   ],
   "awardList": [
-    { "id": "award-1", "awardInfo": "2022 年度优秀员工", "awardTime": "2022.12" },
-    { "id": "award-2", "awardInfo": "内部黑客马拉松一等奖", "awardTime": "2021.08" }
+    {
+      "id": "award-1",
+      "awardInfo": "2022 年度优秀员工",
+      "awardTime": "2022.12"
+    },
+    {
+      "id": "award-2",
+      "awardInfo": "内部黑客马拉松一等奖",
+      "awardTime": "2021.08"
+    }
   ],
   "workList": [
     {

@@ -1,7 +1,8 @@
 export interface Avatar {
   src?: string;
-  shape?: 'circle' | 'square';
-  size?: string;
+  width?: number;       // px，默认 90
+  height?: number;      // px，默认 90
+  borderRadius?: number; // px，0=无 8=中等 999=圆形
   hidden?: boolean;
 }
 

@@ -5,6 +5,7 @@ import { useThemeEffect } from '@/hooks/useThemeEffect';
 import { Toolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
 import { Editor } from '@/components/Editor';
+import { Toaster } from '@/components/ui/sonner';
 
 function App() {
   const { config, loading, error, load } = useResumeStore();
@@ -45,6 +46,7 @@ function App() {
         <ResumeView config={config} />
       </main>
       <Editor />
+      <Toaster />
     </div>
   );
 }

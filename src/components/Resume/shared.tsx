@@ -1,13 +1,17 @@
 import type { ReactNode } from 'react';
-import type { ResumeConfig } from '@/types';
+import type { ResumeConfig, Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
+
+const RING_STYLE = {
+  '--tw-ring-color': 'color-mix(in srgb, var(--resume-primary) 40%, transparent)',
+} as React.CSSProperties;
 
 export function EditableSection({ module, children }: { module: string; children: ReactNode }) {
   const openEditor = useUIStore((s) => s.openEditor);
   return (
     <div
       className="cursor-pointer rounded transition-shadow hover:ring-2 print:cursor-default print:hover:ring-0"
-      style={{ '--tw-ring-color': 'color-mix(in srgb, var(--resume-primary) 40%, transparent)' } as React.CSSProperties}
+      style={RING_STYLE}
       onClick={() => openEditor(module)}
       role="button"
       tabIndex={0}
@@ -35,4 +39,11 @@ export function getTitle(config: ResumeConfig, key: string, fallback: string) {
 
 export function isHidden(config: ResumeConfig, key: string) {
   return config.moduleHidden?.[key] === true;
+}
+
+export function avatarStyle(a?: Avatar): React.CSSProperties {
+  const w = a?.width ?? 90;
+  const h = a?.height ?? 90;
+  const r = a?.borderRadius ?? 999;
+  return { width: w, height: h, borderRadius: Math.min(r, Math.min(w, h) / 2) };
 }

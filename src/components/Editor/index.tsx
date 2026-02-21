@@ -4,9 +4,11 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
+import type { Avatar } from '@/types/resume';
 import { getSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
+import { AvatarEditor } from './AvatarEditor';
 
 export function Editor() {
   const { t } = useTranslation();
@@ -43,6 +45,11 @@ export function Editor() {
       update({ [schema.dataKey]: items });
     },
     [schema, update],
+  );
+
+  const handleAvatarChange = useCallback(
+    (avatar: Avatar) => update({ avatar }),
+    [update],
   );
 
   if (!config) return null;
@@ -97,11 +104,19 @@ export function Editor() {
               onChange={handleListChange}
             />
           ) : schema ? (
-            <FormCreator
-              fields={schema.fields}
-              data={(data as Record<string, unknown>) ?? {}}
-              onChange={handleFieldChange}
-            />
+            <>
+              {schema.module === 'profile' && (
+                <AvatarEditor
+                  avatar={config.avatar}
+                  onChange={handleAvatarChange}
+                />
+              )}
+              <FormCreator
+                fields={schema.fields}
+                data={(data as Record<string, unknown>) ?? {}}
+                onChange={handleFieldChange}
+              />
+            </>
           ) : null}
         </div>
       </aside>
