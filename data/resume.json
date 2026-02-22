@@ -100,15 +100,5 @@
   ],
   "aboutme": {
     "aboutmeDesc": "热爱前端技术，关注用户体验与工程效率。开源爱好者，乐于分享与协作。"
-  },
-  "titleNameMap": {
-    "profile": "基本信息",
-    "educationList": "教育经历",
-    "workExpList": "工作经历",
-    "projectList": "项目经历",
-    "skillList": "专业技能",
-    "awardList": "荣誉奖项",
-    "workList": "个人作品",
-    "aboutme": "自我评价"
   }
 }

@@ -73,7 +73,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'skillList') && config.skillList?.length && (
           <EditableSection module="skillList">
             <div className="mb-4">
-              <SectionTitle title={getTitle(config, 'skillList', '专业技能')} />
+              <SectionTitle title={getTitle(config, 'skillList', t('module.skillList'))} />
               {config.skillList.map((skill) => (
                 <SkillBar
                   key={skill.id}
@@ -89,7 +89,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'educationList') && config.educationList?.length && (
           <EditableSection module="educationList">
             <div className="mb-4">
-              <SectionTitle title={getTitle(config, 'educationList', '教育经历')} />
+              <SectionTitle title={getTitle(config, 'educationList', t('module.educationList'))} />
               {config.educationList.map((edu) => (
                 <div key={edu.id} className="mb-2">
                   <p className="text-xs font-semibold">{edu.school}</p>
@@ -107,7 +107,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'awardList') && config.awardList?.length && (
           <EditableSection module="awardList">
             <div className="mb-4">
-              <SectionTitle title={getTitle(config, 'awardList', '荣誉奖项')} />
+              <SectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} />
               {config.awardList.map((award) => (
                 <div key={award.id} className="mb-1 flex items-start justify-between text-xs">
                   <span>{award.awardInfo}</span>
@@ -127,7 +127,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'workExpList') && config.workExpList?.length && (
           <EditableSection module="workExpList">
             <section className="mb-4">
-              <SectionTitle title={getTitle(config, 'workExpList', '工作经历')} />
+              <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} />
               {config.workExpList.map((work) => (
                 <div key={work.id} className="mb-3">
                   <div className="flex items-start justify-between">
@@ -152,7 +152,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'projectList') && config.projectList?.length && (
           <EditableSection module="projectList">
             <section className="mb-4">
-              <SectionTitle title={getTitle(config, 'projectList', '项目经历')} />
+              <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} />
               {config.projectList.map((proj) => (
                 <div key={proj.id} className="mb-3">
                   <div className="flex items-start justify-between">
@@ -187,7 +187,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'workList') && config.workList?.length && (
           <EditableSection module="workList">
             <section className="mb-4">
-              <SectionTitle title={getTitle(config, 'workList', '个人作品')} />
+              <SectionTitle title={getTitle(config, 'workList', t('module.workList'))} />
               {config.workList.map((item) => (
                 <div key={item.id} className="mb-2">
                   <p className="text-sm font-semibold">
@@ -217,7 +217,7 @@ export function Template1({ config }: Template1Props) {
         {!isHidden(config, 'aboutme') && config.aboutme?.aboutmeDesc && (
           <EditableSection module="aboutme">
             <section className="mb-4">
-              <SectionTitle title={getTitle(config, 'aboutme', '自我评价')} />
+              <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} />
               <Markdown content={config.aboutme.aboutmeDesc} />
             </section>
           </EditableSection>

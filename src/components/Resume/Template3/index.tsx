@@ -98,8 +98,8 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'skillList') && config.skillList?.length && (
           <EditableSection module="skillList">
             <div className="mb-6">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-white">
-                {getTitle(config, 'skillList', '专业技能')}
+              <h3 className="mb-3 text-xs font-semibold text-white">
+                {getTitle(config, 'skillList', t('module.skillList'))}
               </h3>
               {config.skillList.map((skill) => (
                 <div key={skill.id} className="mb-2">
@@ -122,8 +122,8 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'educationList') && config.educationList?.length && (
           <EditableSection module="educationList">
             <div className="mb-6">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-white">
-                {getTitle(config, 'educationList', '教育经历')}
+              <h3 className="mb-3 text-xs font-semibold text-white">
+                {getTitle(config, 'educationList', t('module.educationList'))}
               </h3>
               {config.educationList.map((edu) => (
                 <div key={edu.id} className="mb-2">
@@ -142,8 +142,8 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'awardList') && config.awardList?.length && (
           <EditableSection module="awardList">
             <div className="mb-6">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-white">
-                {getTitle(config, 'awardList', '荣誉奖项')}
+              <h3 className="mb-3 text-xs font-semibold text-white">
+                {getTitle(config, 'awardList', t('module.awardList'))}
               </h3>
               {config.awardList.map((award) => (
                 <div key={award.id} className="mb-1.5 text-xs">
@@ -164,7 +164,7 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'workExpList') && config.workExpList?.length && (
           <EditableSection module="workExpList">
             <section className="mb-5">
-              <SectionTitle title={getTitle(config, 'workExpList', '工作经历')} />
+              <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} />
               {config.workExpList.map((work) => (
                 <div key={work.id} className="mb-4 rounded-lg border border-gray-100 bg-gray-50/50 p-3">
                   <div className="flex items-start justify-between">
@@ -187,7 +187,7 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'projectList') && config.projectList?.length && (
           <EditableSection module="projectList">
             <section className="mb-5">
-              <SectionTitle title={getTitle(config, 'projectList', '项目经历')} />
+              <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} />
               {config.projectList.map((proj) => (
                 <div key={proj.id} className="mb-4 rounded-lg border border-gray-100 bg-gray-50/50 p-3">
                   <div className="flex items-start justify-between">
@@ -215,7 +215,7 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'workList') && config.workList?.length && (
           <EditableSection module="workList">
             <section className="mb-5">
-              <SectionTitle title={getTitle(config, 'workList', '个人作品')} />
+              <SectionTitle title={getTitle(config, 'workList', t('module.workList'))} />
               <div className="grid grid-cols-2 gap-2">
                 {config.workList.map((item) => (
                   <div key={item.id} className="rounded-lg border border-gray-100 bg-gray-50/50 p-3">
@@ -245,7 +245,7 @@ export function Template3({ config }: Template3Props) {
         {!isHidden(config, 'aboutme') && config.aboutme?.aboutmeDesc && (
           <EditableSection module="aboutme">
             <section className="mb-5">
-              <SectionTitle title={getTitle(config, 'aboutme', '自我评价')} />
+              <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} />
               <div className="rounded-lg border border-gray-100 bg-gray-50/50 p-3">
                 <Markdown content={config.aboutme.aboutmeDesc} />
               </div>
