@@ -1,10 +1,15 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
 import type { Avatar } from '@/types/resume';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
 import { getSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
@@ -19,16 +24,6 @@ export function Editor() {
 
   const open = editingModule !== null;
   const schema = editingModule ? getSchema(editingModule) : undefined;
-
-  // ESC 关闭
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeEditor();
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [open, closeEditor]);
 
   const handleFieldChange = useCallback(
     (key: string, value: unknown) => {
@@ -59,43 +54,17 @@ export function Editor() {
     : undefined;
 
   return (
-    <>
-      {/* 遮罩层 */}
-      <div
-        className={cn(
-          'fixed inset-0 z-40 bg-black/30 transition-opacity print:hidden',
-          open ? 'opacity-100' : 'pointer-events-none opacity-0',
-        )}
-        onClick={closeEditor}
-        aria-hidden="true"
-      />
-
-      {/* 抽屉面板 */}
-      <aside
-        className={cn(
-          'fixed right-0 top-0 z-50 flex h-full w-[380px] flex-col bg-white shadow-xl transition-transform print:hidden',
-          open ? 'translate-x-0' : 'translate-x-full',
-        )}
-        role="dialog"
-        aria-modal="true"
-        aria-label={schema ? t(`module.${schema.module}`) : ''}
-      >
-        {/* 头部 */}
-        <div className="flex items-center justify-between border-b px-4 py-3">
-          <h2 className="text-sm font-semibold">
+    <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) closeEditor(); }}>
+      <SheetContent side="right" hideClose className="flex w-[380px] flex-col p-0 print:hidden sm:max-w-[380px]">
+        <SheetHeader className="border-b px-4 py-3">
+          <SheetTitle>
             {schema ? t(`module.${schema.module}`) : ''}
-          </h2>
-          <button
-            type="button"
-            aria-label={t('common.cancel')}
-            onClick={closeEditor}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+          </SheetTitle>
+          <SheetDescription className="sr-only">
+            {schema ? t(`module.${schema.module}`) : ''}
+          </SheetDescription>
+        </SheetHeader>
 
-        {/* 表单内容 */}
         <div className="flex-1 overflow-y-auto p-4">
           {schema && schema.isList ? (
             <ListEditor
@@ -119,7 +88,7 @@ export function Editor() {
             </>
           ) : null}
         </div>
-      </aside>
-    </>
+      </SheetContent>
+    </Sheet>
   );
 }

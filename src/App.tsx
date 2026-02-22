@@ -6,6 +6,7 @@ import { Toolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
 import { Editor } from '@/components/Editor';
 import { Toaster } from '@/components/ui/sonner';
+import { Button } from '@/components/ui/button';
 
 function App() {
   const { config, loading, error, load } = useResumeStore();
@@ -28,13 +29,9 @@ function App() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
         <p className="text-destructive">{error ?? t('common.loadError')}</p>
-        <button
-          type="button"
-          className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground"
-          onClick={() => load()}
-        >
+        <Button size="sm" onClick={() => load()}>
           {t('common.retry')}
-        </button>
+        </Button>
       </div>
     );
   }

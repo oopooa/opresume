@@ -15,14 +15,19 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import {
-  GripVertical,
-  Trash2,
-  Plus,
-  ChevronDown,
-  AlertTriangle,
-} from 'lucide-react';
+import { GripVertical, Trash2, Plus, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import type { ModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 
@@ -35,57 +40,6 @@ interface ListEditorProps {
 interface DeleteConfirm {
   index: number;
   title: string;
-}
-
-function ConfirmDialog({
-  title,
-  onConfirm,
-  onCancel,
-}: {
-  title: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
-  const { t } = useTranslation();
-
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/40"
-        onClick={onCancel}
-        aria-hidden="true"
-      />
-      <div className="relative w-[320px] rounded-xl bg-white p-5 shadow-2xl">
-        <div className="mb-3 flex items-center gap-2 text-red-500">
-          <AlertTriangle className="h-5 w-5" />
-          <span className="text-sm font-semibold">{t('common.confirmDelete')}</span>
-        </div>
-        <p className="mb-4 text-sm text-gray-600">
-          <Trans
-            i18nKey="common.deleteHint"
-            values={{ name: title }}
-            components={{ bold: <span className="font-semibold text-gray-900" /> }}
-          />
-        </p>
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-lg border border-gray-200 px-4 py-1.5 text-xs text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            {t('common.cancel')}
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="rounded-lg bg-red-500 px-4 py-1.5 text-xs text-white transition-colors hover:bg-red-600"
-          >
-            {t('common.delete')}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function SortableItem({
@@ -145,14 +99,15 @@ function SortableItem({
           {title}
         </button>
 
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6 text-destructive"
           aria-label={t('common.delete')}
           onClick={() => onRequestDelete(index, title)}
-          className="text-red-400 hover:text-red-600"
         >
           <Trash2 className="h-3.5 w-3.5" />
-        </button>
+        </Button>
 
         <button
           type="button"
@@ -254,22 +209,38 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
         </SortableContext>
       </DndContext>
       {schema.defaultItem && (
-        <button
-          type="button"
+        <Button
+          variant="default"
+          className="w-full gap-1.5"
           onClick={handleAdd}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-gray-800 py-2.5 text-xs text-white transition-colors hover:bg-gray-700"
         >
           <Plus className="h-3.5 w-3.5" />
           {t('common.add')}
-        </button>
+        </Button>
       )}
-      {deleteConfirm && (
-        <ConfirmDialog
-          title={deleteConfirm.title}
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setDeleteConfirm(null)}
-        />
-      )}
+
+      <AlertDialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
+        <AlertDialogContent className="max-w-[320px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <p className="text-sm text-muted-foreground">
+                <Trans
+                  i18nKey="common.deleteHint"
+                  values={{ name: deleteConfirm?.title ?? '' }}
+                  components={{ bold: <span className="font-semibold text-foreground" /> }}
+                />
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleConfirmDelete}>
+              {t('common.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

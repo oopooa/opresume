@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Printer } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { ThemePanel } from './ThemePanel';
 import { TemplateSelector } from './TemplateSelector';
 import { LangSwitcher } from './LangSwitcher';
@@ -15,14 +16,14 @@ export function Toolbar() {
         <ThemePanel />
         <LangSwitcher />
         <div className="mx-1 h-5 w-px bg-gray-200" />
-        <button
-          type="button"
+        <Button
+          size="sm"
+          className="gap-1.5"
           onClick={() => window.print()}
-          className="inline-flex items-center gap-1.5 rounded-md bg-resume-primary px-3 py-1.5 text-xs text-white transition-colors hover:opacity-90"
         >
           <Printer className="h-3.5 w-3.5" />
           {t('toolbar.print')}
-        </button>
+        </Button>
       </div>
     </header>
   );

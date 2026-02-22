@@ -1,4 +1,15 @@
 import { useTranslation } from 'react-i18next';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Slider } from '@/components/ui/slider';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 import type { FieldDef } from './schemas';
 
 interface FormFieldProps {
@@ -14,70 +25,67 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
   switch (field.type) {
     case 'text':
       return (
-        <label className="block">
-          <span className="mb-1 block text-xs text-gray-600">{label}</span>
-          <input
-            type="text"
-            className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
+        <div className="space-y-1">
+          <Label>{label}</Label>
+          <Input
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
           />
-        </label>
+        </div>
       );
 
     case 'textarea':
     case 'markdown':
       return (
-        <label className="block">
-          <span className="mb-1 block text-xs text-gray-600">{label}</span>
-          <textarea
-            className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
+        <div className="space-y-1">
+          <Label>{label}</Label>
+          <Textarea
             rows={field.type === 'markdown' ? 6 : 3}
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
           />
           {field.type === 'markdown' && (
-            <span className="text-xs text-gray-400">Markdown</span>
+            <span className="text-xs text-muted-foreground">Markdown</span>
           )}
-        </label>
+        </div>
       );
 
-    case 'number':
+    case 'number': {
+      const num = (value as number) ?? 50;
       return (
-        <label className="block">
-          <span className="mb-1 block text-xs text-gray-600">{label}</span>
+        <div className="space-y-1">
+          <Label>{label}</Label>
           <div className="flex items-center gap-2">
-            <input
-              type="range"
+            <Slider
+              className="flex-1"
               min={0}
               max={100}
-              className="flex-1"
-              value={(value as number) ?? 50}
-              onChange={(e) => onChange(Number(e.target.value))}
+              step={1}
+              value={[num]}
+              onValueChange={([v]) => onChange(v)}
             />
-            <span className="w-8 text-right text-xs text-gray-500">{(value as number) ?? 50}</span>
+            <span className="w-8 text-right text-xs text-muted-foreground">{num}</span>
           </div>
-        </label>
+        </div>
       );
+    }
 
     case 'time-range': {
       const arr = (value as [string?, string?]) ?? ['', ''];
       return (
-        <div className="min-w-0">
-          <span className="mb-1 block text-xs text-gray-600">{label}</span>
+        <div className="min-w-0 space-y-1">
+          <Label>{label}</Label>
           <div className="flex items-center gap-2">
-            <input
-              type="text"
+            <Input
+              className="min-w-0 flex-1"
               placeholder={t('field.startTime')}
-              className="min-w-0 flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
               value={arr[0] ?? ''}
               onChange={(e) => onChange([e.target.value, arr[1] ?? ''])}
             />
-            <span className="shrink-0 text-gray-400">-</span>
-            <input
-              type="text"
+            <span className="shrink-0 text-muted-foreground">-</span>
+            <Input
+              className="min-w-0 flex-1"
               placeholder={t('field.endTime')}
-              className="min-w-0 flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
               value={arr[1] ?? ''}
               onChange={(e) => onChange([arr[0] ?? '', e.target.value])}
             />
@@ -88,18 +96,21 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
 
     case 'select':
       return (
-        <label className="block">
-          <span className="mb-1 block text-xs text-gray-600">{label}</span>
-          <select
-            className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
-            value={(value as string) ?? ''}
-            onChange={(e) => onChange(e.target.value)}
-          >
-            {field.options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
-            ))}
-          </select>
-        </label>
+        <div className="space-y-1">
+          <Label>{label}</Label>
+          <Select value={(value as string) ?? ''} onValueChange={(v) => onChange(v)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options?.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {t(opt.labelKey)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       );
 
     default:

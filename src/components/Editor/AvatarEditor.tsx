@@ -4,6 +4,9 @@ import { Upload, Trash2, EyeOff, Eye, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { Avatar } from '@/types/resume';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -158,51 +161,50 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
 
       {/* 删除按钮 */}
       {hasSrc && (
-        <button
-          type="button"
-          className="flex items-center gap-1 text-xs text-red-500 hover:text-red-600"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1 text-destructive"
           onClick={() => set({ src: undefined })}
         >
           <Trash2 className="h-3 w-3" />
           {t('field.removeAvatar')}
-        </button>
+        </Button>
       )}
 
       {/* 在线链接 */}
-      <label className="block">
-        <span className="mb-1 block text-xs text-gray-600">{t('field.avatarLink')}</span>
-        <input
-          type="text"
-          className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-resume-primary"
+      <div className="space-y-1">
+        <Label>{t('field.avatarLink')}</Label>
+        <Input
           placeholder="https://example.com/avatar.png"
           value={avatar?.src?.startsWith('/') ? '' : avatar?.src ?? ''}
           onChange={(e) => set({ src: e.target.value || undefined })}
         />
-      </label>
+      </div>
 
       {/* 尺寸 */}
       <div>
-        <span className="mb-1 block text-xs text-gray-600">{t('field.avatarSize')}</span>
+        <Label className="mb-1 block">{t('field.avatarSize')}</Label>
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
-            <span className="text-xs text-gray-400">W</span>
-            <input
+            <span className="text-xs text-muted-foreground">W</span>
+            <Input
               type="number"
               min={20}
               max={200}
-              className="w-16 rounded border border-gray-300 px-2 py-1 text-center text-sm outline-none focus:border-resume-primary"
+              className="w-16 text-center"
               value={w}
               onChange={(e) => set({ width: Number(e.target.value) || 90 })}
             />
           </label>
-          <span className="text-xs text-gray-400">×</span>
+          <span className="text-xs text-muted-foreground">×</span>
           <label className="flex items-center gap-1">
-            <span className="text-xs text-gray-400">H</span>
-            <input
+            <span className="text-xs text-muted-foreground">H</span>
+            <Input
               type="number"
               min={20}
               max={200}
-              className="w-16 rounded border border-gray-300 px-2 py-1 text-center text-sm outline-none focus:border-resume-primary"
+              className="w-16 text-center"
               value={h}
               onChange={(e) => set({ height: Number(e.target.value) || 90 })}
             />
@@ -212,7 +214,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
 
       {/* 宽高比 */}
       <div>
-        <span className="mb-1 block text-xs text-gray-600">{t('field.aspectRatio')}</span>
+        <Label className="mb-1 block">{t('field.aspectRatio')}</Label>
         <div className="flex flex-wrap gap-1">
           {RATIOS.map((r) => (
             <PresetBtn
@@ -228,7 +230,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
 
       {/* 圆角 */}
       <div>
-        <span className="mb-1 block text-xs text-gray-600">{t('field.borderRadius')}</span>
+        <Label className="mb-1 block">{t('field.borderRadius')}</Label>
         <div className="flex flex-wrap gap-1">
           {RADIUS_PRESETS.map((p) => (
             <PresetBtn
