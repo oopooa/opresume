@@ -1,9 +1,10 @@
 {
   "avatar": {
     "width": 90,
-    "height": 90,
+    "height": 120,
     "borderRadius": 0,
-    "hidden": true
+    "hidden": true,
+    "src": "/api/avatar?t=1771774177071"
   },
   "profile": {
     "name": "张三",
