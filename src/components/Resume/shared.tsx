@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import type { ResumeConfig, Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
+import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 const RING_STYLE = {
   '--tw-ring-color': 'color-mix(in srgb, var(--resume-primary) 40%, transparent)',
@@ -46,6 +48,16 @@ export function avatarStyle(a?: Avatar): React.CSSProperties {
   const h = a?.height ?? 90;
   const r = a?.borderRadius ?? 999;
   return { width: w, height: h, borderRadius: Math.min(r, Math.min(w, h) / 2) };
+}
+
+export function ResumeAvatar({ avatar, name, className }: { avatar?: Avatar; name?: string; className?: string }) {
+  if (!avatar?.src || avatar.hidden) return null;
+  return (
+    <AvatarUI className={cn('h-auto w-auto rounded-none', className)} style={avatarStyle(avatar)}>
+      <AvatarImage src={avatar.src} alt={name ?? ''} className="object-cover" />
+      <AvatarFallback className="rounded-none text-xs">{name?.[0] ?? ''}</AvatarFallback>
+    </AvatarUI>
+  );
 }
 
 /** 根据生日计算周岁，未填写返回 null */

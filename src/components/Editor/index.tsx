@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { getSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
@@ -78,7 +80,8 @@ export function Editor() {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <ScrollArea className="flex-1">
+          <div className="p-4">
           {schema && schema.isList ? (
             <ListEditor
               schema={schema}
@@ -101,22 +104,22 @@ export function Editor() {
                     <div className="relative">
                       <Input
                         disabled
-                        className="pr-16"
+                        className="pr-14"
                         value={age !== null ? t('field.age', { age }) : ''}
                         placeholder={t('field.birthdayHint')}
                       />
                       {age !== null && (
-                        <span
-                          role="button"
-                          tabIndex={0}
-                          aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
-                          className="absolute inset-y-0 right-2 flex cursor-pointer items-center gap-0.5 text-xs text-muted-foreground/60 transition-colors hover:text-muted-foreground"
-                          onClick={() => handleFieldChange('ageHidden', !ageHidden)}
-                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldChange('ageHidden', !ageHidden); }}
-                        >
-                          {ageHidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-                          {t(ageHidden ? 'common.show' : 'common.hide')}
-                        </span>
+                        <div className="absolute inset-y-0 right-2 flex items-center">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-muted-foreground/60 hover:text-muted-foreground"
+                            aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
+                            onClick={() => handleFieldChange('ageHidden', !ageHidden)}
+                          >
+                            {ageHidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -131,7 +134,8 @@ export function Editor() {
               )}
             </>
           ) : null}
-        </div>
+          </div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );

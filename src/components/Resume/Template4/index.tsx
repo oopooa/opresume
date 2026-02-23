@@ -1,7 +1,7 @@
 import type { ResumeConfig } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle, calculateAge } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, ResumeAvatar, calculateAge } from '../shared';
 
 interface Template4Props {
   config: ResumeConfig;
@@ -42,14 +42,7 @@ export function Template4({ config }: Template4Props) {
         {/* 页头 */}
         <EditableSection module="profile">
         <div className="mb-5 flex items-center gap-4 border-b-2 border-resume-primary pb-4">
-          {avatar?.src && !avatar.hidden && (
-            <img
-              src={avatar.src}
-              alt={profile?.name ?? ''}
-              className="shrink-0 object-cover"
-              style={avatarStyle(avatar)}
-            />
-          )}
+          <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />
           <div>
             <h1 className="text-2xl font-bold text-resume-primary">{profile?.name}</h1>
             {profile?.positionTitle && (

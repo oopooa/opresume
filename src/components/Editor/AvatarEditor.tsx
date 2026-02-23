@@ -1,13 +1,16 @@
 import { useRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Upload, Trash2, EyeOff, Eye, ChevronDown } from 'lucide-react';
+import { Upload, Trash2, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { Avatar } from '@/types/resume';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { avatarStyle } from '@/components/Resume/shared';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -26,21 +29,6 @@ const RADIUS_PRESETS = [
 interface AvatarEditorProps {
   avatar?: Avatar;
   onChange: (avatar: Avatar) => void;
-}
-
-function PresetBtn({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      className={cn(
-        'rounded px-2.5 py-1 text-xs',
-        active ? 'bg-resume-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-      )}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
 }
 
 export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
@@ -105,16 +93,16 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
           className="flex w-full items-center justify-between py-1"
         >
           <span className="text-xs font-medium text-gray-700">{t('field.avatar')}</span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <span
               role="button"
               tabIndex={0}
-              className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:bg-accent hover:text-gray-600"
+              aria-label={t(hidden ? 'field.showAvatar' : 'field.hideAvatar')}
               onClick={(e) => { e.stopPropagation(); set({ hidden: !hidden }); }}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); set({ hidden: !hidden }); } }}
             >
               {hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-              {t(hidden ? 'field.showAvatar' : 'field.hideAvatar')}
             </span>
             <ChevronDown
               className={cn(
@@ -143,12 +131,13 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileRef.current?.click(); }}
       >
         {hasSrc ? (
-          <img
-            src={avatar!.src}
-            alt=""
-            className="mb-2 object-cover"
-            style={{ width: w, height: h, borderRadius: Math.min(radius, Math.min(w, h) / 2) }}
-          />
+          <AvatarUI
+            className="mb-2 h-auto w-auto rounded-none"
+            style={avatarStyle(avatar)}
+          >
+            <AvatarImage src={avatar!.src} alt="" className="object-cover" />
+            <AvatarFallback className="rounded-none text-xs text-muted-foreground">N/A</AvatarFallback>
+          </AvatarUI>
         ) : (
           <Upload className="mb-2 h-8 w-8 text-gray-400" />
         )}
@@ -215,33 +204,40 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
       {/* 宽高比 */}
       <div>
         <Label className="mb-1 block">{t('field.aspectRatio')}</Label>
-        <div className="flex flex-wrap gap-1">
+        <ToggleGroup
+          type="single"
+          size="sm"
+          value={activeRatio?.label ?? ''}
+          onValueChange={(val) => {
+            const r = RATIOS.find((r) => r.label === val);
+            if (r) set({ height: Math.round(w * r.h / r.w) });
+          }}
+        >
           {RATIOS.map((r) => (
-            <PresetBtn
-              key={r.label}
-              active={activeRatio === r}
-              onClick={() => set({ height: Math.round(w * r.h / r.w) })}
-            >
+            <ToggleGroupItem key={r.label} value={r.label} className="text-xs">
               {r.label}
-            </PresetBtn>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
       </div>
 
       {/* 圆角 */}
       <div>
         <Label className="mb-1 block">{t('field.borderRadius')}</Label>
-        <div className="flex flex-wrap gap-1">
+        <ToggleGroup
+          type="single"
+          size="sm"
+          value={String(radius)}
+          onValueChange={(val) => {
+            if (val) set({ borderRadius: Number(val) });
+          }}
+        >
           {RADIUS_PRESETS.map((p) => (
-            <PresetBtn
-              key={p.value}
-              active={radius === p.value}
-              onClick={() => set({ borderRadius: p.value })}
-            >
+            <ToggleGroupItem key={p.value} value={String(p.value)} className="text-xs">
               {t(p.labelKey)}
-            </PresetBtn>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
       </div>
       </CollapsibleContent>
     </Collapsible>
