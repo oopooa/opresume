@@ -28,6 +28,7 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import type { ModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 
@@ -75,65 +76,71 @@ function SortableItem({
   );
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="rounded-lg border border-gray-200 bg-white"
-    >
-      <div className="flex items-center gap-2 px-3 py-2.5">
-        <button
-          type="button"
-          aria-label={t('common.dragSort')}
-          {...attributes}
-          {...listeners}
-          className="cursor-grab text-gray-300 hover:text-gray-500"
-        >
-          <GripVertical className="h-4 w-4" />
-        </button>
+    <Collapsible open={expanded} onOpenChange={setExpanded} asChild>
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="rounded-lg border border-gray-200 bg-white"
+      >
+        <div className="flex items-center gap-2 px-3 py-2.5">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 cursor-grab text-gray-300 hover:text-gray-500"
+            aria-label={t('common.dragSort')}
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-4 w-4" />
+          </Button>
 
-        <button
-          type="button"
-          className="flex-1 truncate text-left text-sm text-gray-700"
-          onClick={() => setExpanded((v) => !v)}
-        >
-          {title}
-        </button>
+          <CollapsibleTrigger asChild>
+            <button
+              type="button"
+              className="flex-1 truncate text-left text-sm text-gray-700"
+            >
+              {title}
+            </button>
+          </CollapsibleTrigger>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 text-destructive"
-          aria-label={t('common.delete')}
-          onClick={() => onRequestDelete(index, title)}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 text-destructive"
+            aria-label={t('common.delete')}
+            onClick={() => onRequestDelete(index, title)}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
 
-        <button
-          type="button"
-          aria-label={expanded ? t('common.collapse') : t('common.expand')}
-          onClick={() => setExpanded((v) => !v)}
-          className="text-gray-400 hover:text-gray-600"
-        >
-          <ChevronDown
-            className={cn(
-              'h-4 w-4 transition-transform duration-200',
-              expanded && 'rotate-180',
-            )}
-          />
-        </button>
-      </div>
-
-      {expanded && (
-        <div className="border-t border-gray-100 px-3 pb-3 pt-2">
-          <FormCreator
-            fields={schema.fields}
-            data={item}
-            onChange={handleChange}
-          />
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 text-gray-400 hover:text-gray-600"
+              aria-label={expanded ? t('common.collapse') : t('common.expand')}
+            >
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 transition-transform duration-200',
+                  expanded && 'rotate-180',
+                )}
+              />
+            </Button>
+          </CollapsibleTrigger>
         </div>
-      )}
-    </div>
+
+        <CollapsibleContent>
+          <div className="border-t border-gray-100 px-3 pb-3 pt-2">
+            <FormCreator
+              fields={schema.fields}
+              data={item}
+              onChange={handleChange}
+            />
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
   );
 }
 

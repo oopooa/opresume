@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { ThemePanel } from './ThemePanel';
 import { TemplateSelector } from './TemplateSelector';
 import { LangSwitcher } from './LangSwitcher';
@@ -15,7 +16,7 @@ export function Toolbar() {
         <TemplateSelector />
         <ThemePanel />
         <LangSwitcher />
-        <div className="mx-1 h-5 w-px bg-gray-200" />
+        <Separator orientation="vertical" className="mx-1 h-5" />
         <Button
           size="sm"
           className="gap-1.5"

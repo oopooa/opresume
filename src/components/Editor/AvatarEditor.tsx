@@ -7,6 +7,7 @@ import type { Avatar } from '@/types/resume';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -97,36 +98,35 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
   const activeRatio = RATIOS.find((r) => Math.abs(w / h - r.w / r.h) < 0.01);
 
   return (
-    <div className="mb-4 border-b border-gray-100 pb-4">
-      {/* 折叠头 */}
-      <button
-        type="button"
-        className="flex w-full items-center justify-between py-1"
-        onClick={() => setExpanded((v) => !v)}
-      >
-        <span className="text-xs font-medium text-gray-700">{t('field.avatar')}</span>
-        <div className="flex items-center gap-2">
-          <span
-            role="button"
-            tabIndex={0}
-            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
-            onClick={(e) => { e.stopPropagation(); set({ hidden: !hidden }); }}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); set({ hidden: !hidden }); } }}
-          >
-            {hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-            {t(hidden ? 'field.showAvatar' : 'field.hideAvatar')}
-          </span>
-          <ChevronDown
-            className={cn(
-              'h-4 w-4 text-gray-400 transition-transform duration-200',
-              expanded && 'rotate-180',
-            )}
-          />
-        </div>
-      </button>
+    <Collapsible open={expanded} onOpenChange={setExpanded} className="mb-4 border-b border-gray-100 pb-4">
+      <CollapsibleTrigger asChild>
+        <button
+          type="button"
+          className="flex w-full items-center justify-between py-1"
+        >
+          <span className="text-xs font-medium text-gray-700">{t('field.avatar')}</span>
+          <div className="flex items-center gap-2">
+            <span
+              role="button"
+              tabIndex={0}
+              className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+              onClick={(e) => { e.stopPropagation(); set({ hidden: !hidden }); }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); set({ hidden: !hidden }); } }}
+            >
+              {hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+              {t(hidden ? 'field.showAvatar' : 'field.hideAvatar')}
+            </span>
+            <ChevronDown
+              className={cn(
+                'h-4 w-4 text-gray-400 transition-transform duration-200',
+                expanded && 'rotate-180',
+              )}
+            />
+          </div>
+        </button>
+      </CollapsibleTrigger>
 
-      {expanded && (
-      <div className="mt-3 space-y-3">
+      <CollapsibleContent className="mt-3 space-y-3">
 
       {/* 上传区域 */}
       <div
@@ -243,8 +243,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
           ))}
         </div>
       </div>
-      </div>
-      )}
-    </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

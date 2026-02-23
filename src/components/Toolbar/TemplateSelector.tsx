@@ -22,19 +22,20 @@ export function TemplateSelector() {
       </PopoverTrigger>
       <PopoverContent align="end" className="w-40 p-1">
         {TEMPLATES.map((key) => (
-          <button
+          <Button
             key={key}
-            type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => setTemplate(key)}
             className={cn(
-              'w-full rounded-sm px-3 py-1.5 text-left text-xs transition-colors',
+              'w-full justify-start text-xs',
               template === key
                 ? 'bg-accent font-medium text-resume-primary'
-                : 'text-gray-600 hover:bg-accent',
+                : 'text-gray-600',
             )}
           >
             {t(`template.${key}`)}
-          </button>
+          </Button>
         ))}
       </PopoverContent>
     </Popover>
