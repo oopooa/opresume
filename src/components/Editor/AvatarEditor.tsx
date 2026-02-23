@@ -98,7 +98,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
               role="button"
               tabIndex={0}
               className="inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:bg-accent hover:text-gray-600"
-              aria-label={t(hidden ? 'field.showAvatar' : 'field.hideAvatar')}
+              aria-label={t(hidden ? 'common.show' : 'common.hide')}
               onClick={(e) => { e.stopPropagation(); set({ hidden: !hidden }); }}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); set({ hidden: !hidden }); } }}
             >
