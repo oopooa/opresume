@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,6 +19,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 import { useResumeStore } from '@/store/resume';
 import type { FieldDef } from './schemas';
 
@@ -84,6 +85,98 @@ interface FormFieldProps {
   onChange: (value: unknown) => void;
 }
 
+/** 年月选择器（Popover + 年份导航 + 月份网格） */
+function MonthPicker({ value, onChange, placeholder, minYear, showPresent }: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  minYear?: number | null;
+  showPresent?: boolean;
+}) {
+  const { t, i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  const parsed = value.match(/^(\d{4})\.(\d{2})$/);
+  const selectedYear = parsed ? Number(parsed[1]) : null;
+  const selectedMonth = parsed ? Number(parsed[2]) : null;
+  const isPresent = value === 'present' || (!!value && !parsed);
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const floor = minYear ?? 1970;
+
+  const [viewYear, setViewYear] = useState(() => selectedYear ?? currentYear);
+
+  const months = Array.from({ length: 12 }, (_, i) =>
+    new Date(2024, i).toLocaleDateString(i18n.language, { month: 'short' }),
+  );
+
+  return (
+    <Popover open={open} onOpenChange={(v) => { setOpen(v); if (v) setViewYear(selectedYear ?? currentYear); }}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-full justify-between font-normal">
+          {value
+            ? <span>{isPresent ? t('field.present') : value}</span>
+            : <span className="text-muted-foreground">{placeholder}</span>}
+          <CalendarIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[220px] p-3" align="start">
+        {/* 年份导航 */}
+        <div className="mb-2 flex items-center justify-between">
+          <Button variant="ghost" size="icon" className="h-7 w-7"
+            disabled={viewYear <= floor}
+            onClick={() => setViewYear((y) => y - 1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">{viewYear}</span>
+          <Button variant="ghost" size="icon" className="h-7 w-7"
+            disabled={viewYear >= currentYear}
+            onClick={() => setViewYear((y) => y + 1)}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+        {/* 月份网格 */}
+        <div className="grid grid-cols-3 gap-1">
+          {months.map((name, i) => {
+            const m = i + 1;
+            const isSelected = selectedYear === viewYear && selectedMonth === m;
+            const isFuture = viewYear === currentYear && m > currentMonth;
+            const isBelowMin = viewYear < floor;
+            return (
+              <Button
+                key={m}
+                variant={isSelected ? 'default' : 'ghost'}
+                size="sm"
+                className={cn('text-xs', isSelected && 'pointer-events-none')}
+                disabled={isFuture || isBelowMin}
+                onClick={() => {
+                  onChange(`${viewYear}.${String(m).padStart(2, '0')}`);
+                  setOpen(false);
+                }}
+              >
+                {name}
+              </Button>
+            );
+          })}
+        </div>
+        {/* 至今选项 */}
+        {showPresent && (
+          <Button
+            variant={isPresent ? 'default' : 'outline'}
+            size="sm"
+            className="mt-2 w-full text-xs"
+            onClick={() => { onChange('present'); setOpen(false); }}
+          >
+            {t('field.present')}
+          </Button>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 /** 带生日约束的时间范围输入 */
 function TimeRangeField({ field, value, onChange }: FormFieldProps) {
   const { t } = useTranslation();
@@ -114,19 +207,23 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
     <div className="min-w-0 space-y-1">
       <Label>{label}</Label>
       <div className="flex items-center gap-2">
-        <Input
-          className="min-w-0 flex-1"
-          placeholder={t('field.startTime')}
-          value={arr[0] ?? ''}
-          onChange={(e) => handleStartChange(e.target.value)}
-        />
+        <div className="min-w-0 flex-1">
+          <MonthPicker
+            value={arr[0] ?? ''}
+            onChange={handleStartChange}
+            placeholder={t('field.startTime')}
+            minYear={minYear}
+          />
+        </div>
         <span className="shrink-0 text-muted-foreground">-</span>
-        <Input
-          className="min-w-0 flex-1"
-          placeholder={t('field.endTime')}
-          value={arr[1] ?? ''}
-          onChange={(e) => onChange([arr[0] ?? '', e.target.value])}
-        />
+        <div className="min-w-0 flex-1">
+          <MonthPicker
+            value={arr[1] ?? ''}
+            onChange={(v) => onChange([arr[0] ?? '', v])}
+            placeholder={t('field.endTime')}
+            showPresent={field.showPresent}
+          />
+        </div>
       </div>
       {startError && (
         <p className="text-xs text-destructive">{startError}</p>

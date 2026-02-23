@@ -94,6 +94,8 @@
     "aboutmeDesc": "自我评价",
     "startTime": "开始时间",
     "endTime": "结束时间",
+    "present": "至今",
+    "selectMonth": "选择年月",
     "eduTimeMinError": "开始时间不能早于{{year}}年（需年满15岁）"
   },
   "template": {

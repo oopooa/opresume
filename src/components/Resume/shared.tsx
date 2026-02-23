@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ResumeConfig, Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
+import { useTranslation } from 'react-i18next';
 import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
@@ -25,12 +26,18 @@ export function EditableSection({ module, children }: { module: string; children
 }
 
 export function TimeRange({ time }: { time?: [string?, string?] }) {
+  const { t } = useTranslation();
   if (!time) return null;
   const [start, end] = time;
   if (!start && !end) return null;
+  const display = (v?: string) => {
+    if (!v) return '';
+    if (v === 'present' || v === '至今' || v === 'Present') return t('field.present');
+    return v;
+  };
   return (
     <span className="text-xs text-gray-500">
-      {start}{start && end ? ' - ' : ''}{end}
+      {display(start)}{start && end ? ' - ' : ''}{display(end)}
     </span>
   );
 }

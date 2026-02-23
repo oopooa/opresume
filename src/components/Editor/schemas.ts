@@ -7,6 +7,8 @@ export interface FieldDef {
   options?: { labelKey: string; value: string }[];
   /** 时间范围起始值需满足：出生年 + minFromBirthday */
   minFromBirthday?: number;
+  /** 时间范围结束日期是否显示「至今」选项 */
+  showPresent?: boolean;
 }
 
 export interface ModuleSchema {
@@ -61,7 +63,7 @@ export const schemas: ModuleSchema[] = [
     fields: [
       { key: 'companyName', labelKey: 'field.companyName', type: 'text' },
       { key: 'departmentName', labelKey: 'field.departmentName', type: 'text' },
-      { key: 'workTime', labelKey: 'field.workTime', type: 'time-range' },
+      { key: 'workTime', labelKey: 'field.workTime', type: 'time-range', showPresent: true },
       { key: 'workDesc', labelKey: 'field.workDesc', type: 'markdown' },
     ],
     defaultItem: () => ({ id: uid('work'), companyName: '', departmentName: '', workTime: ['', ''], workDesc: '' }),
@@ -74,7 +76,7 @@ export const schemas: ModuleSchema[] = [
     fields: [
       { key: 'projectName', labelKey: 'field.projectName', type: 'text' },
       { key: 'projectRole', labelKey: 'field.projectRole', type: 'text' },
-      { key: 'projectTime', labelKey: 'field.projectTime', type: 'time-range' },
+      { key: 'projectTime', labelKey: 'field.projectTime', type: 'time-range', showPresent: true },
       { key: 'projectDesc', labelKey: 'field.projectDesc', type: 'textarea' },
       { key: 'projectContent', labelKey: 'field.projectContent', type: 'markdown' },
     ],
