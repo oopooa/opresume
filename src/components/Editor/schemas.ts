@@ -5,8 +5,6 @@ export interface FieldDef {
   labelKey: string;
   type: FieldType;
   options?: { labelKey: string; value: string }[];
-  /** 时间范围起始值需满足：出生年 + minFromBirthday */
-  minFromBirthday?: number;
   /** 时间范围结束日期是否显示「至今」选项 */
   showPresent?: boolean;
 }
@@ -51,7 +49,7 @@ export const schemas: ModuleSchema[] = [
       { key: 'school', labelKey: 'field.school', type: 'text' },
       { key: 'major', labelKey: 'field.major', type: 'text' },
       { key: 'academicDegree', labelKey: 'field.academicDegree', type: 'text' },
-      { key: 'eduTime', labelKey: 'field.eduTime', type: 'time-range', minFromBirthday: 15 },
+      { key: 'eduTime', labelKey: 'field.eduTime', type: 'time-range' },
     ],
     defaultItem: () => ({ id: uid('edu'), school: '', major: '', academicDegree: '', eduTime: ['', ''] }),
   },

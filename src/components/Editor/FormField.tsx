@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -85,12 +85,14 @@ interface FormFieldProps {
   onChange: (value: unknown) => void;
 }
 
-/** 年月选择器（Popover + 年份导航 + 月份网格） */
-function MonthPicker({ value, onChange, placeholder, minYear, showPresent }: {
+/** 年月选择器（Popover + 年份下拉 + 月份网格） */
+function MonthPicker({ value, onChange, placeholder, minYear, minMonth, showPresent }: {
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
   minYear?: number | null;
+  /** 仅当 viewYear === minYear 时生效，1-12 */
+  minMonth?: number | null;
   showPresent?: boolean;
 }) {
   const { t, i18n } = useTranslation();
@@ -123,19 +125,21 @@ function MonthPicker({ value, onChange, placeholder, minYear, showPresent }: {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-3" align="start">
-        {/* 年份导航 */}
-        <div className="mb-2 flex items-center justify-between">
-          <Button variant="ghost" size="icon" className="h-7 w-7"
-            disabled={viewYear <= floor}
-            onClick={() => setViewYear((y) => y - 1)}>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm font-medium">{viewYear}</span>
-          <Button variant="ghost" size="icon" className="h-7 w-7"
-            disabled={viewYear >= currentYear}
-            onClick={() => setViewYear((y) => y + 1)}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+        {/* 年份下拉 */}
+        <div className="mb-2">
+          <Select value={String(viewYear)} onValueChange={(v) => setViewYear(Number(v))}>
+            <SelectTrigger className="h-8 w-full text-sm font-medium">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Array.from({ length: currentYear - floor + 1 }, (_, i) => {
+                const y = currentYear - i;
+                return (
+                  <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </div>
         {/* 月份网格 */}
         <div className="grid grid-cols-3 gap-1">
@@ -144,13 +148,14 @@ function MonthPicker({ value, onChange, placeholder, minYear, showPresent }: {
             const isSelected = selectedYear === viewYear && selectedMonth === m;
             const isFuture = viewYear === currentYear && m > currentMonth;
             const isBelowMin = viewYear < floor;
+            const isBeforeMin = viewYear === floor && !!minMonth && m < minMonth;
             return (
               <Button
                 key={m}
                 variant={isSelected ? 'default' : 'ghost'}
                 size="sm"
                 className={cn('text-xs', isSelected && 'pointer-events-none')}
-                disabled={isFuture || isBelowMin}
+                disabled={isFuture || isBelowMin || isBeforeMin}
                 onClick={() => {
                   onChange(`${viewYear}.${String(m).padStart(2, '0')}`);
                   setOpen(false);
@@ -183,25 +188,20 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
   const label = t(field.labelKey);
   const arr = (value as [string?, string?]) ?? ['', ''];
   const birthday = useResumeStore((s) => s.config?.profile?.birthday);
-  const [startError, setStartError] = useState('');
 
+  // 起始年份下限：出生年 + 15
   let minYear: number | null = null;
-  if (field.minFromBirthday && birthday) {
+  if (birthday) {
     const birthYear = new Date(birthday).getFullYear();
-    if (!isNaN(birthYear)) minYear = birthYear + field.minFromBirthday;
+    if (!isNaN(birthYear)) minYear = birthYear + 15;
   }
 
-  const handleStartChange = (raw: string) => {
-    if (minYear) {
-      const y = parseYear(raw);
-      if (y !== null && y < minYear) {
-        setStartError(t('field.eduTimeMinError', { year: minYear }));
-        return;
-      }
-    }
-    setStartError('');
-    onChange([raw, arr[1] ?? '']);
-  };
+  // 结束时间下限：不早于开始时间
+  const startYear = parseYear(arr[0] ?? '');
+  const startMonthMatch = (arr[0] ?? '').match(/^\d{4}\.(\d{2})$/);
+  const startMonth = startMonthMatch ? Number(startMonthMatch[1]) : null;
+  const endMinYear = startYear ?? minYear;
+  const endMinMonth = startYear ? startMonth : null;
 
   return (
     <div className="min-w-0 space-y-1">
@@ -210,7 +210,7 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
         <div className="min-w-0 flex-1">
           <MonthPicker
             value={arr[0] ?? ''}
-            onChange={handleStartChange}
+            onChange={(v) => onChange([v, arr[1] ?? ''])}
             placeholder={t('field.startTime')}
             minYear={minYear}
           />
@@ -221,13 +221,12 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
             value={arr[1] ?? ''}
             onChange={(v) => onChange([arr[0] ?? '', v])}
             placeholder={t('field.endTime')}
+            minYear={endMinYear}
+            minMonth={endMinMonth}
             showPresent={field.showPresent}
           />
         </div>
       </div>
-      {startError && (
-        <p className="text-xs text-destructive">{startError}</p>
-      )}
     </div>
   );
 }

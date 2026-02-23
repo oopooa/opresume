@@ -93,8 +93,7 @@
     "startTime": "Start",
     "endTime": "End",
     "present": "Present",
-    "selectMonth": "Select month",
-    "eduTimeMinError": "Start time cannot be earlier than {{year}} (must be at least 15 years old)"
+    "selectMonth": "Select month"
   },
   "template": {
     "template1": "Classic",
