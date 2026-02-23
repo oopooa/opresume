@@ -1,10 +1,12 @@
-export type FieldType = 'text' | 'textarea' | 'markdown' | 'number' | 'time-range' | 'select';
+export type FieldType = 'text' | 'textarea' | 'markdown' | 'number' | 'time-range' | 'select' | 'date';
 
 export interface FieldDef {
   key: string;
   labelKey: string;
   type: FieldType;
   options?: { labelKey: string; value: string }[];
+  /** 时间范围起始值需满足：出生年 + minFromBirthday */
+  minFromBirthday?: number;
 }
 
 export interface ModuleSchema {
@@ -28,6 +30,7 @@ export const schemas: ModuleSchema[] = [
     isList: false,
     fields: [
       { key: 'name', labelKey: 'field.name', type: 'text' },
+      { key: 'birthday', labelKey: 'field.birthday', type: 'date' },
       { key: 'positionTitle', labelKey: 'field.positionTitle', type: 'text' },
       { key: 'mobile', labelKey: 'field.mobile', type: 'text' },
       { key: 'email', labelKey: 'field.email', type: 'text' },
@@ -46,7 +49,7 @@ export const schemas: ModuleSchema[] = [
       { key: 'school', labelKey: 'field.school', type: 'text' },
       { key: 'major', labelKey: 'field.major', type: 'text' },
       { key: 'academicDegree', labelKey: 'field.academicDegree', type: 'text' },
-      { key: 'eduTime', labelKey: 'field.eduTime', type: 'time-range' },
+      { key: 'eduTime', labelKey: 'field.eduTime', type: 'time-range', minFromBirthday: 15 },
     ],
     defaultItem: () => ({ id: uid('edu'), school: '', major: '', academicDegree: '', eduTime: ['', ''] }),
   },

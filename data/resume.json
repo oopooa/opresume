@@ -13,7 +13,9 @@
     "github": "zhangsan",
     "workExpYear": "5",
     "workPlace": "北京",
-    "positionTitle": "高级前端工程师"
+    "positionTitle": "高级前端工程师",
+    "ageHidden": true,
+    "birthday": "1996-05-06"
   },
   "educationList": [
     {

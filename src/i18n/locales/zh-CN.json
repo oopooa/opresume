@@ -15,6 +15,8 @@
     "dragSort": "拖拽排序",
     "collapse": "收起",
     "expand": "展开",
+    "show": "显示",
+    "hide": "隐藏",
     "yearsExp": "{{years}}年经验"
   },
   "toolbar": {
@@ -37,6 +39,11 @@
   },
   "field": {
     "name": "姓名",
+    "birthday": "生日",
+    "birthdayHint": "根据您的生日自动计算",
+    "selectDate": "选择日期",
+    "age": "{{age}}岁",
+    "ageLabel": "年龄",
     "mobile": "手机号",
     "email": "邮箱",
     "github": "GitHub",
@@ -86,7 +93,8 @@
     "visitLink": "访问链接",
     "aboutmeDesc": "自我评价",
     "startTime": "开始时间",
-    "endTime": "结束时间"
+    "endTime": "结束时间",
+    "eduTimeMinError": "开始时间不能早于{{year}}年（需年满15岁）"
   },
   "template": {
     "template1": "经典双栏",

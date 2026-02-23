@@ -15,6 +15,8 @@
     "dragSort": "Drag to sort",
     "collapse": "Collapse",
     "expand": "Expand",
+    "show": "Show",
+    "hide": "Hide",
     "yearsExp": "{{years}} yrs exp"
   },
   "toolbar": {
@@ -37,6 +39,11 @@
   },
   "field": {
     "name": "Name",
+    "birthday": "Birthday",
+    "birthdayHint": "Auto-calculated from your birthday",
+    "selectDate": "Select date",
+    "age": "Age {{age}}",
+    "ageLabel": "Age",
     "mobile": "Phone",
     "email": "Email",
     "github": "GitHub",
@@ -86,7 +93,8 @@
     "visitLink": "Link",
     "aboutmeDesc": "About Me",
     "startTime": "Start",
-    "endTime": "End"
+    "endTime": "End",
+    "eduTimeMinError": "Start time cannot be earlier than {{year}} (must be at least 15 years old)"
   },
   "template": {
     "template1": "Classic",

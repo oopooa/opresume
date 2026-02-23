@@ -47,3 +47,17 @@ export function avatarStyle(a?: Avatar): React.CSSProperties {
   const r = a?.borderRadius ?? 999;
   return { width: w, height: h, borderRadius: Math.min(r, Math.min(w, h) / 2) };
 }
+
+/** 根据生日计算周岁，未填写返回 null */
+export function calculateAge(birthday?: string): number | null {
+  if (!birthday) return null;
+  const birth = new Date(birthday);
+  if (isNaN(birth.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age >= 0 ? age : null;
+}

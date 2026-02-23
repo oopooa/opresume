@@ -1,7 +1,7 @@
 import type { ResumeConfig } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle, calculateAge } from '../shared';
 
 interface Template3Props {
   config: ResumeConfig;
@@ -33,6 +33,7 @@ function Badge({ children }: { children: React.ReactNode }) {
 export function Template3({ config }: Template3Props) {
   const { profile, avatar } = config;
   const { t } = useTranslation();
+  const age = calculateAge(profile?.birthday);
 
   return (
     <div className="flex min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
@@ -83,6 +84,12 @@ export function Template3({ config }: Template3Props) {
               <div className="flex items-center gap-2">
                 <span className="w-1 h-1 rounded-full bg-resume-primary shrink-0" />
                 <span>{profile.workPlace}</span>
+              </div>
+            )}
+            {age !== null && !profile?.ageHidden && (
+              <div className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-resume-primary shrink-0" />
+                <span>{t('field.age', { age })}</span>
               </div>
             )}
             {profile?.workExpYear && (

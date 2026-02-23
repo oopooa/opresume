@@ -1,7 +1,7 @@
 import type { ResumeConfig } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle, calculateAge } from '../shared';
 
 interface Template4Props {
   config: ResumeConfig;
@@ -34,6 +34,7 @@ function InfoItem({ label, value }: { label: string; value?: string }) {
 export function Template4({ config }: Template4Props) {
   const { profile, avatar } = config;
   const { t } = useTranslation();
+  const age = calculateAge(profile?.birthday);
 
   return (
     <div className="relative min-h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
@@ -66,6 +67,7 @@ export function Template4({ config }: Template4Props) {
               <InfoItem label={t('field.mobile')} value={profile?.mobile} />
               <InfoItem label={t('field.email')} value={profile?.email} />
               <InfoItem label={t('field.workPlace')} value={profile?.workPlace} />
+              {age !== null && !profile?.ageHidden && <InfoItem label={t('field.ageLabel')} value={t('field.age', { age })} />}
               <InfoItem label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
               <InfoItem label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
               <InfoItem label={t('field.zhihu')} value={profile?.zhihu} />

@@ -8,6 +8,8 @@ export interface Avatar {
 
 export interface Profile {
   name: string;
+  birthday?: string;
+  ageHidden?: boolean;
   mobile?: string;
   email?: string;
   github?: string;

@@ -1,7 +1,7 @@
 import type { ResumeConfig } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, avatarStyle, calculateAge } from '../shared';
 
 interface Template2Props {
   config: ResumeConfig;
@@ -19,6 +19,7 @@ function SectionTitle({ title }: { title: string }) {
 export function Template2({ config }: Template2Props) {
   const { profile, avatar } = config;
   const { t } = useTranslation();
+  const age = calculateAge(profile?.birthday);
 
   return (
     <div className="flex min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
@@ -47,6 +48,7 @@ export function Template2({ config }: Template2Props) {
             {profile?.github && <p>github.com/{profile.github}</p>}
             {profile?.zhihu && <p>{profile.zhihu}</p>}
             {profile?.workPlace && <p>{profile.workPlace}</p>}
+            {age !== null && !profile?.ageHidden && <p>{t('field.age', { age })}</p>}
             {profile?.workExpYear && <p>{t('common.yearsExp', { years: profile.workExpYear })}</p>}
           </div>
         </EditableSection>
