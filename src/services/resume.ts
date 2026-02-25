@@ -1,6 +1,5 @@
 import type { ResumeConfig } from '@/types';
 
-const STORAGE_KEY = 'opresume_config';
 const API_URL = '/api/resume';
 
 function isDev(): boolean {
@@ -13,15 +12,6 @@ export async function loadConfig(): Promise<ResumeConfig> {
     if (res.ok) return res.json();
   }
 
-  const cached = localStorage.getItem(STORAGE_KEY);
-  if (cached) {
-    try {
-      return JSON.parse(cached);
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-  }
-
   const res = await fetch('/data/resume.json');
   if (!res.ok) {
     throw new Error(`加载简历数据失败 (${res.status})`);
@@ -30,8 +20,6 @@ export async function loadConfig(): Promise<ResumeConfig> {
 }
 
 export async function saveConfig(config: ResumeConfig): Promise<void> {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-
   if (isDev()) {
     const res = await fetch(API_URL, {
       method: 'POST',

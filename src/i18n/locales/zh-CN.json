@@ -25,7 +25,10 @@
     "language": "语言",
     "exportJSON": "导出 JSON",
     "importJSON": "导入 JSON",
-    "print": "导出 PDF"
+    "print": "导出 PDF",
+    "save": "保存",
+    "saved": "已保存",
+    "unsaved": "有未保存的更改"
   },
   "module": {
     "profile": "基本信息",

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResumeStore } from '@/store/resume';
 import { useThemeEffect } from '@/hooks/useThemeEffect';
+import { useSaveShortcut } from '@/hooks/useSaveShortcut';
 import { Toolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
 import { Editor } from '@/components/Editor';
@@ -12,6 +13,7 @@ function App() {
   const { config, loading, error, load } = useResumeStore();
   const { t } = useTranslation();
   useThemeEffect();
+  useSaveShortcut();
 
   useEffect(() => {
     load();

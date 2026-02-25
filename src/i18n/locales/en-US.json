@@ -25,7 +25,10 @@
     "language": "Language",
     "exportJSON": "Export JSON",
     "importJSON": "Import JSON",
-    "print": "Export PDF"
+    "print": "Export PDF",
+    "save": "Save",
+    "saved": "Saved",
+    "unsaved": "Unsaved changes"
   },
   "module": {
     "profile": "Profile",
