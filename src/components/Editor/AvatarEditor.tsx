@@ -4,7 +4,6 @@ import { Upload, Trash2, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { Avatar } from '@/types/resume';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -15,15 +14,14 @@ import { avatarStyle } from '@/components/Resume/shared';
 const MAX_SIZE = 2 * 1024 * 1024;
 
 const RATIOS = [
-  { label: '1:1', w: 1, h: 1 },
-  { label: '4:3', w: 4, h: 3 },
   { label: '3:4', w: 3, h: 4 },
+  { label: '5:7', w: 5, h: 7 },
+  { label: '1:1', w: 1, h: 1 },
 ] as const;
 
-const RADIUS_PRESETS = [
-  { labelKey: 'field.radiusNone', value: 0 },
-  { labelKey: 'field.radiusMedium', value: 8 },
-  { labelKey: 'field.radiusCircle', value: 999 },
+const SHAPES = [
+  { labelKey: 'field.square', value: 0 },
+  { labelKey: 'field.circle', value: 999 },
 ] as const;
 
 interface AvatarEditorProps {
@@ -34,6 +32,7 @@ interface AvatarEditorProps {
 export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
   const { t } = useTranslation();
   const fileRef = useRef<HTMLInputElement>(null);
+  const ratioRef = useRef<(typeof RATIOS)[number]>(RATIOS[0]);
   const [dragging, setDragging] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -83,7 +82,13 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
     [uploadFile, t],
   );
 
-  const activeRatio = RATIOS.find((r) => Math.abs(w / h - r.w / r.h) < 0.01);
+  const isCircle = radius >= 999;
+  const activeRatio = isCircle
+    ? RATIOS.find((r) => r.label === '1:1')!
+    : RATIOS.find((r) => Math.abs(w / h - r.w / r.h) < 0.01);
+
+  // 非圆形时持续记住当前比例，供圆形切回方形时恢复
+  if (!isCircle && activeRatio) ratioRef.current = activeRatio;
 
   return (
     <Collapsible open={expanded} onOpenChange={setExpanded} className="mb-4 border-b border-gray-100 pb-4">
@@ -161,84 +166,55 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
         </Button>
       )}
 
-      {/* 在线链接 */}
-      <div className="space-y-1">
-        <Label>{t('field.avatarLink')}</Label>
-        <Input
-          placeholder="https://example.com/avatar.png"
-          value={avatar?.src?.startsWith('/') ? '' : avatar?.src ?? ''}
-          onChange={(e) => set({ src: e.target.value || undefined })}
-        />
+      {/* 形状 */}
+      <div>
+        <Label className="mb-1 block">{t('field.avatarShape')}</Label>
+        <ToggleGroup
+          type="single"
+          size="sm"
+          className="justify-start"
+          value={String(isCircle ? 999 : 0)}
+          onValueChange={(val) => {
+            if (!val) return;
+            const v = Number(val);
+            if (v >= 999) {
+              set({ borderRadius: 999, height: w });
+            } else {
+              const r = ratioRef.current;
+              set({ borderRadius: 0, height: Math.round(w * r.h / r.w) });
+            }
+          }}
+        >
+          {SHAPES.map((s) => (
+            <ToggleGroupItem key={s.value} value={String(s.value)} className="text-xs">
+              {t(s.labelKey)}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
       </div>
 
-      {/* 尺寸 */}
-      <div>
-        <Label className="mb-1 block">{t('field.avatarSize')}</Label>
-        <div className="flex items-center gap-2">
-          <label className="flex items-center gap-1">
-            <span className="text-xs text-muted-foreground">W</span>
-            <Input
-              type="number"
-              min={20}
-              max={200}
-              className="w-16 text-center"
-              value={w}
-              onChange={(e) => set({ width: Number(e.target.value) || 90 })}
-            />
-          </label>
-          <span className="text-xs text-muted-foreground">×</span>
-          <label className="flex items-center gap-1">
-            <span className="text-xs text-muted-foreground">H</span>
-            <Input
-              type="number"
-              min={20}
-              max={200}
-              className="w-16 text-center"
-              value={h}
-              onChange={(e) => set({ height: Number(e.target.value) || 90 })}
-            />
-          </label>
+      {/* 比例（圆形时锁定 1:1） */}
+      {!isCircle && (
+        <div>
+          <Label className="mb-1 block">{t('field.aspectRatio')}</Label>
+          <ToggleGroup
+            type="single"
+            size="sm"
+            className="justify-start"
+            value={activeRatio?.label ?? ''}
+            onValueChange={(val) => {
+              const r = RATIOS.find((r) => r.label === val);
+              if (r) set({ height: Math.round(w * r.h / r.w) });
+            }}
+          >
+            {RATIOS.map((r) => (
+              <ToggleGroupItem key={r.label} value={r.label} className="text-xs">
+                {r.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </div>
-      </div>
-
-      {/* 宽高比 */}
-      <div>
-        <Label className="mb-1 block">{t('field.aspectRatio')}</Label>
-        <ToggleGroup
-          type="single"
-          size="sm"
-          value={activeRatio?.label ?? ''}
-          onValueChange={(val) => {
-            const r = RATIOS.find((r) => r.label === val);
-            if (r) set({ height: Math.round(w * r.h / r.w) });
-          }}
-        >
-          {RATIOS.map((r) => (
-            <ToggleGroupItem key={r.label} value={r.label} className="text-xs">
-              {r.label}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-      </div>
-
-      {/* 圆角 */}
-      <div>
-        <Label className="mb-1 block">{t('field.borderRadius')}</Label>
-        <ToggleGroup
-          type="single"
-          size="sm"
-          value={String(radius)}
-          onValueChange={(val) => {
-            if (val) set({ borderRadius: Number(val) });
-          }}
-        >
-          {RADIUS_PRESETS.map((p) => (
-            <ToggleGroupItem key={p.value} value={String(p.value)} className="text-xs">
-              {t(p.labelKey)}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-      </div>
+      )}
       </CollapsibleContent>
     </Collapsible>
   );
