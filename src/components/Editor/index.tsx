@@ -78,7 +78,7 @@ function SectionHeader({
           aria-label={t(hidden ? 'common.show' : 'common.hide')}
           onClick={onToggleHidden}
         >
-          {hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+          {hidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
         </Button>
       )}
     </div>
@@ -138,7 +138,7 @@ function ProfileSection({
                 aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
                 onClick={() => handleFieldChange('ageHidden', !ageHidden)}
               >
-                {ageHidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                {ageHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </Button>
             </div>
           )}

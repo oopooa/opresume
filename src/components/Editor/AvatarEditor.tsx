@@ -107,7 +107,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
               onClick={(e) => { e.stopPropagation(); set({ hidden: !hidden }); }}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); set({ hidden: !hidden }); } }}
             >
-              {hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+              {hidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
             </span>
             <ChevronDown
               className={cn(
