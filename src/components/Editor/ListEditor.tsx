@@ -146,6 +146,7 @@ function SortableItem({
 
 export function ListEditor({ schema, items, onChange }: ListEditorProps) {
   const { t } = useTranslation();
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirm | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -177,6 +178,7 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
   const handleRequestDelete = useCallback(
     (index: number, title: string) => {
       setDeleteConfirm({ index, title });
+      setDialogOpen(true);
     },
     [],
   );
@@ -184,7 +186,6 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
   const handleConfirmDelete = useCallback(() => {
     if (deleteConfirm === null) return;
     onChange(items.filter((_, i) => i !== deleteConfirm.index));
-    setDeleteConfirm(null);
   }, [deleteConfirm, items, onChange]);
 
   const handleAdd = () => {
@@ -226,7 +227,7 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
         </Button>
       )}
 
-      <AlertDialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <AlertDialogContent className="max-w-[320px]">
           <AlertDialogHeader>
             <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
