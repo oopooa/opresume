@@ -28,7 +28,8 @@
     "print": "Export PDF",
     "save": "Save",
     "saved": "Saved",
-    "unsaved": "Unsaved changes"
+    "unsaved": "Unsaved changes",
+    "editResume": "Edit Resume"
   },
   "module": {
     "profile": "Profile",

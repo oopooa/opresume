@@ -28,7 +28,8 @@
     "print": "导出 PDF",
     "save": "保存",
     "saved": "已保存",
-    "unsaved": "有未保存的更改"
+    "unsaved": "有未保存的更改",
+    "editResume": "编辑简历"
   },
   "module": {
     "profile": "基本信息",

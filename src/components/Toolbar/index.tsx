@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Printer, Save } from 'lucide-react';
+import { Printer, Save, PenLine } from 'lucide-react';
 import { useResumeStore } from '@/store/resume';
+import { useUIStore } from '@/store/ui';
 import { saveWithToast } from '@/hooks/useSaveShortcut';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -20,6 +21,7 @@ const SHORTCUT = IS_MAC ? '⌘S' : 'Ctrl+S';
 export function Toolbar() {
   const { t } = useTranslation();
   const dirty = useResumeStore((s) => s.dirty);
+  const openEditor = useUIStore((s) => s.openEditor);
 
   return (
     <header className="flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
@@ -29,6 +31,15 @@ export function Toolbar() {
         <ThemePanel />
         <LangSwitcher />
         <Separator orientation="vertical" className="mx-1 h-5" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5"
+          onClick={() => openEditor()}
+        >
+          <PenLine className="h-3.5 w-3.5" />
+          {t('common.edit')}
+        </Button>
         <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
