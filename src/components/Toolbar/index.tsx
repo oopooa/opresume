@@ -25,7 +25,7 @@ export function Toolbar() {
 
   return (
     <header className="flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
-      <span className="text-sm font-semibold text-gray-700">opresume</span>
+      <img src="/logo.webp" alt="logo" className="h-6" />
       <div className="flex items-center gap-1">
         <TemplateSelector />
         <ThemePanel />
