@@ -29,7 +29,10 @@
     "save": "Save",
     "saved": "Saved",
     "unsaved": "Unsaved changes",
-    "editResume": "Edit Resume"
+    "editResume": "Edit Resume",
+    "sidebar": "Sidebar",
+    "mainArea": "Main",
+    "dropHint": "Drop modules here"
   },
   "module": {
     "profile": "Profile",

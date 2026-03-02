@@ -1,10 +1,31 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { Eye, EyeOff, ChevronDown, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  pointerWithin,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  DragOverlay,
+  type CollisionDetection,
+  type DragStartEvent,
+  type DragEndEvent,
+  type DragOverEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
-import type { Avatar, ResumeConfig } from '@/types/resume';
+import type { Avatar, ResumeConfig, ModuleLayout } from '@/types/resume';
 import {
   Sheet,
   SheetContent,
@@ -26,12 +47,19 @@ import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
 import { AvatarEditor } from './AvatarEditor';
 import { calculateAge } from '@/components/Resume/shared';
+import { getEffectiveLayout, isTwoColumnTemplate } from '@/config/layout';
 
-/* 不可隐藏的模块 */
 const ALWAYS_VISIBLE = new Set(['profile']);
 
-/* ── 折叠区块头部 ── */
-function SectionHeader({
+/* 自定义碰撞检测：先用 closestCenter 匹配具体 item，匹配不到时用 pointerWithin 匹配容器 */
+const combinedCollision: CollisionDetection = (args) => {
+  const centerHits = closestCenter(args);
+  if (centerHits.length > 0) return centerHits;
+  return pointerWithin(args);
+};
+
+/* ── 可拖拽的模块头部 ── */
+function SortableModuleHeader({
   module,
   expanded,
   hidden,
@@ -45,8 +73,13 @@ function SectionHeader({
   onToggleHidden: () => void;
 }) {
   const { t } = useTranslation();
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: module });
+  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };
+
   return (
     <div
+      ref={setNodeRef}
+      style={style}
       className={cn(
         'flex items-center gap-1 rounded-lg px-3 transition-colors',
         'bg-sky-50/80',
@@ -54,6 +87,16 @@ function SectionHeader({
       )}
       id={`editor-${module}`}
     >
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-6 w-6 cursor-grab text-gray-300 hover:text-gray-500"
+        aria-label={t('common.dragSort')}
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4" />
+      </Button>
       <CollapsibleTrigger asChild>
         <button
           type="button"
@@ -85,6 +128,17 @@ function SectionHeader({
   );
 }
 
+/* ── 拖拽覆盖层（拖拽时显示的浮动元素） ── */
+function DragOverlayContent({ module }: { module: string }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-center gap-2 rounded-lg bg-sky-100 px-3 py-3 shadow-lg">
+      <GripVertical className="h-4 w-4 text-gray-400" />
+      <span className="text-[15px] font-medium text-gray-700">{t(`module.${module}`)}</span>
+    </div>
+  );
+}
+
 /* ── Profile 模块（特殊处理：头像 + 年龄） ── */
 function ProfileSection({
   schema,
@@ -99,7 +153,6 @@ function ProfileSection({
   const data = (config.profile ?? {}) as Record<string, unknown>;
   const age = calculateAge(config.profile?.birthday);
   const ageHidden = config.profile?.ageHidden ?? false;
-
   const birthdayIdx = schema.fields.findIndex((f) => f.key === 'birthday');
   const beforeFields = schema.fields.slice(0, birthdayIdx + 1);
   const afterFields = schema.fields.slice(birthdayIdx + 1);
@@ -195,6 +248,91 @@ function ModuleContent({
   );
 }
 
+/* ── 分栏区域标题 ── */
+function ColumnLabel({ label, id }: { label: string; id: string }) {
+  return (
+    <div id={id} className="mb-1 mt-2 flex items-center gap-2 px-1">
+      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</span>
+      <div className="h-px flex-1 bg-gray-200" />
+    </div>
+  );
+}
+
+/* ── 可排序的模块列表（一个栏） ── */
+function SortableColumn({
+  columnId,
+  modules,
+  expanded,
+  config,
+  toggle,
+  toggleModuleHidden,
+  update,
+}: {
+  columnId: string;
+  modules: string[];
+  expanded: string | null;
+  config: ResumeConfig;
+  toggle: (module: string) => void;
+  toggleModuleHidden: (module: string) => void;
+  update: (partial: Partial<ResumeConfig>) => void;
+}) {
+  const { t } = useTranslation();
+  const { setNodeRef, isOver } = useDroppable({ id: columnId });
+  const schemaMap = useMemo(() => {
+    const map: Record<string, ModuleSchema> = {};
+    for (const s of schemas) map[s.module] = s;
+    return map;
+  }, []);
+
+  return (
+    <SortableContext id={columnId} items={modules} strategy={verticalListSortingStrategy}>
+      <div
+        ref={setNodeRef}
+        className={cn(
+          'min-h-[40px] space-y-2 rounded-lg transition-colors',
+          modules.length === 0 && 'min-h-[64px] border-2 border-dashed border-gray-200 p-3',
+          modules.length === 0 && isOver && 'border-sky-400 bg-sky-50/50',
+        )}
+      >
+        {modules.length === 0 ? (
+          <p className="py-2 text-center text-xs text-gray-400">
+            {t('toolbar.dropHint')}
+          </p>
+        ) : (
+          modules.map((module) => {
+            const schema = schemaMap[module];
+            if (!schema) return null;
+            const isExpanded = expanded === module;
+            const hidden = config.moduleHidden?.[module] === true;
+            const canHide = !ALWAYS_VISIBLE.has(module);
+
+            return (
+              <Collapsible key={module} open={isExpanded} onOpenChange={() => toggle(module)}>
+                <SortableModuleHeader
+                  module={module}
+                  expanded={isExpanded}
+                  hidden={hidden}
+                  canHide={canHide}
+                  onToggleHidden={() => toggleModuleHidden(module)}
+                />
+                <CollapsibleContent>
+                  <div className="pt-3 pb-4">
+                    {module === 'profile' ? (
+                      <ProfileSection schema={schema} config={config} update={update} />
+                    ) : (
+                      <ModuleContent schema={schema} config={config} update={update} />
+                    )}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            );
+          })
+        )}
+      </div>
+    </SortableContext>
+  );
+}
+
 /* ── 主编辑器 ── */
 export function Editor() {
   const { t } = useTranslation();
@@ -202,11 +340,24 @@ export function Editor() {
   const activeModule = useUIStore((s) => s.activeModule);
   const closeEditor = useUIStore((s) => s.closeEditor);
   const clearActiveModule = useUIStore((s) => s.clearActiveModule);
+  const template = useUIStore((s) => s.template);
   const config = useResumeStore((s) => s.config);
   const update = useResumeStore((s) => s.update);
 
-  /* 手风琴：同时只展开一个模块 */
+  const twoColumn = isTwoColumnTemplate(template);
+  const layout = config ? getEffectiveLayout(template, config.moduleLayout) : { sidebar: [], main: [] };
+
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  /* 拖拽过程中的临时布局状态 */
+  const [tempLayout, setTempLayout] = useState<ModuleLayout | null>(null);
+
+  /* 实际使用的布局（拖拽中用临时状态，否则用持久化的） */
+  const currentLayout = tempLayout ?? layout;
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
   const toggle = useCallback((module: string) => {
     setExpanded((prev) => (prev === module ? null : module));
@@ -220,6 +371,97 @@ export function Editor() {
     },
     [config, update],
   );
+
+  /* 持久化布局到 config */
+  const saveLayout = useCallback(
+    (newLayout: ModuleLayout) => {
+      if (!config) return;
+      const prev = config.moduleLayout ?? {};
+      update({ moduleLayout: { ...prev, [template]: newLayout } });
+    },
+    [config, template, update],
+  );
+
+  /* 找到模块所在的栏 */
+  const findColumn = useCallback(
+    (id: string, ly: ModuleLayout): 'sidebar' | 'main' | null => {
+      if (ly.sidebar.includes(id)) return 'sidebar';
+      if (ly.main.includes(id)) return 'main';
+      return null;
+    },
+    [],
+  );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    const id = event.active.id as string;
+    setActiveId(id);
+    setExpanded((prev) => (prev === id ? null : prev));
+    setTempLayout({ sidebar: [...currentLayout.sidebar], main: [...currentLayout.main] });
+  }, [currentLayout]);
+
+  const handleDragOver = useCallback(
+    (event: DragOverEvent) => {
+      const { active, over } = event;
+      if (!over || !tempLayout) return;
+
+      const activeModule = active.id as string;
+      const overId = over.id as string;
+
+      const fromCol = findColumn(activeModule, tempLayout);
+      if (!fromCol) return;
+
+      /* over 可能是另一个模块，也可能是容器 ID（sidebar / main） */
+      let toCol: 'sidebar' | 'main';
+      if (overId === 'sidebar' || overId === 'main') {
+        toCol = overId;
+      } else {
+        const col = findColumn(overId, tempLayout);
+        if (!col) return;
+        toCol = col;
+      }
+
+      /* 单栏模板不允许拖到侧栏 */
+      if (!twoColumn && toCol === 'sidebar') return;
+
+      if (fromCol === toCol) {
+        /* 同栏内排序 */
+        const items = [...tempLayout[fromCol]];
+        const oldIdx = items.indexOf(activeModule);
+        const newIdx = items.indexOf(overId);
+        if (oldIdx !== -1 && newIdx !== -1 && oldIdx !== newIdx) {
+          setTempLayout({ ...tempLayout, [fromCol]: arrayMove(items, oldIdx, newIdx) });
+        }
+      } else {
+        /* 跨栏移动 */
+        const fromItems = tempLayout[fromCol].filter((m) => m !== activeModule);
+        const toItems = [...tempLayout[toCol]];
+        const overIdx = toItems.indexOf(overId);
+        if (overIdx !== -1) {
+          toItems.splice(overIdx, 0, activeModule);
+        } else {
+          toItems.push(activeModule);
+        }
+        setTempLayout({ ...tempLayout, [fromCol]: fromItems, [toCol]: toItems });
+      }
+    },
+    [tempLayout, findColumn, twoColumn],
+  );
+
+  const handleDragEnd = useCallback(
+    (_event: DragEndEvent) => {
+      setActiveId(null);
+      if (tempLayout) {
+        saveLayout(tempLayout);
+        setTempLayout(null);
+      }
+    },
+    [tempLayout, saveLayout],
+  );
+
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+    setTempLayout(null);
+  }, []);
 
   /* 点击简历区域时，展开对应模块并滚动到位 */
   useEffect(() => {
@@ -244,38 +486,80 @@ export function Editor() {
         </SheetHeader>
 
         <ScrollArea className="flex-1">
-          <div className="space-y-4 px-4 py-2">
-            {schemas.map((schema) => {
-              const module = schema.module;
-              const isExpanded = expanded === module;
-              const hidden = config.moduleHidden?.[module] === true;
-              const canHide = !ALWAYS_VISIBLE.has(module);
-
+          <div className="space-y-2 px-4 py-2">
+            {/* Profile 固定在最上方，不参与拖拽 */}
+            {(() => {
+              const schema = schemas.find((s) => s.module === 'profile');
+              if (!schema) return null;
+              const isExpanded = expanded === 'profile';
               return (
-                <Collapsible
-                  key={module}
-                  open={isExpanded}
-                  onOpenChange={() => toggle(module)}
-                >
-                  <SectionHeader
-                    module={module}
-                    expanded={isExpanded}
-                    hidden={hidden}
-                    canHide={canHide}
-                    onToggleHidden={() => toggleModuleHidden(module)}
-                  />
+                <Collapsible open={isExpanded} onOpenChange={() => toggle('profile')}>
+                  <div
+                    className={cn(
+                      'flex items-center gap-1 rounded-lg px-3 transition-colors',
+                      'bg-sky-50/80',
+                      isExpanded && 'bg-sky-100/90',
+                    )}
+                    id="editor-profile"
+                  >
+                    <CollapsibleTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
+                      >
+                        <ChevronDown className={cn('h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200', isExpanded && 'rotate-180')} />
+                        <span>{t('module.profile')}</span>
+                      </button>
+                    </CollapsibleTrigger>
+                  </div>
                   <CollapsibleContent>
                     <div className="pt-3 pb-4">
-                      {module === 'profile' ? (
-                        <ProfileSection schema={schema} config={config} update={update} />
-                      ) : (
-                        <ModuleContent schema={schema} config={config} update={update} />
-                      )}
+                      <ProfileSection schema={schema} config={config} update={update} />
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
               );
-            })}
+            })()}
+
+            {/* 可拖拽的模块区域 */}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={combinedCollision}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+              onDragCancel={handleDragCancel}
+            >
+              {twoColumn && (
+                <>
+                  <ColumnLabel label={t('toolbar.sidebar')} id="column-sidebar" />
+                  <SortableColumn
+                    columnId="sidebar"
+                    modules={currentLayout.sidebar}
+                    expanded={expanded}
+                    config={config}
+                    toggle={toggle}
+                    toggleModuleHidden={toggleModuleHidden}
+                    update={update}
+                  />
+                </>
+              )}
+
+              <ColumnLabel label={twoColumn ? t('toolbar.mainArea') : ''} id="column-main" />
+              <SortableColumn
+                columnId="main"
+                modules={currentLayout.main}
+                expanded={expanded}
+                config={config}
+                toggle={toggle}
+                toggleModuleHidden={toggleModuleHidden}
+                update={update}
+              />
+
+              <DragOverlay>
+                {activeId ? <DragOverlayContent module={activeId} /> : null}
+              </DragOverlay>
+            </DndContext>
           </div>
         </ScrollArea>
       </SheetContent>

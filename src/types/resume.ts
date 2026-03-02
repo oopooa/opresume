@@ -68,6 +68,12 @@ export interface AboutMe {
   aboutmeDesc: string;
 }
 
+/** 模块在模板中的分栏布局（不含 profile，profile 固定在侧栏首位） */
+export interface ModuleLayout {
+  sidebar: string[];
+  main: string[];
+}
+
 export interface ResumeConfig {
   avatar?: Avatar;
   profile?: Profile;
@@ -80,5 +86,7 @@ export interface ResumeConfig {
   aboutme?: AboutMe;
   titleNameMap?: Record<string, string>;
   moduleHidden?: Record<string, boolean>;
+  /** 按模板 ID 存储模块布局，键为模板名如 "template1" */
+  moduleLayout?: Record<string, ModuleLayout>;
   locales?: Record<string, Partial<ResumeConfig>>;
 }

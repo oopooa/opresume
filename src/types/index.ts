@@ -8,6 +8,7 @@ export type {
   Award,
   Work,
   AboutMe,
+  ModuleLayout,
   ResumeConfig,
 } from './resume';
 
