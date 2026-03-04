@@ -31,7 +31,11 @@
     --radius: 0.5rem;
 
     --resume-primary: #2f5785;
-    --resume-tag: #8bc34a
+    --resume-tag: #8bc34a;
+
+    --editor-module: color-mix(in srgb, var(--resume-primary) 6%, white);
+    --editor-module-active: color-mix(in srgb, var(--resume-primary) 12%, white);
+    --editor-drop: color-mix(in srgb, var(--resume-primary) 40%, white)
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -57,7 +61,11 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
+
+    --editor-module: color-mix(in srgb, var(--resume-primary) 8%, hsl(0 0% 3.9%));
+    --editor-module-active: color-mix(in srgb, var(--resume-primary) 15%, hsl(0 0% 3.9%));
+    --editor-drop: color-mix(in srgb, var(--resume-primary) 40%, hsl(0 0% 3.9%))
   }
 
   * {

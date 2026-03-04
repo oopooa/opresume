@@ -101,15 +101,15 @@ function SortableModuleHeader({
       style={style}
       className={cn(
         'flex items-center gap-1 rounded-lg px-3 transition-colors',
-        'bg-sky-50/80',
-        expanded && 'bg-sky-100/90',
+        'bg-editor-module',
+        expanded && 'bg-editor-module-active',
       )}
       id={`editor-${module}`}
     >
       <Button
         variant="ghost"
         size="icon"
-        className="h-6 w-6 cursor-grab text-gray-300 hover:text-gray-500"
+        className="h-6 w-6 cursor-grab text-gray-400 hover:text-gray-600"
         aria-label={t('common.dragSort')}
         {...attributes}
         {...listeners}
@@ -177,7 +177,7 @@ function SortableModuleHeader({
 function DragOverlayContent({ module, customTitle }: { module: string; customTitle?: string }) {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-sky-100 px-3 py-3 shadow-lg">
+    <div className="flex items-center gap-2 rounded-lg bg-editor-module-active px-3 py-3 shadow-lg">
       <GripVertical className="h-4 w-4 text-gray-400" />
       <span className="text-[15px] font-medium text-gray-700">{customTitle || t(`module.${module}`)}</span>
     </div>
@@ -349,7 +349,7 @@ function SortableColumn({
         className={cn(
           'min-h-[40px] space-y-2 rounded-lg transition-colors',
           modules.length === 0 && 'min-h-[64px] border-2 border-dashed border-gray-200 p-3',
-          modules.length === 0 && isOver && 'border-sky-400 bg-sky-50/50',
+          modules.length === 0 && isOver && 'border-editor-drop bg-editor-module',
         )}
       >
         {modules.length === 0 ? (
@@ -558,8 +558,8 @@ export function Editor() {
                   <div
                     className={cn(
                       'flex items-center gap-1 rounded-lg px-3 transition-colors',
-                      'bg-sky-50/80',
-                      isExpanded && 'bg-sky-100/90',
+                      'bg-editor-module',
+                      isExpanded && 'bg-editor-module-active',
                     )}
                     id="editor-profile"
                   >

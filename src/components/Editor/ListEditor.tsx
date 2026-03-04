@@ -86,7 +86,7 @@ function SortableItem({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 cursor-grab text-gray-300 hover:text-gray-500"
+            className="h-6 w-6 cursor-grab text-gray-400 hover:text-gray-600"
             aria-label={t('common.dragSort')}
             {...attributes}
             {...listeners}

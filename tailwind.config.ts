@@ -9,6 +9,20 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      keyframes: {
+        'collapsible-down': {
+          from: { height: '0', opacity: '0' },
+          to: { height: 'var(--radix-collapsible-content-height)', opacity: '1' },
+        },
+        'collapsible-up': {
+          from: { height: 'var(--radix-collapsible-content-height)', opacity: '1' },
+          to: { height: '0', opacity: '0' },
+        },
+      },
+      animation: {
+        'collapsible-down': 'collapsible-down 200ms ease-out',
+        'collapsible-up': 'collapsible-up 150ms ease-in forwards',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -53,6 +67,11 @@ export default {
         resume: {
           primary: 'var(--resume-primary)',
           tag: 'var(--resume-tag)',
+        },
+        editor: {
+          module: 'var(--editor-module)',
+          'module-active': 'var(--editor-module-active)',
+          drop: 'var(--editor-drop)',
         },
       },
     },
