@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, ChevronDown, GripVertical } from 'lucide-react';
+import { Eye, EyeOff, ChevronDown, GripVertical, Pencil } from 'lucide-react';
 import {
   DndContext,
   pointerWithin,
@@ -64,17 +64,36 @@ function SortableModuleHeader({
   expanded,
   hidden,
   canHide,
+  customTitle,
   onToggleHidden,
+  onTitleChange,
 }: {
   module: string;
   expanded: boolean;
   hidden: boolean;
   canHide: boolean;
+  customTitle?: string;
   onToggleHidden: () => void;
+  onTitleChange: (title: string) => void;
 }) {
   const { t } = useTranslation();
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: module });
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };
+
+  const startEditing = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditValue(customTitle ?? '');
+    setEditing(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  }, [customTitle]);
+
+  const commitEdit = useCallback(() => {
+    setEditing(false);
+    onTitleChange(editValue.trim());
+  }, [editValue, onTitleChange]);
 
   return (
     <div
@@ -97,22 +116,48 @@ function SortableModuleHeader({
       >
         <GripVertical className="h-4 w-4" />
       </Button>
-      <CollapsibleTrigger asChild>
-        <button
-          type="button"
-          className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
-        >
-          <ChevronDown
-            className={cn(
-              'h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200',
-              expanded && 'rotate-180',
-            )}
+      {editing ? (
+        <div className="flex flex-1 items-center py-1.5">
+          <Input
+            ref={inputRef}
+            value={editValue}
+            placeholder={t(`module.${module}`)}
+            className="h-8 text-[15px]"
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitEdit();
+              if (e.key === 'Escape') setEditing(false);
+            }}
           />
-          <span className={cn(hidden && 'text-gray-400 line-through')}>
-            {t(`module.${module}`)}
-          </span>
-        </button>
-      </CollapsibleTrigger>
+        </div>
+      ) : (
+          <CollapsibleTrigger asChild>
+            <button
+              type="button"
+              className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
+            >
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200',
+                  expanded && 'rotate-180',
+                )}
+              />
+              <span className={cn(hidden && 'text-gray-400 line-through')}>
+                {customTitle || t(`module.${module}`)}
+              </span>
+              <span
+                role="button"
+                tabIndex={-1}
+                aria-label={t('common.edit')}
+                className="inline-flex shrink-0 text-gray-400 hover:text-gray-600"
+                onClick={startEditing}
+              >
+                <Pencil className="h-3 w-3" />
+              </span>
+            </button>
+          </CollapsibleTrigger>
+      )}
       {canHide && (
         <Button
           variant="ghost"
@@ -129,12 +174,12 @@ function SortableModuleHeader({
 }
 
 /* ── 拖拽覆盖层（拖拽时显示的浮动元素） ── */
-function DragOverlayContent({ module }: { module: string }) {
+function DragOverlayContent({ module, customTitle }: { module: string; customTitle?: string }) {
   const { t } = useTranslation();
   return (
     <div className="flex items-center gap-2 rounded-lg bg-sky-100 px-3 py-3 shadow-lg">
       <GripVertical className="h-4 w-4 text-gray-400" />
-      <span className="text-[15px] font-medium text-gray-700">{t(`module.${module}`)}</span>
+      <span className="text-[15px] font-medium text-gray-700">{customTitle || t(`module.${module}`)}</span>
     </div>
   );
 }
@@ -284,6 +329,19 @@ function SortableColumn({
     return map;
   }, []);
 
+  const handleTitleChange = useCallback(
+    (module: string, title: string) => {
+      const prev = config.titleNameMap ?? {};
+      if (title) {
+        update({ titleNameMap: { ...prev, [module]: title } });
+      } else {
+        const { [module]: _, ...rest } = prev;
+        update({ titleNameMap: rest });
+      }
+    },
+    [config.titleNameMap, update],
+  );
+
   return (
     <SortableContext id={columnId} items={modules} strategy={verticalListSortingStrategy}>
       <div
@@ -305,6 +363,7 @@ function SortableColumn({
             const isExpanded = expanded === module;
             const hidden = config.moduleHidden?.[module] === true;
             const canHide = !ALWAYS_VISIBLE.has(module);
+            const customTitle = config.titleNameMap?.[module];
 
             return (
               <Collapsible key={module} open={isExpanded} onOpenChange={() => toggle(module)}>
@@ -313,7 +372,9 @@ function SortableColumn({
                   expanded={isExpanded}
                   hidden={hidden}
                   canHide={canHide}
+                  customTitle={customTitle}
                   onToggleHidden={() => toggleModuleHidden(module)}
+                  onTitleChange={(title) => handleTitleChange(module, title)}
                 />
                 <CollapsibleContent>
                   <div className="pt-3 pb-4">
@@ -557,7 +618,7 @@ export function Editor() {
               />
 
               <DragOverlay>
-                {activeId ? <DragOverlayContent module={activeId} /> : null}
+                {activeId ? <DragOverlayContent module={activeId} customTitle={config.titleNameMap?.[activeId]} /> : null}
               </DragOverlay>
             </DndContext>
           </div>
