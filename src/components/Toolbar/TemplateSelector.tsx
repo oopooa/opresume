@@ -4,8 +4,7 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-
-const TEMPLATES = ['template1', 'template2', 'template3', 'template4'] as const;
+import { templateIds } from '@/components/Resume/templates';
 
 export function TemplateSelector() {
   const { t } = useTranslation();
@@ -21,7 +20,7 @@ export function TemplateSelector() {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-40 p-1">
-        {TEMPLATES.map((key) => (
+        {templateIds.map((key) => (
           <Button
             key={key}
             variant="ghost"

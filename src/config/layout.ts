@@ -1,32 +1,20 @@
 import type { ModuleLayout } from '@/types/resume';
+import { definitions, defaultDefinition } from '@/components/Resume/templates';
 
 /**
- * 每个模板的默认模块布局。
+ * 每个模板的默认模块布局，从模板定义的 defaultLayout 字段自动派生。
+ * 新增模板时无需修改此文件——只要模板文件声明了 defaultLayout 即可。
+ *
  * profile 不在此列——它固定在侧栏首位，不参与拖拽排序。
- * 单栏模板（template4）sidebar 为空数组，所有模块放 main。
  */
-export const DEFAULT_LAYOUTS: Record<string, ModuleLayout> = {
-  template1: {
-    sidebar: ['skillList', 'educationList', 'awardList'],
-    main: ['workExpList', 'projectList', 'workList', 'aboutme'],
-  },
-  template2: {
-    sidebar: ['skillList', 'educationList', 'awardList'],
-    main: ['workExpList', 'projectList', 'workList', 'aboutme'],
-  },
-  template3: {
-    sidebar: ['skillList', 'educationList', 'awardList'],
-    main: ['workExpList', 'projectList', 'workList', 'aboutme'],
-  },
-  template4: {
-    sidebar: [],
-    main: ['workExpList', 'projectList', 'skillList', 'educationList', 'awardList', 'workList', 'aboutme'],
-  },
-};
+export const DEFAULT_LAYOUTS: Record<string, ModuleLayout> = Object.fromEntries(
+  Object.values(definitions).map((def) => [def.id, def.defaultLayout]),
+);
 
-/** 模板是否支持双栏布局 */
+/** 模板是否支持双栏布局（sidebar 非空即为双栏） */
 export function isTwoColumnTemplate(template: string): boolean {
-  return template !== 'template4';
+  const layout = DEFAULT_LAYOUTS[template];
+  return layout ? layout.sidebar.length > 0 : true;
 }
 
 /** 获取当前生效的布局：用户自定义 > 模板默认 */
@@ -36,7 +24,7 @@ export function getEffectiveLayout(
 ): ModuleLayout {
   const custom = moduleLayout?.[template];
   if (custom) return custom;
-  return DEFAULT_LAYOUTS[template] ?? DEFAULT_LAYOUTS.template1;
+  return DEFAULT_LAYOUTS[template] ?? defaultDefinition.defaultLayout;
 }
 
 /** 所有可排序的模块 ID（不含 profile） */
