@@ -99,7 +99,6 @@
   "template": {
     "template1": "Classic",
     "template2": "Minimal",
-    "template3": "Card",
     "template4": "Single Column"
   },
   "theme": {
