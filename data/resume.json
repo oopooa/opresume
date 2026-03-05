@@ -10,9 +10,7 @@
     "name": "张三",
     "mobile": "13800000000",
     "email": "zhangsan@example.com",
-    "github": "zhangsan",
     "workExpYear": "5",
-    "workPlace": "北京",
     "positionTitle": "高级前端工程师",
     "ageHidden": true,
     "birthday": "1996-05-06"
