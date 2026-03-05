@@ -46,6 +46,7 @@ import { schemas, type ModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
 import { AvatarEditor } from './AvatarEditor';
+import { CustomFieldsEditor } from './CustomFieldsEditor';
 import { calculateAge } from '@/components/Resume/shared';
 import { getEffectiveLayout, isTwoColumnTemplate } from '@/config/layout';
 
@@ -214,6 +215,13 @@ function ProfileSection({
     [update],
   );
 
+  const handleCustomFieldsChange = useCallback(
+    (customFields: NonNullable<typeof config.profile>['customFields']) => {
+      update({ profile: { ...config.profile, name: config.profile?.name ?? '', customFields } });
+    },
+    [config.profile, update],
+  );
+
   return (
     <div className="space-y-3">
       <AvatarEditor avatar={config.avatar} onChange={handleAvatarChange} />
@@ -243,6 +251,10 @@ function ProfileSection({
         </div>
       </div>
       <FormCreator fields={afterFields} data={data} onChange={handleFieldChange} />
+      <CustomFieldsEditor
+        fields={config.profile?.customFields ?? []}
+        onChange={handleCustomFieldsChange}
+      />
     </div>
   );
 }

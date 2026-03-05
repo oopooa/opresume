@@ -71,6 +71,9 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
               <InfoItem label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
               <InfoItem label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
               <InfoItem label={t('field.zhihu')} value={profile?.zhihu} />
+              {profile?.customFields?.map((field) => (
+                <InfoItem key={field.id} label={field.key} value={field.value} />
+              ))}
             </div>
           </div>
         </EditableSection>

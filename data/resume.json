@@ -13,7 +13,17 @@
     "workExpYear": "5",
     "positionTitle": "高级前端工程师",
     "ageHidden": true,
-    "birthday": "1996-05-06"
+    "birthday": "1996-05-06",
+    "customFields": [
+      {
+        "key": "GitHub",
+        "value": "aabbcc"
+      },
+      {
+        "key": "工作地点",
+        "value": "成都"
+      }
+    ]
   },
   "educationList": [
     {

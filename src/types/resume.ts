@@ -6,6 +6,12 @@ export interface Avatar {
   hidden?: boolean;
 }
 
+export interface CustomField {
+  id?: string;
+  key: string;
+  value: string;
+}
+
 export interface Profile {
   name: string;
   birthday?: string;
@@ -17,6 +23,7 @@ export interface Profile {
   workExpYear?: string;
   workPlace?: string;
   positionTitle?: string;
+  customFields?: CustomField[];
 }
 
 export interface Education {

@@ -1,4 +1,4 @@
-import type { ResumeConfig } from '@/types';
+import type { ResumeConfig, CustomField } from '@/types';
 
 const API_URL = '/api/resume';
 
@@ -6,25 +6,60 @@ function isDev(): boolean {
   return import.meta.env.DEV;
 }
 
+function addCustomFieldIds(config: ResumeConfig): ResumeConfig {
+  if (!config.profile?.customFields) return config;
+
+  return {
+    ...config,
+    profile: {
+      ...config.profile,
+      customFields: config.profile.customFields.map((field, index) => ({
+        ...field,
+        id: field.id || `custom-${Date.now()}-${index}`,
+      })),
+    },
+  };
+}
+
+function removeCustomFieldIds(config: ResumeConfig): ResumeConfig {
+  const cleaned = { ...config };
+  if (cleaned.profile?.customFields) {
+    cleaned.profile = {
+      ...cleaned.profile,
+      customFields: cleaned.profile.customFields
+        .filter((f) => f.key.trim() || f.value.trim())
+        .map(({ id, ...field }) => field as CustomField),
+    };
+  }
+  return cleaned;
+}
+
 export async function loadConfig(): Promise<ResumeConfig> {
+  let config: ResumeConfig;
+
   if (isDev()) {
     const res = await fetch(API_URL);
-    if (res.ok) return res.json();
+    if (res.ok) {
+      config = await res.json();
+      return addCustomFieldIds(config);
+    }
   }
 
   const res = await fetch('/data/resume.json');
   if (!res.ok) {
     throw new Error(`加载简历数据失败 (${res.status})`);
   }
-  return res.json();
+  config = await res.json();
+  return addCustomFieldIds(config);
 }
 
 export async function saveConfig(config: ResumeConfig): Promise<void> {
   if (isDev()) {
+    const cleaned = removeCustomFieldIds(config);
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(config, null, 2),
+      body: JSON.stringify(cleaned, null, 2),
     });
     if (!res.ok) {
       throw new Error(`保存失败 (${res.status})`);
@@ -33,8 +68,9 @@ export async function saveConfig(config: ResumeConfig): Promise<void> {
 }
 
 export function exportConfig(config: ResumeConfig): void {
+  const cleaned = removeCustomFieldIds(config);
   const blob = new Blob(
-    [JSON.stringify(config, null, 2)],
+    [JSON.stringify(cleaned, null, 2)],
     { type: 'application/json' },
   );
   const url = URL.createObjectURL(blob);
@@ -50,7 +86,8 @@ export function importConfig(file: File): Promise<ResumeConfig> {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        resolve(JSON.parse(reader.result as string));
+        const config = JSON.parse(reader.result as string);
+        resolve(addCustomFieldIds(config));
       } catch {
         reject(new Error('JSON 解析失败'));
       }

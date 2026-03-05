@@ -49,6 +49,9 @@ function Template2Shell({ config, sidebarContent, mainContent }: LayoutShellProp
             {profile?.workPlace && <p>{profile.workPlace}</p>}
             {age !== null && !profile?.ageHidden && <p>{t('field.age', { age })}</p>}
             {profile?.workExpYear && <p>{t('common.yearsExp', { years: profile.workExpYear })}</p>}
+            {profile?.customFields?.map((field) => (
+              <p key={field.id}>{field.key}: {field.value}</p>
+            ))}
           </div>
         </EditableSection>
         {sidebarContent}

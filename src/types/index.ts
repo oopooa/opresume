@@ -1,5 +1,6 @@
 export type {
   Avatar,
+  CustomField,
   Profile,
   Education,
   WorkExp,
