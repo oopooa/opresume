@@ -247,6 +247,21 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
         </div>
       );
 
+    case 'tel':
+      return (
+        <div className="space-y-1">
+          <Label>{label}</Label>
+          <Input
+            type="tel"
+            value={(value as string) ?? ''}
+            onChange={(e) => {
+              const v = e.target.value.replace(/\D/g, '');
+              if (v.length <= 11) onChange(v);
+            }}
+          />
+        </div>
+      );
+
     case 'date':
       return <DatePickerField field={field} value={value} onChange={onChange} />;
 

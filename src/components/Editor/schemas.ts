@@ -1,4 +1,4 @@
-export type FieldType = 'text' | 'textarea' | 'markdown' | 'number' | 'time-range' | 'select' | 'date';
+export type FieldType = 'text' | 'textarea' | 'markdown' | 'number' | 'time-range' | 'select' | 'date' | 'tel';
 
 export interface FieldDef {
   key: string;
@@ -32,7 +32,7 @@ export const schemas: ModuleSchema[] = [
       { key: 'name', labelKey: 'field.name', type: 'text' },
       { key: 'birthday', labelKey: 'field.birthday', type: 'date' },
       { key: 'positionTitle', labelKey: 'field.positionTitle', type: 'text' },
-      { key: 'mobile', labelKey: 'field.mobile', type: 'text' },
+      { key: 'mobile', labelKey: 'field.mobile', type: 'tel' },
       { key: 'email', labelKey: 'field.email', type: 'text' },
       { key: 'github', labelKey: 'field.github', type: 'text' },
       { key: 'zhihu', labelKey: 'field.zhihu', type: 'text' },
