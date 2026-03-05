@@ -6,26 +6,46 @@ import { EditableSection, TimeRange, getTitle, isHidden } from '../shared';
 
 export function ProjectModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
-  const { SectionTitle } = tokens;
+  const { SectionTitle } = tokens.components;
   if (isHidden(config, 'projectList') || !config.projectList?.length) return null;
+
+  const isDetailed = tokens.variants.project === 'detailed';
 
   return (
     <EditableSection module="projectList">
-      <section className={tokens.moduleSpacing}>
+      <section className={tokens.spacing.module}>
         <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} />
         {config.projectList.map((proj) => (
-          <div key={proj.id} className="mb-3">
-            <div className={cn('flex justify-between', tokens.flexAlign)}>
-              <div className="flex items-center gap-2">
-                <p className={cn('text-sm font-semibold', tokens.textPrimary)}>{proj.projectName}</p>
+          <div key={proj.id} className={tokens.spacing.item}>
+            <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
+              <div className={cn(isDetailed ? 'flex items-baseline gap-2' : 'flex items-center gap-2')}>
+                <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>
+                  {proj.projectName}
+                </p>
                 {proj.projectRole && (
-                  <span className={cn('text-xs', tokens.textSecondary)}>/ {proj.projectRole}</span>
+                  isDetailed ? (
+                    <span
+                      className={cn('rounded px-1.5 py-0.5', tokens.typography.contentSize)}
+                      style={{
+                        backgroundColor: 'color-mix(in srgb, var(--resume-tag) 20%, transparent)',
+                        color: 'var(--resume-tag)',
+                      }}
+                    >
+                      {proj.projectRole}
+                    </span>
+                  ) : (
+                    <span className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
+                      / {proj.projectRole}
+                    </span>
+                  )
                 )}
               </div>
               <TimeRange time={proj.projectTime} />
             </div>
             {proj.projectDesc && (
-              <p className={cn('mt-0.5 text-xs', tokens.textSecondary)}>{proj.projectDesc}</p>
+              <p className={cn('mt-1', tokens.typography.contentSize, tokens.colors.secondary)}>
+                {proj.projectDesc}
+              </p>
             )}
             {proj.projectContent && (
               <div className="mt-1">

@@ -5,27 +5,28 @@ import { EditableSection, getTitle, isHidden } from '../shared';
 
 export function AwardModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
-  const { SectionTitle } = tokens;
+  const { SectionTitle } = tokens.components;
   if (isHidden(config, 'awardList') || !config.awardList?.length) return null;
 
   return (
     <EditableSection module="awardList">
-      <section className={tokens.moduleSpacing}>
+      <section className={tokens.spacing.module}>
         <SectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} />
         {config.awardList.map((award) => (
           <div
             key={award.id}
             className={cn(
-              'mb-1 text-xs',
-              !tokens.awardTimeInline && 'flex justify-between',
-              !tokens.awardTimeInline && tokens.flexAlign,
+              tokens.spacing.item,
+              tokens.typography.contentSize,
+              !tokens.layout.awardTimeInline && 'flex justify-between',
+              !tokens.layout.awardTimeInline && tokens.layout.flexAlign,
             )}
           >
             <span>{award.awardInfo}</span>
             {award.awardTime && (
-              tokens.awardTimeInline
-                ? <span className={cn('ml-1', tokens.textMuted)}>({award.awardTime})</span>
-                : <span className={cn('ml-2 shrink-0', tokens.textMuted)}>{award.awardTime}</span>
+              tokens.layout.awardTimeInline
+                ? <span className={cn('ml-1', tokens.colors.muted)}>({award.awardTime})</span>
+                : <span className={cn('ml-2 shrink-0', tokens.colors.muted)}>{award.awardTime}</span>
             )}
           </div>
         ))}

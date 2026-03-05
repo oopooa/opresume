@@ -1,7 +1,6 @@
-import type { TemplateDefinition, StyleTokens, LayoutShellProps, ModuleProps } from '../types';
+import type { TemplateDefinition, StyleTokens, LayoutShellProps } from '../types';
 import { useTranslation } from 'react-i18next';
-import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden, ResumeAvatar, calculateAge } from '../shared';
+import { EditableSection, ResumeAvatar, calculateAge } from '../shared';
 
 /* ---------- SectionTitle ---------- */
 
@@ -13,91 +12,16 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-/* ---------- SkillBar ---------- */
-
-function SkillBar({ name, level }: { name: string; level: number }) {
-  return (
-    <div className="mb-1.5">
-      <div className="mb-0.5 flex items-center justify-between text-xs">
-        <span>{name}</span>
-      </div>
-      <div className="h-1.5 w-full rounded-full bg-gray-200">
-        <div
-          className="h-1.5 rounded-full bg-resume-primary"
-          style={{ width: `${level}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
 /* ---------- StyleTokens ---------- */
 
 const tokens: StyleTokens = {
-  moduleSpacing: 'mb-4',
-  textPrimary: '',
-  textSecondary: 'text-gray-600',
-  textMuted: 'text-gray-500',
-  SectionTitle,
-  awardTimeInline: false,
-  educationInline: false,
-  flexAlign: 'items-start',
+  spacing: { module: 'mb-4', item: 'mb-2' },
+  typography: { titleWeight: 'font-bold', titleSize: 'text-sm', contentSize: 'text-xs' },
+  colors: { primary: '', secondary: 'text-gray-600', muted: 'text-gray-500' },
+  components: { SectionTitle },
+  variants: { skill: 'bar', project: 'compact', education: 'stacked' },
+  layout: { awardTimeInline: false, flexAlign: 'items-start' },
 };
-
-/* ---------- overrides ---------- */
-
-function SkillListOverride({ config }: ModuleProps) {
-  const { t } = useTranslation();
-  if (isHidden(config, 'skillList') || !config.skillList?.length) return null;
-  return (
-    <EditableSection module="skillList">
-      <div className="mb-4">
-        <SectionTitle title={getTitle(config, 'skillList', t('module.skillList'))} />
-        {config.skillList.map((skill) => (
-          <SkillBar key={skill.id} name={skill.skillName ?? ''} level={skill.skillLevel ?? 0} />
-        ))}
-      </div>
-    </EditableSection>
-  );
-}
-
-function ProjectListOverride({ config }: ModuleProps) {
-  const { t } = useTranslation();
-  if (isHidden(config, 'projectList') || !config.projectList?.length) return null;
-  return (
-    <EditableSection module="projectList">
-      <section className="mb-4">
-        <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} />
-        {config.projectList.map((proj) => (
-          <div key={proj.id} className="mb-3">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-semibold">{proj.projectName}</p>
-                {proj.projectRole && (
-                  <span
-                    className="inline-block rounded px-1.5 py-0.5 text-xs text-resume-primary"
-                    style={{ backgroundColor: 'color-mix(in srgb, var(--resume-tag) 20%, transparent)' }}
-                  >
-                    {proj.projectRole}
-                  </span>
-                )}
-              </div>
-              <TimeRange time={proj.projectTime} />
-            </div>
-            {proj.projectDesc && (
-              <p className="mt-1 text-xs text-gray-600">{proj.projectDesc}</p>
-            )}
-            {proj.projectContent && (
-              <div className="mt-1">
-                <Markdown content={proj.projectContent} />
-              </div>
-            )}
-          </div>
-        ))}
-      </section>
-    </EditableSection>
-  );
-}
 
 /* ---------- LayoutShell ---------- */
 
@@ -147,10 +71,6 @@ const definition: TemplateDefinition = {
     main: ['workExpList', 'projectList', 'workList', 'aboutme'],
   },
   getTokens: () => tokens,
-  moduleOverrides: {
-    skillList: SkillListOverride,
-    projectList: ProjectListOverride,
-  },
   LayoutShell: Template1Shell,
 };
 

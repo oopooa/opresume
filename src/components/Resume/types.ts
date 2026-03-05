@@ -6,22 +6,45 @@ export type RenderZone = 'sidebar' | 'main';
 
 /** 样式令牌 — 控制共享模块的视觉差异 */
 export interface StyleTokens {
-  /** 模块容器间距: "mb-4" | "mb-5" | "mb-6" */
-  moduleSpacing: string;
-  /** 标题/名称文字色: "text-gray-800" | "text-white" | "" */
-  textPrimary: string;
-  /** 次要文字色: "text-gray-600" | "text-gray-400" */
-  textSecondary: string;
-  /** 弱文字色: "text-gray-500" */
-  textMuted: string;
-  /** 该区域的 SectionTitle 组件 */
-  SectionTitle: ComponentType<{ title: string }>;
-  /** 奖项时间：true=括号内联, false=右对齐 */
-  awardTimeInline: boolean;
-  /** 教育条目：true=单行横排(T4), false=多行堆叠 */
-  educationInline: boolean;
-  /** flex 行内垂直对齐: "items-start" | "items-baseline" */
-  flexAlign: string;
+  spacing: {
+    module: string;
+    item: string;
+  };
+  typography: {
+    titleWeight: string;
+    titleSize: string;
+    contentSize: string;
+  };
+  colors: {
+    primary: string;
+    secondary: string;
+    muted: string;
+  };
+  components: {
+    SectionTitle: ComponentType<{ title: string }>;
+  };
+  variants: {
+    skill: 'bar' | 'list' | 'tags';
+    project: 'compact' | 'detailed';
+    education: 'inline' | 'stacked';
+  };
+  layout: {
+    awardTimeInline: boolean;
+    flexAlign: string;
+  };
+
+  /** @deprecated 使用 spacing.module */
+  moduleSpacing?: string;
+  /** @deprecated 使用 colors.primary */
+  textPrimary?: string;
+  /** @deprecated 使用 colors.secondary */
+  textSecondary?: string;
+  /** @deprecated 使用 colors.muted */
+  textMuted?: string;
+  /** @deprecated 使用 components.SectionTitle */
+  SectionTitle?: ComponentType<{ title: string }>;
+  /** @deprecated 使用 variants.education */
+  educationInline?: boolean;
 }
 
 /** 共享模块组件的 props */

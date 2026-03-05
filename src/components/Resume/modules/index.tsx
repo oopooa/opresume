@@ -9,8 +9,9 @@ import { WorkExpModule } from './WorkExpModule';
 import { ProjectModule } from './ProjectModule';
 import { WorkListModule } from './WorkListModule';
 import { AboutMeModule } from './AboutMeModule';
+import { SkillModule } from './SkillModule';
 
-/** 共享默认模块映射（不含 skillList，每个模板自行 override） */
+/** 共享默认模块映射 */
 const DEFAULT_MODULES: Record<string, ComponentType<ModuleProps>> = {
   educationList: EducationModule,
   awardList: AwardModule,
@@ -18,6 +19,7 @@ const DEFAULT_MODULES: Record<string, ComponentType<ModuleProps>> = {
   projectList: ProjectModule,
   workList: WorkListModule,
   aboutme: AboutMeModule,
+  skillList: SkillModule,
 };
 
 /** 解析 override：支持统一组件或按 zone 区分 */

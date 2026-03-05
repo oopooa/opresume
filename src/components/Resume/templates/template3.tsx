@@ -35,25 +35,21 @@ function Badge({ children }: { children: ReactNode }) {
 /* ---------- StyleTokens ---------- */
 
 const sidebarTokens: StyleTokens = {
-  moduleSpacing: 'mb-6',
-  textPrimary: 'text-white',
-  textSecondary: 'text-gray-400',
-  textMuted: 'text-gray-500',
-  SectionTitle: SidebarSectionTitle,
-  awardTimeInline: true,
-  educationInline: false,
-  flexAlign: '',
+  spacing: { module: 'mb-6', item: 'mb-2' },
+  typography: { titleWeight: 'font-semibold', titleSize: 'text-xs', contentSize: 'text-xs' },
+  colors: { primary: 'text-white', secondary: 'text-gray-400', muted: 'text-gray-500' },
+  components: { SectionTitle: SidebarSectionTitle },
+  variants: { skill: 'bar', project: 'compact', education: 'stacked' },
+  layout: { awardTimeInline: true, flexAlign: '' },
 };
 
 const mainTokens: StyleTokens = {
-  moduleSpacing: 'mb-5',
-  textPrimary: 'text-gray-800',
-  textSecondary: 'text-gray-500',
-  textMuted: 'text-gray-400',
-  SectionTitle: MainSectionTitle,
-  awardTimeInline: false,
-  educationInline: false,
-  flexAlign: 'items-start',
+  spacing: { module: 'mb-5', item: 'mb-3' },
+  typography: { titleWeight: 'font-bold', titleSize: 'text-sm', contentSize: 'text-xs' },
+  colors: { primary: 'text-gray-800', secondary: 'text-gray-500', muted: 'text-gray-400' },
+  components: { SectionTitle: MainSectionTitle },
+  variants: { skill: 'bar', project: 'detailed', education: 'stacked' },
+  layout: { awardTimeInline: false, flexAlign: 'items-start' },
 };
 
 /* ========== sidebar overrides ========== */

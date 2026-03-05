@@ -5,12 +5,12 @@ import { EditableSection, getTitle, isHidden } from '../shared';
 
 export function AboutMeModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
-  const { SectionTitle } = tokens;
+  const { SectionTitle } = tokens.components;
   if (isHidden(config, 'aboutme') || !config.aboutme?.aboutmeDesc) return null;
 
   return (
     <EditableSection module="aboutme">
-      <section className={tokens.moduleSpacing}>
+      <section className={tokens.spacing.module}>
         <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} />
         <Markdown content={config.aboutme.aboutmeDesc} />
       </section>
