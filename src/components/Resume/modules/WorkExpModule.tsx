@@ -29,7 +29,7 @@ export function WorkExpModule({ config, tokens }: ModuleProps) {
               <TimeRange time={work.workTime} />
             </div>
             <div className="mt-1">
-              <Markdown content={work.workDesc} />
+              <Markdown content={work.workDesc} textSize={tokens.typography.contentSize} />
             </div>
           </div>
         ))}

@@ -12,7 +12,7 @@ export function AboutMeModule({ config, tokens }: ModuleProps) {
     <EditableSection module="aboutme">
       <section className={tokens.spacing.module}>
         <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} />
-        <Markdown content={config.aboutme.aboutmeDesc} />
+        <Markdown content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
       </section>
     </EditableSection>
   );

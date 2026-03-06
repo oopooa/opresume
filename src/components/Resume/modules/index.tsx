@@ -1,6 +1,6 @@
 import type { ReactNode, ComponentType } from 'react';
 import type { ResumeConfig } from '@/types';
-import type { TemplateDefinition, RenderZone, ModuleProps, ModuleOverride } from '../types';
+import type { TemplateDefinition, ModuleProps } from '../types';
 import { getEffectiveLayout } from '@/config/layout';
 
 import { EducationModule } from './EducationModule';
@@ -22,19 +22,6 @@ const DEFAULT_MODULES: Record<string, ComponentType<ModuleProps>> = {
   skillList: SkillModule,
 };
 
-/** 解析 override：支持统一组件或按 zone 区分 */
-function resolveOverride(
-  raw: ModuleOverride | { sidebar?: ModuleOverride; main?: ModuleOverride },
-  zone: RenderZone,
-): ComponentType<ModuleProps> | undefined {
-  // 含 sidebar/main 键的对象 → zone 感知
-  if ('sidebar' in raw || 'main' in raw) {
-    return (raw as { sidebar?: ModuleOverride; main?: ModuleOverride })[zone];
-  }
-  // 否则视为统一组件
-  return raw as ComponentType<ModuleProps>;
-}
-
 /**
  * 根据模板定义和布局配置，生成 sidebar 和 main 区域的已排序渲染节点。
  */
@@ -43,27 +30,16 @@ export function useTemplateModules(
   config: ResumeConfig,
 ): { sidebarContent: ReactNode; mainContent: ReactNode } {
   const layout = getEffectiveLayout(def.id, config.moduleLayout);
+  const tokens = def.getTokens();
 
-  function renderModule(key: string, zone: RenderZone): ReactNode {
-    const tokens = def.getTokens(zone);
-
-    // 查找 override（支持 zone 感知）
-    const raw = def.moduleOverrides?.[key];
-    if (raw) {
-      const Override = resolveOverride(raw, zone);
-      if (Override) {
-        return <div key={key}><Override config={config} tokens={tokens} /></div>;
-      }
-    }
-
-    // 使用共享默认渲染器
+  function renderModule(key: string): ReactNode {
     const Mod = DEFAULT_MODULES[key];
     if (!Mod) return null;
     return <div key={key}><Mod config={config} tokens={tokens} /></div>;
   }
 
   return {
-    sidebarContent: <>{layout.sidebar.map((k) => renderModule(k, 'sidebar'))}</>,
-    mainContent: <>{layout.main.map((k) => renderModule(k, 'main'))}</>,
+    sidebarContent: <>{layout.sidebar.map((k) => renderModule(k))}</>,
+    mainContent: <>{layout.main.map((k) => renderModule(k))}</>,
   };
 }

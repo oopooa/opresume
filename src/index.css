@@ -83,8 +83,25 @@
     margin: 0;
   }
 
-  body {
+  html, body {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    background: white;
+  }
+
+  /* 标题不与正文断裂 */
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  /* 改善孤行和寡行 */
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* 模块内条目尽量不跨页 */
+  section > div {
+    break-inside: avoid;
   }
 }

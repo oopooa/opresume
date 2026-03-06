@@ -49,7 +49,7 @@ export function ProjectModule({ config, tokens }: ModuleProps) {
             )}
             {proj.projectContent && (
               <div className="mt-1">
-                <Markdown content={proj.projectContent} />
+                <Markdown content={proj.projectContent} textSize={tokens.typography.contentSize} />
               </div>
             )}
           </div>

@@ -1,9 +1,6 @@
 import type { ReactNode, ComponentType } from 'react';
 import type { ResumeConfig, ModuleLayout } from '@/types';
 
-/** 渲染区域：侧栏 or 主栏，用于 Template3 按区域返回不同 tokens */
-export type RenderZone = 'sidebar' | 'main';
-
 /** 样式令牌 — 控制共享模块的视觉差异 */
 export interface StyleTokens {
   spacing: {
@@ -32,19 +29,6 @@ export interface StyleTokens {
     awardTimeInline: boolean;
     flexAlign: string;
   };
-
-  /** @deprecated 使用 spacing.module */
-  moduleSpacing?: string;
-  /** @deprecated 使用 colors.primary */
-  textPrimary?: string;
-  /** @deprecated 使用 colors.secondary */
-  textSecondary?: string;
-  /** @deprecated 使用 colors.muted */
-  textMuted?: string;
-  /** @deprecated 使用 components.SectionTitle */
-  SectionTitle?: ComponentType<{ title: string }>;
-  /** @deprecated 使用 variants.education */
-  educationInline?: boolean;
 }
 
 /** 共享模块组件的 props */
@@ -52,9 +36,6 @@ export interface ModuleProps {
   config: ResumeConfig;
   tokens: StyleTokens;
 }
-
-/** 模块覆盖组件 — 与共享模块使用相同的 props */
-export type ModuleOverride = ComponentType<ModuleProps>;
 
 /**
  * 模板定义 — 每个模板实现此接口。
@@ -67,12 +48,7 @@ export interface TemplateDefinition {
   id: string;
   /** 默认模块布局：sidebar 和 main 各放哪些模块（不含 profile） */
   defaultLayout: ModuleLayout;
-  getTokens: (zone: RenderZone) => StyleTokens;
-  moduleOverrides?: Record<
-    string,
-    | ModuleOverride
-    | { sidebar?: ModuleOverride; main?: ModuleOverride }
-  >;
+  getTokens: () => StyleTokens;
   LayoutShell: ComponentType<LayoutShellProps>;
 }
 

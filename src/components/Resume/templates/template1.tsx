@@ -17,7 +17,7 @@ function SectionTitle({ title }: { title: string }) {
 const tokens: StyleTokens = {
   spacing: { module: 'mb-4', item: 'mb-2' },
   typography: { titleWeight: 'font-bold', titleSize: 'text-sm', contentSize: 'text-xs' },
-  colors: { primary: '', secondary: 'text-gray-600', muted: 'text-gray-500' },
+  colors: { primary: 'text-gray-800', secondary: 'text-gray-600', muted: 'text-gray-500' },
   components: { SectionTitle },
   variants: { skill: 'bar', project: 'compact', education: 'stacked' },
   layout: { awardTimeInline: false, flexAlign: 'items-start' },
