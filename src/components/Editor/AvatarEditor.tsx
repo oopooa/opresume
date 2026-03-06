@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { Card } from '@/components/ui/card';
+import { useUIStore } from '@/store/ui';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set(['image/png', 'image/jpeg']);
@@ -36,7 +37,8 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const ratioRef = useRef<(typeof RATIOS)[number]>(RATIOS[0]);
   const [dragging, setDragging] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const expanded = useUIStore((s) => s.avatarEditorOpen);
+  const setExpanded = useCallback((open: boolean) => useUIStore.setState({ avatarEditorOpen: open }), []);
 
   const w = avatar?.width ?? 90;
   const h = avatar?.height ?? 90;
@@ -96,10 +98,10 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
   }, [isCircle, activeRatio]);
 
   return (
-    <Collapsible open={expanded} onOpenChange={setExpanded} className="mb-4 border-b border-gray-100 pb-4">
+    <Collapsible open={expanded} onOpenChange={setExpanded}>
       <CollapsibleTrigger asChild>
         <button type="button" className="flex w-full items-center justify-between py-1">
-          <span className="text-xs font-medium text-gray-700">{t('field.avatar')}</span>
+          <span className="text-sm font-medium">{t('field.avatar')}</span>
           <div className="flex items-center gap-1">
             <span
               role="button"

@@ -9,6 +9,7 @@ interface UIStore {
   lang: string;
   editorOpen: boolean;
   activeModule: string | null;
+  avatarEditorOpen: boolean;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
@@ -25,6 +26,7 @@ export const useUIStore = create<UIStore>()(
       lang: 'zh-CN',
       editorOpen: false,
       activeModule: null,
+      avatarEditorOpen: false,
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -49,6 +51,7 @@ export const useUIStore = create<UIStore>()(
         theme: state.theme,
         template: state.template,
         lang: state.lang,
+        avatarEditorOpen: state.avatarEditorOpen,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.lang) {
