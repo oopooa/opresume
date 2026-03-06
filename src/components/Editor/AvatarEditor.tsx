@@ -1,17 +1,19 @@
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Upload, Trash2, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { Upload, Trash2, Eye, EyeOff, ChevronDown, ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { Avatar } from '@/types/resume';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { avatarStyle } from '@/components/Resume/shared';
+import { Card } from '@/components/ui/card';
 
 const MAX_SIZE = 2 * 1024 * 1024;
+const ACCEPTED_TYPES = new Set(['image/png', 'image/jpeg']);
+const ACCEPT_ATTR = 'image/png,image/jpeg';
+
+const PREVIEW_BASE = 120;
 
 const RATIOS = [
   { label: '3:4', w: 3, h: 4 },
@@ -42,6 +44,8 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
   const hidden = avatar?.hidden ?? false;
   const hasSrc = !!avatar?.src;
 
+  const previewH = Math.round(PREVIEW_BASE * h / w);
+
   const set = useCallback(
     (partial: Partial<Avatar>) => onChange({ ...avatar, ...partial }),
     [avatar, onChange],
@@ -49,6 +53,7 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
 
   const uploadFile = useCallback(
     async (file: File) => {
+      if (!ACCEPTED_TYPES.has(file.type)) { toast.error(t('field.invalidFileType')); return; }
       if (file.size > MAX_SIZE) { toast.error(t('field.fileTooLarge')); return; }
       try {
         const res = await fetch('/api/avatar', { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
@@ -76,27 +81,24 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
       e.preventDefault();
       setDragging(false);
       const file = e.dataTransfer.files[0];
-      if (file?.type.startsWith('image/')) uploadFile(file);
+      if (file && ACCEPTED_TYPES.has(file.type)) uploadFile(file);
       else if (file) toast.error(t('field.invalidFileType'));
     },
     [uploadFile, t],
   );
 
   const isCircle = radius >= 999;
-  const activeRatio = isCircle
-    ? RATIOS.find((r) => r.label === '1:1')!
-    : RATIOS.find((r) => Math.abs(w / h - r.w / r.h) < 0.01);
+  const activeRatio = RATIOS.find((r) => Math.abs(w / h - r.w / r.h) < 0.01);
 
   // 非圆形时持续记住当前比例，供圆形切回方形时恢复
-  if (!isCircle && activeRatio) ratioRef.current = activeRatio;
+  useEffect(() => {
+    if (!isCircle && activeRatio) ratioRef.current = activeRatio;
+  }, [isCircle, activeRatio]);
 
   return (
     <Collapsible open={expanded} onOpenChange={setExpanded} className="mb-4 border-b border-gray-100 pb-4">
       <CollapsibleTrigger asChild>
-        <button
-          type="button"
-          className="flex w-full items-center justify-between py-1"
-        >
+        <button type="button" className="flex w-full items-center justify-between py-1">
           <span className="text-xs font-medium text-gray-700">{t('field.avatar')}</span>
           <div className="flex items-center gap-1">
             <span
@@ -109,112 +111,125 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
             >
               {hidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
             </span>
-            <ChevronDown
-              className={cn(
-                'h-4 w-4 text-gray-400 transition-transform duration-200',
-                expanded && 'rotate-180',
-              )}
-            />
+            <ChevronDown className={cn('h-4 w-4 text-gray-400 transition-transform duration-200', expanded && 'rotate-180')} />
           </div>
         </button>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="mt-3 space-y-3">
+      <CollapsibleContent className="mt-3">
+        <Card className="flex gap-6 p-5">
+          {/* 左侧：预览区 */}
+          <div className="flex flex-col items-center gap-2.5">
+            <div
+              className={cn(
+                'group relative flex cursor-pointer items-center justify-center overflow-hidden transition-all',
+                hasSrc
+                  ? 'shadow-sm ring-1 ring-black/5'
+                  : cn(
+                      'border-2 border-dashed',
+                      dragging ? 'border-primary bg-primary/5' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300 hover:bg-slate-50',
+                    ),
+              )}
+              style={{
+                width: PREVIEW_BASE,
+                height: previewH,
+                borderRadius: isCircle ? '50%' : '8px',
+              }}
+              onClick={() => fileRef.current?.click()}
+              onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={onDrop}
+            >
+              {hasSrc ? (
+                <img src={avatar!.src} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex flex-col items-center gap-1.5 text-slate-300">
+                  <ImageIcon className="h-8 w-8" />
+                  <span className="text-[11px] text-slate-400">{t('field.uploadAvatar')}</span>
+                </div>
+              )}
+              {/* 悬浮遮罩 */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white opacity-0 backdrop-blur-[1px] transition-opacity group-hover:opacity-100">
+                <Upload className="mb-1 h-4 w-4" />
+                <span className="text-[11px] font-medium">{hasSrc ? t('field.changeAvatar') : t('field.uploadAvatar')}</span>
+              </div>
+            </div>
+            {hasSrc && (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-[11px] text-slate-400 transition-colors hover:text-red-500"
+                onClick={() => set({ src: undefined })}
+              >
+                <Trash2 className="h-3 w-3" />
+                {t('field.removeAvatar')}
+              </button>
+            )}
+          </div>
 
-      {/* 上传区域 */}
-      <div
-        className={cn(
-          'flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed py-6 transition-colors',
-          dragging ? 'border-resume-primary bg-resume-primary/5' : 'border-gray-300 bg-gray-50 hover:border-gray-400',
-        )}
-        onClick={() => fileRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={onDrop}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileRef.current?.click(); }}
-      >
-        {hasSrc ? (
-          <AvatarUI
-            className="mb-2 h-auto w-auto rounded-none"
-            style={avatarStyle(avatar)}
-          >
-            <AvatarImage src={avatar!.src} alt="" className="object-cover" />
-            <AvatarFallback className="rounded-none text-xs text-muted-foreground">N/A</AvatarFallback>
-          </AvatarUI>
-        ) : (
-          <Upload className="mb-2 h-8 w-8 text-gray-400" />
-        )}
-        <p className="text-xs text-gray-500">
-          {t('field.uploadHint')}
-        </p>
-      </div>
+          {/* 右侧：设置区 */}
+          <div className="flex flex-1 flex-col justify-between">
+            <div className="space-y-4">
+              <div>
+                <Label className="mb-2 block text-xs font-medium text-slate-600">{t('field.avatarShape')}</Label>
+                <ToggleGroup
+                  type="single"
+                  className="inline-flex gap-0.5 rounded-lg border border-slate-200 bg-slate-100/80 p-1"
+                  value={String(isCircle ? 999 : 0)}
+                  onValueChange={(val) => {
+                    if (!val) return;
+                    const v = Number(val);
+                    if (v >= 999) {
+                      set({ borderRadius: 999, height: w });
+                    } else {
+                      const r = ratioRef.current;
+                      set({ borderRadius: 0, height: Math.round(w * r.h / r.w) });
+                    }
+                  }}
+                >
+                  {SHAPES.map((s) => (
+                    <ToggleGroupItem
+                      key={s.value}
+                      value={String(s.value)}
+                      className="h-7 rounded-md px-4 text-xs font-medium text-slate-500 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm"
+                    >
+                      {t(s.labelKey)}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
 
-      <input ref={fileRef} type="file" accept="image/*" className="hidden" aria-label={t('field.uploadAvatar')} onChange={onFileChange} />
+              <div>
+                <Label className="mb-2 block text-xs font-medium text-slate-600">{t('field.aspectRatio')}</Label>
+                <ToggleGroup
+                  type="single"
+                  className="inline-flex gap-0.5 rounded-lg border border-slate-200 bg-slate-100/80 p-1"
+                  value={activeRatio?.label ?? ''}
+                  onValueChange={(val) => {
+                    const r = RATIOS.find((r) => r.label === val);
+                    if (r) set({ height: Math.round(w * r.h / r.w) });
+                  }}
+                >
+                  {RATIOS.map((r) => (
+                    <ToggleGroupItem
+                      key={r.label}
+                      value={r.label}
+                      className="h-7 rounded-md px-3.5 text-xs font-medium text-slate-500 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm"
+                    >
+                      {r.label}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+            </div>
 
-      {/* 删除按钮 */}
-      {hasSrc && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1 text-destructive"
-          onClick={() => set({ src: undefined })}
-        >
-          <Trash2 className="h-3 w-3" />
-          {t('field.removeAvatar')}
-        </Button>
-      )}
+            <p className="mt-4 flex items-center gap-1.5 text-[11px] text-slate-400">
+              <ImageIcon className="h-3 w-3 shrink-0" />
+              {t('field.avatarFormatHint')}
+            </p>
+          </div>
+        </Card>
 
-      {/* 形状 */}
-      <div>
-        <Label className="mb-1 block">{t('field.avatarShape')}</Label>
-        <ToggleGroup
-          type="single"
-          size="sm"
-          className="justify-start"
-          value={String(isCircle ? 999 : 0)}
-          onValueChange={(val) => {
-            if (!val) return;
-            const v = Number(val);
-            if (v >= 999) {
-              set({ borderRadius: 999, height: w });
-            } else {
-              const r = ratioRef.current;
-              set({ borderRadius: 0, height: Math.round(w * r.h / r.w) });
-            }
-          }}
-        >
-          {SHAPES.map((s) => (
-            <ToggleGroupItem key={s.value} value={String(s.value)} className="text-xs">
-              {t(s.labelKey)}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-      </div>
-
-      {/* 比例（圆形时锁定 1:1） */}
-      {!isCircle && (
-        <div>
-          <Label className="mb-1 block">{t('field.aspectRatio')}</Label>
-          <ToggleGroup
-            type="single"
-            size="sm"
-            className="justify-start"
-            value={activeRatio?.label ?? ''}
-            onValueChange={(val) => {
-              const r = RATIOS.find((r) => r.label === val);
-              if (r) set({ height: Math.round(w * r.h / r.w) });
-            }}
-          >
-            {RATIOS.map((r) => (
-              <ToggleGroupItem key={r.label} value={r.label} className="text-xs">
-                {r.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </div>
-      )}
+        <input ref={fileRef} type="file" accept={ACCEPT_ATTR} className="hidden" aria-label={t('field.uploadAvatar')} onChange={onFileChange} />
       </CollapsibleContent>
     </Collapsible>
   );

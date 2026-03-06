@@ -10,9 +10,6 @@ const DATA_DIR = path.resolve(__dirname, 'data');
 const MIME_EXT: Record<string, string> = {
   'image/png': '.png',
   'image/jpeg': '.jpg',
-  'image/gif': '.gif',
-  'image/webp': '.webp',
-  'image/svg+xml': '.svg',
 };
 
 const EXT_MIME: Record<string, string> = Object.fromEntries(
