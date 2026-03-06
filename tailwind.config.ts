@@ -66,6 +66,7 @@ export default {
         },
         resume: {
           primary: 'var(--resume-primary)',
+          'primary-light': 'var(--resume-primary-light)',
           tag: 'var(--resume-tag)',
         },
         editor: {

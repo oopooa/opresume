@@ -21,6 +21,7 @@
   },
   "toolbar": {
     "template": "Template",
+    "templateDesc": "Choose a template that suits your resume",
     "theme": "Theme",
     "language": "Language",
     "exportJSON": "Export JSON",

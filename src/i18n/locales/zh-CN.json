@@ -21,6 +21,7 @@
   },
   "toolbar": {
     "template": "模板",
+    "templateDesc": "选择适合您的简历模板",
     "theme": "主题",
     "language": "语言",
     "exportJSON": "导出 JSON",

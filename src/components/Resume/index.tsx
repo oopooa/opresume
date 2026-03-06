@@ -10,8 +10,8 @@ function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: Re
   return <Shell config={config} sidebarContent={sidebarContent} mainContent={mainContent} />;
 }
 
-export function ResumeView({ config }: { config: ResumeConfig }) {
-  const template = useUIStore((s) => s.template);
-  const def = definitions[template] ?? defaultDefinition;
+export function ResumeView({ config, templateId }: { config: ResumeConfig; templateId?: string }) {
+  const storeTemplate = useUIStore((s) => s.template);
+  const def = definitions[templateId ?? storeTemplate] ?? defaultDefinition;
   return <TemplateRenderer def={def} config={config} />;
 }
