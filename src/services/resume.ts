@@ -1,4 +1,4 @@
-import type { ResumeConfig, CustomField } from '@/types';
+import type { ResumeConfig } from '@/types';
 
 const API_URL = '/api/resume';
 
@@ -28,7 +28,7 @@ function removeCustomFieldIds(config: ResumeConfig): ResumeConfig {
       ...cleaned.profile,
       customFields: cleaned.profile.customFields
         .filter((f) => f.key.trim() || f.value.trim())
-        .map(({ id, ...field }) => field as CustomField),
+        .map(({ id: _, ...rest }) => rest),
     };
   }
   return cleaned;

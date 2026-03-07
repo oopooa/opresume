@@ -7,6 +7,8 @@ export interface FieldDef {
   options?: { labelKey: string; value: string }[];
   /** 时间范围结束日期是否显示「至今」选项 */
   showPresent?: boolean;
+  /** 字段图标名（lucide 图标） */
+  icon?: string;
 }
 
 export interface ModuleSchema {

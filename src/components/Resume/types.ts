@@ -18,7 +18,7 @@ export interface StyleTokens {
     muted: string;
   };
   components: {
-    SectionTitle: ComponentType<{ title: string }>;
+    SectionTitle: ComponentType<{ title: string; icon?: string }>;
   };
   variants: {
     skill: 'bar' | 'list' | 'tags';

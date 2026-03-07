@@ -1,15 +1,17 @@
 import type { TemplateDefinition, StyleTokens, LayoutShellProps } from '../types';
 import { useTranslation } from 'react-i18next';
 
-import { EditableSection, ResumeAvatar, calculateAge } from '../shared';
+import { EditableSection, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, ProfileField } from '../shared';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
 /* ---------- SectionTitle ---------- */
 
-function SectionTitle({ title }: { title: string }) {
+function SectionTitle({ title, icon }: { title: string; icon?: string }) {
   return (
-    <h3 className="mb-2 text-xs font-semibold text-resume-primary">
+    <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-resume-primary">
+      <DynamicIcon name={icon} className="h-3.5 w-3.5" />
       {title}
-      <div className="mt-1 h-px bg-gray-200" />
+      <div className="mt-1 h-px flex-1 bg-gray-200" />
     </h3>
   );
 }
@@ -31,6 +33,7 @@ function Template2Shell({ config, sidebarContent, mainContent }: LayoutShellProp
   const { profile, avatar } = config;
   const { t } = useTranslation();
   const age = calculateAge(profile?.birthday);
+  const customFieldIconMap = useCustomFieldIconMap();
 
   return (
     <div className="flex min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
@@ -42,15 +45,15 @@ function Template2Shell({ config, sidebarContent, mainContent }: LayoutShellProp
             {profile?.positionTitle && <p className="mt-0.5 text-xs text-gray-500">{profile.positionTitle}</p>}
           </div>
           <div className="mb-5 space-y-1.5 text-xs text-gray-600">
-            {profile?.mobile && <p>{profile.mobile}</p>}
-            {profile?.email && <p>{profile.email}</p>}
-            {profile?.github && <p>github.com/{profile.github}</p>}
-            {profile?.zhihu && <p>{profile.zhihu}</p>}
-            {profile?.workPlace && <p>{profile.workPlace}</p>}
+            {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')}>{profile.mobile}</ProfileField>}
+            {profile?.email && <ProfileField icon={getProfileIcon('email')}>{profile.email}</ProfileField>}
+            {profile?.github && <ProfileField icon={getProfileIcon('github')}>github.com/{profile.github}</ProfileField>}
+            {profile?.zhihu && <ProfileField icon={getProfileIcon('zhihu')}>{profile.zhihu}</ProfileField>}
+            {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')}>{profile.workPlace}</ProfileField>}
             {age !== null && !profile?.ageHidden && <p>{t('field.age', { age })}</p>}
-            {profile?.workExpYear && <p>{t('common.yearsExp', { years: profile.workExpYear })}</p>}
+            {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
             {profile?.customFields?.map((field) => (
-              <p key={field.id}>{field.key}: {field.value}</p>
+              <ProfileField key={field.key} icon={customFieldIconMap[field.key]}>{field.key}: {field.value}</ProfileField>
             ))}
           </div>
         </EditableSection>

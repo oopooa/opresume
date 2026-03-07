@@ -4,6 +4,8 @@ import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
 import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS } from '@/config/icons';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
 const RING_STYLE = {
   '--tw-ring-color': 'color-mix(in srgb, var(--resume-primary) 40%, transparent)',
@@ -79,4 +81,38 @@ export function calculateAge(birthday?: string): number | null {
     age--;
   }
   return age >= 0 ? age : null;
+}
+
+/** 响应式获取模块图标：用户覆盖（UIStore） → 默认图标 */
+export function useModuleIcon(key: string): string | undefined {
+  const icon = useUIStore((s) => s.moduleIconMap[key]);
+  return icon ?? DEFAULT_MODULE_ICONS[key];
+}
+
+/** 获取 Profile 字段默认图标 */
+export function getProfileIcon(key: string): string | undefined {
+  return DEFAULT_PROFILE_ICONS[key];
+}
+
+/** 响应式获取自定义字段图标映射 */
+export function useCustomFieldIconMap(): Record<string, string> {
+  return useUIStore((s) => s.customFieldIconMap);
+}
+
+/** Profile 字段带图标渲染 */
+export function ProfileField({
+  icon,
+  children,
+  className,
+}: {
+  icon?: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <p className={cn('flex items-center gap-1.5', className)}>
+      <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
+      <span>{children}</span>
+    </p>
+  );
 }

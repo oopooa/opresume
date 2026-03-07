@@ -1,17 +1,18 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { EditableSection, getTitle, isHidden } from '../shared';
+import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function AwardModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
+  const moduleIcon = useModuleIcon('awardList');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'awardList') || !config.awardList?.length) return null;
 
   return (
     <EditableSection module="awardList">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} />
+        <SectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} icon={moduleIcon} />
         {config.awardList.map((award) => (
           <div
             key={award.id}

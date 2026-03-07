@@ -1,10 +1,11 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { EditableSection, TimeRange, getTitle, isHidden } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function EducationModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
+  const moduleIcon = useModuleIcon('educationList');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'educationList') || !config.educationList?.length) return null;
 
@@ -13,7 +14,7 @@ export function EducationModule({ config, tokens }: ModuleProps) {
   return (
     <EditableSection module="educationList">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'educationList', t('module.educationList'))} />
+        <SectionTitle title={getTitle(config, 'educationList', t('module.educationList'))} icon={moduleIcon} />
         {config.educationList.map((edu) => (
           <div
             key={edu.id}

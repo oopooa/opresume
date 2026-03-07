@@ -2,10 +2,11 @@ import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, TimeRange, getTitle, isHidden } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function ProjectModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
+  const moduleIcon = useModuleIcon('projectList');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'projectList') || !config.projectList?.length) return null;
 
@@ -14,7 +15,7 @@ export function ProjectModule({ config, tokens }: ModuleProps) {
   return (
     <EditableSection module="projectList">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} />
+        <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />
         {config.projectList.map((proj) => (
           <div key={proj.id} className={tokens.spacing.item}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>

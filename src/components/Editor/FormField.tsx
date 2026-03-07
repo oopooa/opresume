@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { useResumeStore } from '@/store/resume';
+import { DynamicIcon } from '@/components/DynamicIcon';
 import type { FieldDef } from './schemas';
 
 /** 从 "YYYY.MM" 或 "YYYY" 格式中提取年份 */
@@ -37,6 +38,16 @@ function toDateString(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
+/** 带图标的字段标签 */
+function FieldLabel({ label, icon }: { label: string; icon?: string }) {
+  return (
+    <Label className="flex items-center gap-1.5">
+      <DynamicIcon name={icon} className="h-3.5 w-3.5 text-muted-foreground" />
+      {label}
+    </Label>
+  );
+}
+
 /** 日期选择器（Popover + Calendar） */
 function DatePickerField({ field, value, onChange }: FormFieldProps) {
   const { t, i18n } = useTranslation();
@@ -49,7 +60,7 @@ function DatePickerField({ field, value, onChange }: FormFieldProps) {
 
   return (
     <div className="space-y-1">
-      <Label>{label}</Label>
+      <FieldLabel label={label} icon={field.icon} />
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -205,7 +216,7 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
 
   return (
     <div className="min-w-0 space-y-1">
-      <Label>{label}</Label>
+      <FieldLabel label={label} icon={field.icon} />
       <div className="flex items-center gap-2">
         <div className="min-w-0 flex-1">
           <MonthPicker
@@ -239,7 +250,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'text':
       return (
         <div className="space-y-1">
-          <Label>{label}</Label>
+          <FieldLabel label={label} icon={field.icon} />
           <Input
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
@@ -250,7 +261,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'tel':
       return (
         <div className="space-y-1">
-          <Label>{label}</Label>
+          <FieldLabel label={label} icon={field.icon} />
           <Input
             type="tel"
             value={(value as string) ?? ''}
@@ -269,7 +280,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'markdown':
       return (
         <div className="space-y-1">
-          <Label>{label}</Label>
+          <FieldLabel label={label} icon={field.icon} />
           <Textarea
             rows={field.type === 'markdown' ? 6 : 3}
             value={(value as string) ?? ''}
@@ -285,7 +296,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
       const num = (value as number) ?? 50;
       return (
         <div className="space-y-1">
-          <Label>{label}</Label>
+          <FieldLabel label={label} icon={field.icon} />
           <div className="flex items-center gap-2">
             <Slider
               className="flex-1"
@@ -307,7 +318,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'select':
       return (
         <div className="space-y-1">
-          <Label>{label}</Label>
+          <FieldLabel label={label} icon={field.icon} />
           <Select value={(value as string) ?? ''} onValueChange={(v) => onChange(v)}>
             <SelectTrigger>
               <SelectValue />

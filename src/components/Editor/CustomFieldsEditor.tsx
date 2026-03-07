@@ -30,6 +30,8 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import type { CustomField } from '@/types/resume';
 import { useTranslation } from 'react-i18next';
+import { IconPicker } from './IconPicker';
+import { useUIStore } from '@/store/ui';
 
 interface CustomFieldsEditorProps {
   fields: CustomField[];
@@ -39,17 +41,20 @@ interface CustomFieldsEditorProps {
 function SortableField({
   field,
   onUpdate,
+  onIconChange,
   onDelete,
   onBlur,
   isLastEmpty,
 }: {
   field: CustomField;
   onUpdate: (field: 'key' | 'value', val: string) => void;
+  onIconChange: (icon: string | undefined) => void;
   onDelete: () => void;
   onBlur: () => void;
   isLastEmpty: boolean;
 }) {
   const { t } = useTranslation();
+  const fieldIcon = useUIStore((s) => s.customFieldIconMap[field.key]);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: field.id!,
   });
@@ -70,6 +75,7 @@ function SortableField({
       >
         <GripVertical className="h-4 w-4" />
       </button>
+      <IconPicker value={fieldIcon} onChange={onIconChange} />
       <Input
         value={field.key}
         onChange={(e) => onUpdate('key', e.target.value)}
@@ -155,6 +161,10 @@ export function CustomFieldsEditor({ fields, onChange }: CustomFieldsEditorProps
     onChange(fields.map((f) => (f.id === id ? { ...f, [field]: val } : f)));
   };
 
+  const handleIconChange = (fieldKey: string, icon: string | undefined) => {
+    useUIStore.getState().updateCustomFieldIcon(fieldKey, icon);
+  };
+
   const handleBlur = (id: string) => {
     const field = fields.find((f) => f.id === id);
     // 只有当 key 和 value 都有值时才新增幽灵行
@@ -194,6 +204,7 @@ export function CustomFieldsEditor({ fields, onChange }: CustomFieldsEditorProps
                   key={field.id}
                   field={field}
                   onUpdate={(f, val) => handleUpdate(field.id!, f, val)}
+                  onIconChange={(icon) => handleIconChange(field.key, icon)}
                   onDelete={() => handleDeleteClick(field)}
                   onBlur={() => handleBlur(field.id!)}
                   isLastEmpty={isLastEmpty}

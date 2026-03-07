@@ -1,17 +1,18 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { Markdown } from '@/components/Markdown';
-import { EditableSection, getTitle, isHidden } from '../shared';
+import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function AboutMeModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
+  const moduleIcon = useModuleIcon('aboutme');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'aboutme') || !config.aboutme?.aboutmeDesc) return null;
 
   return (
     <EditableSection module="aboutme">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} />
+        <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} icon={moduleIcon} />
         <Markdown content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
       </section>
     </EditableSection>

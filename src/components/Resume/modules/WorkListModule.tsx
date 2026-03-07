@@ -1,17 +1,18 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { EditableSection, getTitle, isHidden } from '../shared';
+import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function WorkListModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
+  const moduleIcon = useModuleIcon('workList');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'workList') || !config.workList?.length) return null;
 
   return (
     <EditableSection module="workList">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'workList', t('module.workList'))} />
+        <SectionTitle title={getTitle(config, 'workList', t('module.workList'))} icon={moduleIcon} />
         {config.workList.map((item) => (
           <div key={item.id} className={tokens.spacing.item}>
             <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>

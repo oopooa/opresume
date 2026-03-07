@@ -49,6 +49,9 @@ import { AvatarEditor } from './AvatarEditor';
 import { CustomFieldsEditor } from './CustomFieldsEditor';
 import { calculateAge } from '@/components/Resume/shared';
 import { getEffectiveLayout, isTwoColumnTemplate } from '@/config/layout';
+import { DEFAULT_MODULE_ICONS } from '@/config/icons';
+import { IconPicker } from './IconPicker';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
 const ALWAYS_VISIBLE = new Set(['profile']);
 
@@ -66,16 +69,20 @@ function SortableModuleHeader({
   hidden,
   canHide,
   customTitle,
+  moduleIcon,
   onToggleHidden,
   onTitleChange,
+  onIconChange,
 }: {
   module: string;
   expanded: boolean;
   hidden: boolean;
   canHide: boolean;
   customTitle?: string;
+  moduleIcon?: string;
   onToggleHidden: () => void;
   onTitleChange: (title: string) => void;
+  onIconChange: (icon: string | undefined) => void;
 }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
@@ -117,6 +124,21 @@ function SortableModuleHeader({
       >
         <GripVertical className="h-4 w-4" />
       </Button>
+      <CollapsibleTrigger asChild>
+        <button
+          type="button"
+          aria-label={t(expanded ? 'common.collapse' : 'common.expand')}
+          className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-gray-400 transition-transform duration-200"
+        >
+          <ChevronDown
+            className={cn(
+              'h-4 w-4',
+              expanded && 'rotate-180',
+            )}
+          />
+        </button>
+      </CollapsibleTrigger>
+      <IconPicker value={moduleIcon} onChange={onIconChange} />
       {editing ? (
         <div className="flex flex-1 items-center py-1.5">
           <Input
@@ -138,12 +160,6 @@ function SortableModuleHeader({
               type="button"
               className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
             >
-              <ChevronDown
-                className={cn(
-                  'h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200',
-                  expanded && 'rotate-180',
-                )}
-              />
               <span className={cn(hidden && 'text-gray-400 line-through')}>
                 {customTitle || t(`module.${module}`)}
               </span>
@@ -175,11 +191,12 @@ function SortableModuleHeader({
 }
 
 /* ── 拖拽覆盖层（拖拽时显示的浮动元素） ── */
-function DragOverlayContent({ module, customTitle }: { module: string; customTitle?: string }) {
+function DragOverlayContent({ module, customTitle, moduleIcon }: { module: string; customTitle?: string; moduleIcon?: string }) {
   const { t } = useTranslation();
   return (
     <div className="flex items-center gap-2 rounded-lg bg-editor-module-active px-3 py-3 shadow-lg">
       <GripVertical className="h-4 w-4 text-gray-400" />
+      <DynamicIcon name={moduleIcon} className="h-4 w-4 text-gray-500" />
       <span className="text-[15px] font-medium text-gray-700">{customTitle || t(`module.${module}`)}</span>
     </div>
   );
@@ -251,6 +268,7 @@ function ProfileSection({
         </div>
       </div>
       <FormCreator fields={afterFields} data={data} onChange={handleFieldChange} />
+
       <CustomFieldsEditor
         fields={config.profile?.customFields ?? []}
         onChange={handleCustomFieldsChange}
@@ -335,6 +353,7 @@ function SortableColumn({
 }) {
   const { t } = useTranslation();
   const { setNodeRef, isOver } = useDroppable({ id: columnId });
+  const moduleIconMap = useUIStore((s) => s.moduleIconMap);
   const schemaMap = useMemo(() => {
     const map: Record<string, ModuleSchema> = {};
     for (const s of schemas) map[s.module] = s;
@@ -352,6 +371,13 @@ function SortableColumn({
       }
     },
     [config.titleNameMap, update],
+  );
+
+  const handleIconChange = useCallback(
+    (module: string, icon: string | undefined) => {
+      useUIStore.getState().updateModuleIcon(module, icon);
+    },
+    [],
   );
 
   return (
@@ -376,6 +402,7 @@ function SortableColumn({
             const hidden = config.moduleHidden?.[module] === true;
             const canHide = !ALWAYS_VISIBLE.has(module);
             const customTitle = config.titleNameMap?.[module];
+            const moduleIcon = moduleIconMap[module] ?? DEFAULT_MODULE_ICONS[module];
 
             return (
               <Collapsible key={module} open={isExpanded} onOpenChange={() => toggle(module)}>
@@ -385,8 +412,10 @@ function SortableColumn({
                   hidden={hidden}
                   canHide={canHide}
                   customTitle={customTitle}
+                  moduleIcon={moduleIcon}
                   onToggleHidden={() => toggleModuleHidden(module)}
                   onTitleChange={(title) => handleTitleChange(module, title)}
+                  onIconChange={(icon) => handleIconChange(module, icon)}
                 />
                 <CollapsibleContent>
                   <div className="pt-3 pb-4">
@@ -414,6 +443,7 @@ export function Editor() {
   const closeEditor = useUIStore((s) => s.closeEditor);
   const clearActiveModule = useUIStore((s) => s.clearActiveModule);
   const template = useUIStore((s) => s.template);
+  const editorModuleIconMap = useUIStore((s) => s.moduleIconMap);
   const config = useResumeStore((s) => s.config);
   const update = useResumeStore((s) => s.update);
 
@@ -578,9 +608,18 @@ export function Editor() {
                     <CollapsibleTrigger asChild>
                       <button
                         type="button"
+                        aria-label={t(isExpanded ? 'common.collapse' : 'common.expand')}
+                        className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-gray-400 transition-transform duration-200"
+                      >
+                        <ChevronDown className={cn('h-4 w-4', isExpanded && 'rotate-180')} />
+                      </button>
+                    </CollapsibleTrigger>
+                    <DynamicIcon name={DEFAULT_MODULE_ICONS['profile']} className="h-4 w-4 text-gray-500" />
+                    <CollapsibleTrigger asChild>
+                      <button
+                        type="button"
                         className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
                       >
-                        <ChevronDown className={cn('h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200', isExpanded && 'rotate-180')} />
                         <span>{t('module.profile')}</span>
                       </button>
                     </CollapsibleTrigger>
@@ -630,7 +669,7 @@ export function Editor() {
               />
 
               <DragOverlay>
-                {activeId ? <DragOverlayContent module={activeId} customTitle={config.titleNameMap?.[activeId]} /> : null}
+                {activeId ? <DragOverlayContent module={activeId} customTitle={config.titleNameMap?.[activeId]} moduleIcon={editorModuleIconMap[activeId] ?? DEFAULT_MODULE_ICONS[activeId]} /> : null}
               </DragOverlay>
             </DndContext>
           </div>

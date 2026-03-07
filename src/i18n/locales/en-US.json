@@ -108,5 +108,17 @@
     "customColor": "Custom Color",
     "primaryColor": "Primary Color",
     "tagColor": "Tag Color"
+  },
+  "icon": {
+    "selectIcon": "Select Icon",
+    "searchIcon": "Search icons...",
+    "clearIcon": "Clear Icon",
+    "noResult": "No matching icons found",
+    "contact": "Contact",
+    "social": "Social",
+    "skillTool": "Skills & Tools",
+    "eduExp": "Education & Experience",
+    "awardWork": "Awards & Works",
+    "general": "General"
   }
 }

@@ -108,5 +108,17 @@
     "customColor": "自定义颜色",
     "primaryColor": "主题色",
     "tagColor": "标签色"
+  },
+  "icon": {
+    "selectIcon": "选择图标",
+    "searchIcon": "搜索图标...",
+    "clearIcon": "清除图标",
+    "noResult": "没有找到匹配的图标",
+    "contact": "联系方式",
+    "social": "社交与主页",
+    "skillTool": "技能与工具",
+    "eduExp": "教育与经历",
+    "awardWork": "荣誉与作品",
+    "general": "通用"
   }
 }

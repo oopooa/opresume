@@ -1,16 +1,18 @@
 import type { TemplateDefinition, StyleTokens, LayoutShellProps } from '../types';
 import { useTranslation } from 'react-i18next';
-import { EditableSection, getTitle, ResumeAvatar, calculateAge } from '../shared';
+import { EditableSection, getTitle, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, useModuleIcon } from '../shared';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
 /* ---------- SectionTitle ---------- */
 
-function SectionTitle({ title }: { title: string }) {
+function SectionTitle({ title, icon }: { title: string; icon?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
       <span
-        className="inline-block rounded-sm px-3 py-1 text-xs font-bold text-white"
+        className="inline-flex items-center gap-1.5 rounded-sm px-3 py-1 text-xs font-bold text-white"
         style={{ backgroundColor: 'var(--resume-primary)' }}
       >
+        <DynamicIcon name={icon} className="h-3.5 w-3.5" />
         {title}
       </span>
       <div className="h-px flex-1 bg-gray-200" />
@@ -20,10 +22,11 @@ function SectionTitle({ title }: { title: string }) {
 
 /* ---------- InfoItem（Template4 专有） ---------- */
 
-function InfoItem({ label, value }: { label: string; value?: string }) {
+function InfoItem({ icon, label, value }: { icon?: string; label: string; value?: string }) {
   if (!value) return null;
   return (
-    <div className="flex items-baseline gap-1 text-xs">
+    <div className="flex items-center gap-1 text-xs">
+      <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
       <span className="shrink-0 text-gray-500">{label}：</span>
       <span className="text-gray-800">{value}</span>
     </div>
@@ -47,6 +50,8 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
   const { profile, avatar } = config;
   const { t } = useTranslation();
   const age = calculateAge(profile?.birthday);
+  const customFieldIconMap = useCustomFieldIconMap();
+  const profileIcon = useModuleIcon('profile');
 
   return (
     <div className="relative min-h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
@@ -62,17 +67,17 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
         </EditableSection>
         <EditableSection module="profile">
           <div className="mb-5">
-            <SectionTitle title={getTitle(config, 'profile', t('module.profile'))} />
+            <SectionTitle title={getTitle(config, 'profile', t('module.profile'))} icon={profileIcon} />
             <div className="grid grid-cols-3 gap-x-6 gap-y-1.5">
-              <InfoItem label={t('field.mobile')} value={profile?.mobile} />
-              <InfoItem label={t('field.email')} value={profile?.email} />
-              <InfoItem label={t('field.workPlace')} value={profile?.workPlace} />
+              <InfoItem icon={getProfileIcon('mobile')} label={t('field.mobile')} value={profile?.mobile} />
+              <InfoItem icon={getProfileIcon('email')} label={t('field.email')} value={profile?.email} />
+              <InfoItem icon={getProfileIcon('workPlace')} label={t('field.workPlace')} value={profile?.workPlace} />
               {age !== null && !profile?.ageHidden && <InfoItem label={t('field.ageLabel')} value={t('field.age', { age })} />}
-              <InfoItem label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
-              <InfoItem label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
-              <InfoItem label={t('field.zhihu')} value={profile?.zhihu} />
+              <InfoItem icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
+              <InfoItem icon={getProfileIcon('github')} label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
+              <InfoItem icon={getProfileIcon('zhihu')} label={t('field.zhihu')} value={profile?.zhihu} />
               {profile?.customFields?.map((field) => (
-                <InfoItem key={field.id} label={field.key} value={field.value} />
+                <InfoItem key={field.key} icon={customFieldIconMap[field.key]} label={field.key} value={field.value} />
               ))}
             </div>
           </div>
