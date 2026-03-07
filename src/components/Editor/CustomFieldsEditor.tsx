@@ -29,7 +29,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { CustomField } from '@/types/resume';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { IconPicker } from './IconPicker';
 import { useUIStore } from '@/store/ui';
 
@@ -219,8 +219,14 @@ export function CustomFieldsEditor({ fields, onChange }: CustomFieldsEditorProps
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('common.deleteHint', { name: fieldToDelete?.key || t('field.customFieldKey') })}
+            <AlertDialogDescription asChild>
+              <p className="text-sm text-muted-foreground">
+                <Trans
+                  i18nKey="common.deleteHint"
+                  values={{ name: fieldToDelete?.key || t('field.customFieldKey') }}
+                  components={{ bold: <span className="font-semibold text-foreground" /> }}
+                />
+              </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
