@@ -31,12 +31,14 @@ import { templateIds } from '@/components/Resume/templates';
 import { ResumeView } from '@/components/Resume';
 
 const PRESETS = [
-  { color: '#2f5785', tagColor: '#8bc34a' },
-  { color: '#2e7d32', tagColor: '#ff9800' },
-  { color: '#c62828', tagColor: '#42a5f5' },
-  { color: '#6a1b9a', tagColor: '#fdd835' },
-  { color: '#00695c', tagColor: '#ef5350' },
-  { color: '#37474f', tagColor: '#26c6da' },
+  { key: 'onyxBlack', color: '#18181B', tagColor: '#71717A' },
+  { key: 'executiveNavy', color: '#2C3E50', tagColor: '#5B8C5A' },
+  { key: 'techBlue', color: '#2563EB', tagColor: '#F59E0B' },
+  { key: 'ivyTeal', color: '#115E59', tagColor: '#EA580C' },
+  { key: 'charcoalSlate', color: '#334155', tagColor: '#818CF8' },
+  { key: 'burgundy', color: '#7F1D1D', tagColor: '#CA8A04' },
+  { key: 'mutedPlum', color: '#5B21B6', tagColor: '#14B8A6' },
+  { key: 'espressoBrown', color: '#4E342E', tagColor: '#D97706' },
 ];
 
 export function AppearanceDrawer() {
@@ -121,42 +123,34 @@ export function AppearanceDrawer() {
               {/* 主题配色 */}
               <section>
                 <h3 className="mb-3 text-sm font-medium text-foreground">{t('toolbar.theme')}</h3>
-                <div className="space-y-3">
-                  <div className="flex flex-wrap gap-2">
-                    {PRESETS.map((preset) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {PRESETS.map((preset) => {
+                    const active = theme.color === preset.color;
+                    return (
                       <button
-                        key={preset.color}
+                        key={preset.key}
                         type="button"
-                        aria-label={preset.color}
-                        onClick={() => updateTheme(preset)}
+                        onClick={() => updateTheme({ color: preset.color, tagColor: preset.tagColor })}
                         className={cn(
-                          'h-7 w-7 rounded-full border-2 transition-transform hover:scale-110',
-                          theme.color === preset.color ? 'border-gray-800' : 'border-transparent',
+                          'flex items-center gap-2.5 rounded-lg border px-3 py-2 text-left transition-all',
+                          active
+                            ? 'border-gray-800 bg-gray-50'
+                            : 'border-gray-200 hover:border-gray-300',
                         )}
-                        style={{ backgroundColor: preset.color }}
-                      />
-                    ))}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center justify-between text-sm text-muted-foreground">
-                      {t('theme.primaryColor')}
-                      <input
-                        type="color"
-                        value={theme.color}
-                        onChange={(e) => updateTheme({ color: e.target.value })}
-                        className="h-7 w-9 cursor-pointer rounded border border-gray-300"
-                      />
-                    </label>
-                    <label className="flex items-center justify-between text-sm text-muted-foreground">
-                      {t('theme.tagColor')}
-                      <input
-                        type="color"
-                        value={theme.tagColor}
-                        onChange={(e) => updateTheme({ tagColor: e.target.value })}
-                        className="h-7 w-9 cursor-pointer rounded border border-gray-300"
-                      />
-                    </label>
-                  </div>
+                      >
+                        <span
+                          className="h-4 w-4 shrink-0 rounded-full"
+                          style={{ backgroundColor: preset.color }}
+                        />
+                        <span className={cn(
+                          'text-xs font-medium',
+                          active ? 'text-gray-900' : 'text-gray-600',
+                        )}>
+                          {t(`theme.${preset.key}`)}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </section>
 

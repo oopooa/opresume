@@ -110,9 +110,14 @@
     "template4": "Single Column"
   },
   "theme": {
-    "customColor": "Custom Color",
-    "primaryColor": "Primary Color",
-    "tagColor": "Tag Color"
+    "onyxBlack": "Onyx Black",
+    "executiveNavy": "Executive Navy",
+    "techBlue": "Tech Blue",
+    "ivyTeal": "Ivy Teal",
+    "charcoalSlate": "Charcoal Slate",
+    "burgundy": "Burgundy Wine",
+    "mutedPlum": "Muted Plum",
+    "espressoBrown": "Espresso Brown"
   },
   "icon": {
     "selectIcon": "Select Icon",

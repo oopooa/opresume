@@ -110,9 +110,14 @@
     "template4": "单栏经典"
   },
   "theme": {
-    "customColor": "自定义颜色",
-    "primaryColor": "主题色",
-    "tagColor": "标签色"
+    "onyxBlack": "曜石黑",
+    "executiveNavy": "沉稳商务蓝",
+    "techBlue": "现代科技蓝",
+    "ivyTeal": "常春藤墨绿",
+    "charcoalSlate": "极简铅灰",
+    "burgundy": "勃艮第红",
+    "mutedPlum": "知性紫灰",
+    "espressoBrown": "醇咖棕"
   },
   "icon": {
     "selectIcon": "选择图标",

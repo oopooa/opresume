@@ -30,7 +30,7 @@ interface UIStore {
 export const useUIStore = create<UIStore>()(
   persist(
     (set) => ({
-      theme: { color: '#2f5785', tagColor: '#8bc34a' },
+      theme: { color: '#2C3E50', tagColor: '#5B8C5A' },
       template: 'template1',
       lang: 'zh-CN',
       editorOpen: false,
