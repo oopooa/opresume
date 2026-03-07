@@ -12,9 +12,10 @@ interface IconPickerProps {
   onChange: (icon: string | undefined) => void;
   /** 触发按钮额外样式 */
   className?: string;
+  disabled?: boolean;
 }
 
-export function IconPicker({ value, onChange, className }: IconPickerProps) {
+export function IconPicker({ value, onChange, className, disabled }: IconPickerProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -68,12 +69,16 @@ export function IconPicker({ value, onChange, className }: IconPickerProps) {
   }, []);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={disabled ? false : open} onOpenChange={disabled ? undefined : setOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"
+          disabled={disabled}
           className={cn(
-            'inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-gray-600',
+            'inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors',
+            disabled
+              ? 'opacity-30 cursor-not-allowed'
+              : 'hover:bg-accent hover:text-gray-600',
             value
               ? 'border border-transparent text-gray-600'
               : 'border border-dashed border-gray-300 text-gray-400',

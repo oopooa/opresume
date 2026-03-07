@@ -75,7 +75,7 @@ function SortableField({
       >
         <GripVertical className="h-4 w-4" />
       </button>
-      <IconPicker value={fieldIcon} onChange={onIconChange} />
+      <IconPicker value={fieldIcon} onChange={onIconChange} disabled={isLastEmpty} />
       <Input
         value={field.key}
         onChange={(e) => onUpdate('key', e.target.value)}
