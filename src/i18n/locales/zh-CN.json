@@ -123,5 +123,16 @@
     "eduExp": "教育与经历",
     "awardWork": "荣誉与作品",
     "general": "通用"
+  },
+  "editor": {
+    "bold": "粗体",
+    "italic": "斜体",
+    "bulletList": "无序列表",
+    "orderedList": "有序列表",
+    "link": "链接",
+    "linkPlaceholder": "输入链接地址...",
+    "undo": "撤销",
+    "redo": "重做",
+    "placeholder": "输入内容..."
   }
 }

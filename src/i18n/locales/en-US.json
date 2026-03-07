@@ -123,5 +123,16 @@
     "eduExp": "Education & Experience",
     "awardWork": "Awards & Works",
     "general": "General"
+  },
+  "editor": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "bulletList": "Bullet List",
+    "orderedList": "Ordered List",
+    "link": "Link",
+    "linkPlaceholder": "Enter URL...",
+    "undo": "Undo",
+    "redo": "Redo",
+    "placeholder": "Start typing..."
   }
 }

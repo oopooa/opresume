@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { RichTextEditor } from './RichTextEditor';
 import {
   Popover,
   PopoverContent,
@@ -276,19 +277,26 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'date':
       return <DatePickerField field={field} value={value} onChange={onChange} />;
 
-    case 'textarea':
     case 'markdown':
       return (
         <div className="space-y-1">
           <FieldLabel label={label} icon={field.icon} />
+          <RichTextEditor
+            value={(value as string) ?? ''}
+            onChange={(html) => onChange(html)}
+          />
+        </div>
+      );
+
+    case 'textarea':
+      return (
+        <div className="space-y-1">
+          <FieldLabel label={label} icon={field.icon} />
           <Textarea
-            rows={field.type === 'markdown' ? 6 : 3}
+            rows={3}
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
           />
-          {field.type === 'markdown' && (
-            <span className="text-xs text-muted-foreground">Markdown</span>
-          )}
         </div>
       );
 

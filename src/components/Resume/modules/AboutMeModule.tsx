@@ -1,6 +1,6 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
-import { Markdown } from '@/components/Markdown';
+import { RichContent } from '@/components/RichContent';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function AboutMeModule({ config, tokens }: ModuleProps) {
@@ -13,7 +13,7 @@ export function AboutMeModule({ config, tokens }: ModuleProps) {
     <EditableSection module="aboutme">
       <section className={tokens.spacing.module}>
         <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} icon={moduleIcon} />
-        <Markdown content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
+        <RichContent content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
       </section>
     </EditableSection>
   );

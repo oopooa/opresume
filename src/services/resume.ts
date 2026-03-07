@@ -1,4 +1,5 @@
 import type { ResumeConfig } from '@/types';
+import { migrateMarkdownFields } from '@/utils/migrate-markdown';
 
 const API_URL = '/api/resume';
 
@@ -41,7 +42,7 @@ export async function loadConfig(): Promise<ResumeConfig> {
     const res = await fetch(API_URL);
     if (res.ok) {
       config = await res.json();
-      return addCustomFieldIds(config);
+      return migrateMarkdownFields(addCustomFieldIds(config));
     }
   }
 
@@ -50,7 +51,7 @@ export async function loadConfig(): Promise<ResumeConfig> {
     throw new Error(`加载简历数据失败 (${res.status})`);
   }
   config = await res.json();
-  return addCustomFieldIds(config);
+  return migrateMarkdownFields(addCustomFieldIds(config));
 }
 
 export async function saveConfig(config: ResumeConfig): Promise<void> {
@@ -87,7 +88,7 @@ export function importConfig(file: File): Promise<ResumeConfig> {
     reader.onload = () => {
       try {
         const config = JSON.parse(reader.result as string);
-        resolve(addCustomFieldIds(config));
+        resolve(migrateMarkdownFields(addCustomFieldIds(config)));
       } catch {
         reject(new Error('JSON 解析失败'));
       }

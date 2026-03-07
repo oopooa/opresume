@@ -1,7 +1,7 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { Markdown } from '@/components/Markdown';
+import { RichContent } from '@/components/RichContent';
 import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function ProjectModule({ config, tokens }: ModuleProps) {
@@ -50,7 +50,7 @@ export function ProjectModule({ config, tokens }: ModuleProps) {
             )}
             {proj.projectContent && (
               <div className="mt-1">
-                <Markdown content={proj.projectContent} textSize={tokens.typography.contentSize} />
+                <RichContent content={proj.projectContent} textSize={tokens.typography.contentSize} />
               </div>
             )}
           </div>
