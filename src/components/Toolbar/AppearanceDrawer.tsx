@@ -57,15 +57,23 @@ export function AppearanceDrawer() {
   const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
   const captureRef = useRef<HTMLDivElement>(null);
 
+  // drawer 动画完成后才启用缩略图 hover 效果，避免鼠标滑过时误触
+  const [drawerReady, setDrawerReady] = useState(false);
+  const readyTimer = useRef<ReturnType<typeof setTimeout>>();
+
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(() => () => clearTimeout(closeTimer.current), []);
+  useEffect(() => () => { clearTimeout(closeTimer.current); clearTimeout(readyTimer.current); }, []);
 
   // 打开抽屉时捕获缩略图快照，后续主题色/图标变更不影响预览
   useEffect(() => {
     if (!open) {
       setSnapshotUrl(null);
+      setDrawerReady(false);
+      clearTimeout(readyTimer.current);
       return;
     }
+    // 500ms 与 Sheet 打开动画时长一致
+    readyTimer.current = setTimeout(() => setDrawerReady(true), 500);
     let cancelled = false;
     let outerRaf: number;
     let innerRaf: number;
@@ -81,6 +89,7 @@ export function AppearanceDrawer() {
     });
     return () => {
       cancelled = true;
+      clearTimeout(readyTimer.current);
       cancelAnimationFrame(outerRaf);
       cancelAnimationFrame(innerRaf);
     };
@@ -124,7 +133,10 @@ export function AppearanceDrawer() {
                   role="button"
                   tabIndex={0}
                   onClick={() => setTemplateDialogOpen(true)}
-                  className="group relative block w-full max-w-40 cursor-pointer overflow-hidden rounded-lg ring-1 ring-gray-200 transition-all hover:ring-gray-300 hover:shadow-md text-left"
+                  className={cn(
+                    'relative block w-full max-w-40 cursor-pointer overflow-hidden rounded-lg ring-1 ring-gray-200 transition-all hover:ring-gray-300 hover:shadow-md text-left',
+                    drawerReady && 'group',
+                  )}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
