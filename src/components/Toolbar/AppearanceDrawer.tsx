@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toPng } from 'html-to-image';
 import { Palette, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
@@ -53,8 +54,37 @@ export function AppearanceDrawer() {
   const toggleIcons = useUIStore((s) => s.toggleIcons);
   const config = useResumeStore((s) => s.config);
 
+  const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
+  const captureRef = useRef<HTMLDivElement>(null);
+
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  // 打开抽屉时捕获缩略图快照，后续主题色/图标变更不影响预览
+  useEffect(() => {
+    if (!open) {
+      setSnapshotUrl(null);
+      return;
+    }
+    let cancelled = false;
+    let outerRaf: number;
+    let innerRaf: number;
+    // 双 rAF 确保 Sheet 内容已渲染并完成首次绘制
+    outerRaf = requestAnimationFrame(() => {
+      innerRaf = requestAnimationFrame(() => {
+        const node = captureRef.current;
+        if (cancelled || !node) return;
+        toPng(node, { pixelRatio: 2 })
+          .then((dataUrl) => { if (!cancelled) setSnapshotUrl(dataUrl); })
+          .catch(() => { /* 捕获失败则保持实时渲染 */ });
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(outerRaf);
+      cancelAnimationFrame(innerRaf);
+    };
+  }, [open]);
 
   const handleTemplateSelect = useCallback((key: string) => {
     setTemplate(key);
@@ -103,11 +133,15 @@ export function AppearanceDrawer() {
                   }}
                 >
                   <div className="relative h-52 w-full overflow-hidden bg-white">
-                    {config && (
-                      <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.20]">
-                        <ResumeView config={config} templateId={template} />
-                      </div>
-                    )}
+                    <div ref={captureRef} className="h-full w-full">
+                      {snapshotUrl ? (
+                        <img src={snapshotUrl} alt="" className="h-full w-full object-cover object-top" />
+                      ) : config ? (
+                        <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.20]">
+                          <ResumeView config={config} templateId={template} />
+                        </div>
+                      ) : null}
+                    </div>
                     <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/40">
                       <span className="text-sm font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
                         {t('toolbar.changeTemplate')}
