@@ -17,7 +17,10 @@
     "expand": "展开",
     "show": "显示",
     "hide": "隐藏",
-    "yearsExp": "{{years}}年"
+    "yearsExp": "{{years}}年",
+    "workExpCalc": "自动推算：{{years}}年{{months}}个月",
+    "workExpCalcYearOnly": "自动推算：{{years}}年",
+    "workExpCalcMonthOnly": "自动推算：不足1年"
   },
   "toolbar": {
     "template": "模板",

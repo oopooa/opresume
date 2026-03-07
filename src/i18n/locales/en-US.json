@@ -17,7 +17,10 @@
     "expand": "Expand",
     "show": "Show",
     "hide": "Hide",
-    "yearsExp": "{{years}} yrs"
+    "yearsExp": "{{years}} yrs",
+    "workExpCalc": "Auto-calculated: {{years}} yrs {{months}} mos",
+    "workExpCalcYearOnly": "Auto-calculated: {{years}} yrs",
+    "workExpCalcMonthOnly": "Auto-calculated: <1 yr"
   },
   "toolbar": {
     "template": "Template",

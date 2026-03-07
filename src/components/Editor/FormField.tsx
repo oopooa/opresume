@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CalendarIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
@@ -23,12 +23,62 @@ import {
 import { cn } from '@/lib/utils';
 import { useResumeStore } from '@/store/resume';
 import { DynamicIcon } from '@/components/DynamicIcon';
+import type { WorkExp } from '@/types/resume';
 import type { FieldDef } from './schemas';
 
 /** 从 "YYYY.MM" 或 "YYYY" 格式中提取年份 */
 function parseYear(v: string): number | null {
   const m = v.match(/^(\d{4})/);
   return m ? Number(m[1]) : null;
+}
+
+/** 将 "YYYY.MM" 转为绝对月份数（year * 12 + month），用于区间计算 */
+function toAbsoluteMonth(v: string): number | null {
+  const m = v.match(/^(\d{4})\.(\d{2})$/);
+  if (!m) return null;
+  return Number(m[1]) * 12 + Number(m[2]);
+}
+
+/** 根据工作经历列表计算总工作时长（合并重叠区间），返回 { years, months } */
+function calcWorkExp(list: WorkExp[]): { years: number; months: number } | null {
+  const now = new Date();
+  const nowAbs = now.getFullYear() * 12 + (now.getMonth() + 1);
+
+  // 收集所有有效的 [start, end] 区间（绝对月份）
+  const intervals: [number, number][] = [];
+  for (const item of list) {
+    const [startStr, endStr] = item.workTime ?? [];
+    if (!startStr) continue;
+    const start = toAbsoluteMonth(startStr);
+    if (start == null) continue;
+
+    let end: number;
+    if (!endStr || endStr === 'present' || endStr === '至今') {
+      end = nowAbs;
+    } else {
+      const parsed = toAbsoluteMonth(endStr);
+      if (parsed == null) continue;
+      end = parsed;
+    }
+    if (end >= start) intervals.push([start, end]);
+  }
+
+  if (intervals.length === 0) return null;
+
+  // 按起始时间排序后合并重叠区间
+  intervals.sort((a, b) => a[0] - b[0]);
+  const merged: [number, number][] = [intervals[0]];
+  for (let i = 1; i < intervals.length; i++) {
+    const last = merged[merged.length - 1];
+    if (intervals[i][0] <= last[1]) {
+      last[1] = Math.max(last[1], intervals[i][1]);
+    } else {
+      merged.push(intervals[i]);
+    }
+  }
+
+  const totalMonths = merged.reduce((sum, [s, e]) => sum + (e - s), 0);
+  return { years: Math.floor(totalMonths / 12), months: totalMonths % 12 };
 }
 
 /** 将 Date 转为 YYYY-MM-DD 字符串 */
@@ -243,12 +293,43 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
   );
 }
 
+/** 工作经验字段：带自动计算 placeholder */
+function WorkExpYearField({ field, value, onChange }: FormFieldProps) {
+  const { t } = useTranslation();
+  const label = t(field.labelKey);
+  const workExpList = useResumeStore((s) => s.config?.workExpList);
+
+  const placeholder = useMemo(() => {
+    if (!workExpList?.length) return undefined;
+    const result = calcWorkExp(workExpList);
+    if (!result) return undefined;
+    const { years, months } = result;
+    if (years > 0 && months > 0) return t('common.workExpCalc', { years, months });
+    if (years > 0) return t('common.workExpCalcYearOnly', { years });
+    return t('common.workExpCalcMonthOnly');
+  }, [workExpList, t]);
+
+  return (
+    <div className="space-y-1">
+      <FieldLabel label={label} icon={field.icon} />
+      <Input
+        value={(value as string) ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
 export function FormField({ field, value, onChange }: FormFieldProps) {
   const { t } = useTranslation();
   const label = t(field.labelKey);
 
   switch (field.type) {
     case 'text':
+      if (field.key === 'workExpYear') {
+        return <WorkExpYearField field={field} value={value} onChange={onChange} />;
+      }
       return (
         <div className="space-y-1">
           <FieldLabel label={label} icon={field.icon} />
