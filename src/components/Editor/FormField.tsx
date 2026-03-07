@@ -42,7 +42,7 @@ function toDateString(d: Date): string {
 function FieldLabel({ label, icon }: { label: string; icon?: string }) {
   return (
     <Label className="flex items-center gap-1.5">
-      <DynamicIcon name={icon} className="h-3.5 w-3.5 text-muted-foreground" />
+      <DynamicIcon name={icon} className="h-3.5 w-3.5 text-muted-foreground" forceShow />
       {label}
     </Label>
   );

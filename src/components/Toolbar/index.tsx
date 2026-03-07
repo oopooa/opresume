@@ -5,6 +5,7 @@ import { useUIStore } from '@/store/ui';
 import { saveWithToast } from '@/hooks/useSaveShortcut';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +23,8 @@ export function Toolbar() {
   const { t } = useTranslation();
   const dirty = useResumeStore((s) => s.dirty);
   const openEditor = useUIStore((s) => s.openEditor);
+  const showIcons = useUIStore((s) => s.showIcons);
+  const toggleIcons = useUIStore((s) => s.toggleIcons);
 
   return (
     <header className="flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
@@ -29,6 +32,14 @@ export function Toolbar() {
       <div className="flex items-center gap-1">
         <TemplateSelector />
         <ThemePanel />
+        <div className="inline-flex h-8 items-center gap-1.5 rounded-md border bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground">
+          <span>{t('toolbar.iconMode')}</span>
+          <Switch
+            checked={showIcons}
+            onCheckedChange={toggleIcons}
+            aria-label={showIcons ? t('toolbar.hideIcons') : t('toolbar.showIcons')}
+          />
+        </div>
         <Separator orientation="vertical" className="mx-1 h-5" />
         <Button
           variant="outline"

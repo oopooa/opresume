@@ -33,7 +33,10 @@
     "editResume": "Edit Resume",
     "sidebar": "Sidebar",
     "mainArea": "Main",
-    "dropHint": "Drop modules here"
+    "dropHint": "Drop modules here",
+    "showIcons": "Show Icons",
+    "hideIcons": "Hide Icons",
+    "iconMode": "Icons"
   },
   "module": {
     "profile": "Profile",

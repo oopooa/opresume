@@ -14,12 +14,15 @@ interface UIStore {
   moduleIconMap: Record<string, string>;
   /** 自定义字段图标，键为字段 key（字段名称），值为 lucide 图标名 */
   customFieldIconMap: Record<string, string>;
+  /** 控制简历中所有图标的可见性 */
+  showIcons: boolean;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
   openEditor: (module?: string) => void;
   closeEditor: () => void;
   clearActiveModule: () => void;
+  toggleIcons: () => void;
   updateModuleIcon: (module: string, icon: string | undefined) => void;
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
 }
@@ -35,6 +38,7 @@ export const useUIStore = create<UIStore>()(
       avatarEditorOpen: false,
       moduleIconMap: {},
       customFieldIconMap: {},
+      showIcons: true,
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -52,6 +56,9 @@ export const useUIStore = create<UIStore>()(
         set({ editorOpen: false, activeModule: null }),
       clearActiveModule: () =>
         set({ activeModule: null }),
+
+      toggleIcons: () =>
+        set((s) => ({ showIcons: !s.showIcons })),
 
       updateModuleIcon: (module, icon) =>
         set((s) => {
@@ -80,6 +87,7 @@ export const useUIStore = create<UIStore>()(
         avatarEditorOpen: state.avatarEditorOpen,
         moduleIconMap: state.moduleIconMap,
         customFieldIconMap: state.customFieldIconMap,
+        showIcons: state.showIcons,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.lang) {

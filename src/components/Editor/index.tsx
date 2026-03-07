@@ -196,7 +196,7 @@ function DragOverlayContent({ module, customTitle, moduleIcon }: { module: strin
   return (
     <div className="flex items-center gap-2 rounded-lg bg-editor-module-active px-3 py-3 shadow-lg">
       <GripVertical className="h-4 w-4 text-gray-400" />
-      <DynamicIcon name={moduleIcon} className="h-4 w-4 text-gray-500" />
+      <DynamicIcon name={moduleIcon} className="h-4 w-4 text-gray-500" forceShow />
       <span className="text-[15px] font-medium text-gray-700">{customTitle || t(`module.${module}`)}</span>
     </div>
   );
@@ -614,7 +614,7 @@ export function Editor() {
                         <ChevronDown className={cn('h-4 w-4', isExpanded && 'rotate-180')} />
                       </button>
                     </CollapsibleTrigger>
-                    <DynamicIcon name={DEFAULT_MODULE_ICONS['profile']} className="h-4 w-4 text-gray-500" />
+                    <DynamicIcon name={DEFAULT_MODULE_ICONS['profile']} className="h-4 w-4 text-gray-500" forceShow />
                     <CollapsibleTrigger asChild>
                       <button
                         type="button"

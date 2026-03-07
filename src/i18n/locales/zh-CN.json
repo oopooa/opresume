@@ -33,7 +33,10 @@
     "editResume": "编辑简历",
     "sidebar": "侧边栏",
     "mainArea": "主界面",
-    "dropHint": "拖放内容到此处"
+    "dropHint": "拖放内容到此处",
+    "showIcons": "显示图标",
+    "hideIcons": "隐藏图标",
+    "iconMode": "图标"
   },
   "module": {
     "profile": "基本信息",

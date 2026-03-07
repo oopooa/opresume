@@ -87,7 +87,7 @@ export function IconPicker({ value, onChange, className, disabled }: IconPickerP
           aria-label={t('icon.selectIcon')}
         >
           {value ? (
-            <DynamicIcon name={value} className="h-3.5 w-3.5" />
+            <DynamicIcon name={value} className="h-3.5 w-3.5" forceShow />
           ) : (
             <Plus className="h-3 w-3" />
           )}
