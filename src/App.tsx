@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useResumeStore } from '@/store/resume';
 import { useThemeEffect } from '@/hooks/useThemeEffect';
 import { useSaveShortcut } from '@/hooks/useSaveShortcut';
-import { Toolbar } from '@/components/Toolbar';
+import { Toolbar, FloatingToolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
 import { Editor } from '@/components/Editor';
 import { Toaster } from '@/components/ui/sonner';
@@ -44,6 +44,7 @@ function App() {
       <main className="flex flex-1 justify-center overflow-auto py-8 print:overflow-visible print:py-0">
         <ResumeView config={config} />
       </main>
+      <FloatingToolbar />
       <Editor />
       <Toaster />
     </div>

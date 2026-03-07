@@ -36,7 +36,9 @@
     "dropHint": "Drop modules here",
     "showIcons": "Show Icons",
     "hideIcons": "Hide Icons",
-    "iconMode": "Icons"
+    "iconMode": "Icons",
+    "appearanceSettings": "Appearance",
+    "changeTemplate": "Change Template"
   },
   "module": {
     "profile": "Profile",
