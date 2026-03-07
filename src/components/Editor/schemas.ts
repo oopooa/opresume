@@ -9,6 +9,8 @@ export interface FieldDef {
   showPresent?: boolean;
   /** 字段图标名（lucide 图标） */
   icon?: string;
+  /** 隐藏字段标签（适用于单字段模块，标签与模块标题重复时） */
+  hideLabel?: boolean;
 }
 
 export interface ModuleSchema {
@@ -119,7 +121,7 @@ export const schemas: ModuleSchema[] = [
     dataKey: 'aboutme',
     isList: false,
     fields: [
-      { key: 'aboutmeDesc', labelKey: 'field.aboutmeDesc', type: 'markdown' },
+      { key: 'aboutmeDesc', labelKey: 'field.aboutmeDesc', type: 'markdown', hideLabel: true },
     ],
   },
 ];

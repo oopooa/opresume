@@ -280,7 +280,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
     case 'markdown':
       return (
         <div className="space-y-1">
-          <FieldLabel label={label} icon={field.icon} />
+          {!field.hideLabel && <FieldLabel label={label} icon={field.icon} />}
           <RichTextEditor
             value={(value as string) ?? ''}
             onChange={(html) => onChange(html)}
