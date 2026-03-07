@@ -244,28 +244,26 @@ function ProfileSection({
       <AvatarEditor avatar={config.avatar} onChange={handleAvatarChange} />
       <FormCreator fields={beforeFields} data={data} onChange={handleFieldChange} />
       <div className="space-y-1">
-        <Label>{t('field.ageLabel')}</Label>
-        <div className="relative">
-          <Input
-            disabled
-            className="pr-14"
-            value={age !== null ? t('field.age', { age }) : ''}
-            placeholder={t('field.birthdayHint')}
-          />
+        <div className="flex items-center justify-between">
+          <Label>{t('field.ageLabel')}</Label>
           {age !== null && (
-            <div className="absolute inset-y-0 right-2 flex items-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 text-muted-foreground/60 hover:text-muted-foreground"
-                aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
-                onClick={() => handleFieldChange('ageHidden', !ageHidden)}
-              >
-                {ageHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-              </Button>
-            </div>
+            <span
+              role="button"
+              tabIndex={0}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:bg-accent hover:text-gray-600"
+              aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
+              onClick={() => handleFieldChange('ageHidden', !ageHidden)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldChange('ageHidden', !ageHidden); }}
+            >
+              {ageHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+            </span>
           )}
         </div>
+        <Input
+          disabled
+          value={age !== null ? t('field.age', { age }) : ''}
+          placeholder={t('field.birthdayHint')}
+        />
       </div>
       <FormCreator fields={afterFields} data={data} onChange={handleFieldChange} />
 
