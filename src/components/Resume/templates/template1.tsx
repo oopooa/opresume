@@ -1,6 +1,6 @@
 import type { TemplateDefinition, StyleTokens, LayoutShellProps } from '../types';
 import { useTranslation } from 'react-i18next';
-import { EditableSection, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, ProfileField } from '../shared';
+import { EditableSection, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, ProfileField, usePrivacyMask } from '../shared';
 import { DynamicIcon } from '@/components/DynamicIcon';
 
 /* ---------- SectionTitle ---------- */
@@ -32,6 +32,7 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
   const { t } = useTranslation();
   const age = calculateAge(profile?.birthday);
   const customFieldIconMap = useCustomFieldIconMap();
+  const mask = usePrivacyMask();
 
   return (
     <div className="flex min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
@@ -39,17 +40,15 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
         <EditableSection module="profile">
           <div className="mb-4 text-center">
             <ResumeAvatar avatar={avatar} name={profile?.name} className="mx-auto mb-2" />
-            <h1 className="text-xl font-bold text-resume-primary">{profile?.name}</h1>
+            <h1 className="text-xl font-bold text-resume-primary">{mask(profile?.name, 'name')}</h1>
             {profile?.positionTitle && (
               <p className="mt-0.5 text-xs text-gray-600">{profile.positionTitle}</p>
             )}
           </div>
           <div className="mb-4 space-y-1 text-xs text-gray-600">
-            {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')}>{profile.mobile}</ProfileField>}
-            {profile?.email && <ProfileField icon={getProfileIcon('email')}>{profile.email}</ProfileField>}
-            {profile?.github && <ProfileField icon={getProfileIcon('github')}>github.com/{profile.github}</ProfileField>}
-            {profile?.zhihu && <ProfileField icon={getProfileIcon('zhihu')}>{profile.zhihu}</ProfileField>}
-            {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')}>{profile.workPlace}</ProfileField>}
+            {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')}>{mask(profile.mobile, 'mobile')}</ProfileField>}
+            {profile?.email && <ProfileField icon={getProfileIcon('email')}>{mask(profile.email, 'email')}</ProfileField>}
+            {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')}>{mask(profile.workPlace, 'workPlace')}</ProfileField>}
             {age !== null && !profile?.ageHidden && <p>{t('field.age', { age })}</p>}
             {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
             {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (

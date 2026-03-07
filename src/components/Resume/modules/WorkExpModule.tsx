@@ -2,12 +2,13 @@ import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
 
 export function WorkExpModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('workExpList');
   const { SectionTitle } = tokens.components;
+  const mask = usePrivacyMask();
   if (isHidden(config, 'workExpList') || !config.workExpList?.length) return null;
 
   return (
@@ -19,11 +20,11 @@ export function WorkExpModule({ config, tokens }: ModuleProps) {
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
               <div>
                 <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>
-                  {work.companyName}
+                  {mask(work.companyName, 'companyName')}
                 </p>
                 {work.departmentName && (
                   <p className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
-                    {work.departmentName}
+                    {mask(work.departmentName, 'departmentName')}
                   </p>
                 )}
               </div>

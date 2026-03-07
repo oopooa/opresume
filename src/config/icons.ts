@@ -455,8 +455,6 @@ export const DEFAULT_MODULE_ICONS: Record<string, string> = {
 export const DEFAULT_PROFILE_ICONS: Record<string, string> = {
   mobile: 'Phone',
   email: 'Mail',
-  github: 'Github',
-  zhihu: 'BookOpen',
   workPlace: 'MapPin',
   workExpYear: 'Clock',
 };

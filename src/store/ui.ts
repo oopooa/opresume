@@ -16,6 +16,8 @@ interface UIStore {
   customFieldIconMap: Record<string, string>;
   /** 控制简历中所有图标的可见性 */
   showIcons: boolean;
+  /** 隐私模式：对敏感信息进行打码显示 */
+  privacyMode: boolean;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
@@ -23,6 +25,7 @@ interface UIStore {
   closeEditor: () => void;
   clearActiveModule: () => void;
   toggleIcons: () => void;
+  togglePrivacy: () => void;
   updateModuleIcon: (module: string, icon: string | undefined) => void;
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
 }
@@ -39,6 +42,7 @@ export const useUIStore = create<UIStore>()(
       moduleIconMap: {},
       customFieldIconMap: {},
       showIcons: true,
+      privacyMode: false,
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -59,6 +63,9 @@ export const useUIStore = create<UIStore>()(
 
       toggleIcons: () =>
         set((s) => ({ showIcons: !s.showIcons })),
+
+      togglePrivacy: () =>
+        set((s) => ({ privacyMode: !s.privacyMode })),
 
       updateModuleIcon: (module, icon) =>
         set((s) => {
@@ -88,6 +95,7 @@ export const useUIStore = create<UIStore>()(
         moduleIconMap: state.moduleIconMap,
         customFieldIconMap: state.customFieldIconMap,
         showIcons: state.showIcons,
+        privacyMode: state.privacyMode,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.lang) {

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useCallback } from 'react';
 import type { ResumeConfig, Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +7,7 @@ import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui
 import { cn } from '@/lib/utils';
 import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS } from '@/config/icons';
 import { DynamicIcon } from '@/components/DynamicIcon';
+import { maskField } from '@/utils/privacy';
 
 const RING_STYLE = {
   '--tw-ring-color': 'color-mix(in srgb, var(--resume-primary) 40%, transparent)',
@@ -114,5 +116,22 @@ export function ProfileField({
       <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
       <span>{children}</span>
     </p>
+  );
+}
+
+/**
+ * 隐私打码 hook
+ *
+ * 返回 mask 函数：隐私模式开启时对值打码，关闭时原样返回。
+ * 用法：const mask = usePrivacyMask(); mask(profile?.name, 'name')
+ */
+export function usePrivacyMask() {
+  const privacyMode = useUIStore((s) => s.privacyMode);
+  return useCallback(
+    (value: string | undefined, fieldKey: string): string | undefined => {
+      if (!privacyMode || !value) return value;
+      return maskField(value, fieldKey);
+    },
+    [privacyMode],
   );
 }

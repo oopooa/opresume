@@ -41,7 +41,10 @@
     "hideIcons": "隐藏图标",
     "iconMode": "图标",
     "appearanceSettings": "外观设置",
-    "changeTemplate": "更换模板"
+    "changeTemplate": "更换模板",
+    "privacyMode": "隐私模式",
+    "privacyOn": "敏感信息已打码",
+    "privacyOff": "显示完整信息"
   },
   "module": {
     "profile": "基本信息",

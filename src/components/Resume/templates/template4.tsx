@@ -1,6 +1,6 @@
 import type { TemplateDefinition, StyleTokens, LayoutShellProps } from '../types';
 import { useTranslation } from 'react-i18next';
-import { EditableSection, getTitle, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, useModuleIcon } from '../shared';
+import { EditableSection, getTitle, ResumeAvatar, calculateAge, getProfileIcon, useCustomFieldIconMap, useModuleIcon, usePrivacyMask } from '../shared';
 import { DynamicIcon } from '@/components/DynamicIcon';
 
 /* ---------- SectionTitle ---------- */
@@ -52,6 +52,7 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
   const age = calculateAge(profile?.birthday);
   const customFieldIconMap = useCustomFieldIconMap();
   const profileIcon = useModuleIcon('profile');
+  const mask = usePrivacyMask();
 
   return (
     <div className="relative min-h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
@@ -60,7 +61,7 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
           <div className="mb-5 flex items-center gap-4 border-b-2 border-resume-primary pb-4">
             <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />
             <div>
-              <h1 className="text-2xl font-bold text-resume-primary">{profile?.name}</h1>
+              <h1 className="text-2xl font-bold text-resume-primary">{mask(profile?.name, 'name')}</h1>
               {profile?.positionTitle && <p className="mt-0.5 text-sm text-gray-600">{profile.positionTitle}</p>}
             </div>
           </div>
@@ -69,13 +70,11 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
           <div className="mb-5">
             <SectionTitle title={getTitle(config, 'profile', t('module.profile'))} icon={profileIcon} />
             <div className="grid grid-cols-3 gap-x-6 gap-y-1.5">
-              <InfoItem icon={getProfileIcon('mobile')} label={t('field.mobile')} value={profile?.mobile} />
-              <InfoItem icon={getProfileIcon('email')} label={t('field.email')} value={profile?.email} />
-              <InfoItem icon={getProfileIcon('workPlace')} label={t('field.workPlace')} value={profile?.workPlace} />
+              <InfoItem icon={getProfileIcon('mobile')} label={t('field.mobile')} value={mask(profile?.mobile, 'mobile')} />
+              <InfoItem icon={getProfileIcon('email')} label={t('field.email')} value={mask(profile?.email, 'email')} />
+              <InfoItem icon={getProfileIcon('workPlace')} label={t('field.workPlace')} value={mask(profile?.workPlace, 'workPlace')} />
               {age !== null && !profile?.ageHidden && <InfoItem label={t('field.ageLabel')} value={t('field.age', { age })} />}
               <InfoItem icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
-              <InfoItem icon={getProfileIcon('github')} label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
-              <InfoItem icon={getProfileIcon('zhihu')} label={t('field.zhihu')} value={profile?.zhihu} />
               {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
                 <InfoItem key={field.key} icon={customFieldIconMap[field.key]} label={field.key} value={field.value} />
               ))}

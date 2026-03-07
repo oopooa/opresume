@@ -1,12 +1,13 @@
 import type { ModuleProps } from '../types';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
+import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
 
 export function EducationModule({ config, tokens }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('educationList');
   const { SectionTitle } = tokens.components;
+  const mask = usePrivacyMask();
   if (isHidden(config, 'educationList') || !config.educationList?.length) return null;
 
   const isInline = tokens.variants.education === 'inline';
@@ -22,7 +23,7 @@ export function EducationModule({ config, tokens }: ModuleProps) {
           >
             <div className={cn(isInline && 'flex items-baseline gap-2')}>
               <p className={cn(isInline ? tokens.typography.titleSize : tokens.typography.contentSize, tokens.typography.titleWeight, tokens.colors.primary)}>
-                {edu.school}
+                {mask(edu.school, 'school')}
               </p>
               {isInline ? (
                 <span className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>

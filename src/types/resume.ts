@@ -18,8 +18,6 @@ export interface Profile {
   ageHidden?: boolean;
   mobile?: string;
   email?: string;
-  github?: string;
-  zhihu?: string;
   workExpYear?: string;
   workPlace?: string;
   positionTitle?: string;

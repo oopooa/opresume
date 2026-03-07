@@ -41,7 +41,10 @@
     "hideIcons": "Hide Icons",
     "iconMode": "Icons",
     "appearanceSettings": "Appearance",
-    "changeTemplate": "Change Template"
+    "changeTemplate": "Change Template",
+    "privacyMode": "Privacy Mode",
+    "privacyOn": "Sensitive info is masked",
+    "privacyOff": "Show full info"
   },
   "module": {
     "profile": "Profile",
