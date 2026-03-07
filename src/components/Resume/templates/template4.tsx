@@ -76,7 +76,7 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
               <InfoItem icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
               <InfoItem icon={getProfileIcon('github')} label={t('field.github')} value={profile?.github ? `github.com/${profile.github}` : undefined} />
               <InfoItem icon={getProfileIcon('zhihu')} label={t('field.zhihu')} value={profile?.zhihu} />
-              {profile?.customFields?.map((field) => (
+              {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
                 <InfoItem key={field.key} icon={customFieldIconMap[field.key]} label={field.key} value={field.value} />
               ))}
             </div>

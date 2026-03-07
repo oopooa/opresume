@@ -52,7 +52,7 @@ function Template2Shell({ config, sidebarContent, mainContent }: LayoutShellProp
             {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')}>{profile.workPlace}</ProfileField>}
             {age !== null && !profile?.ageHidden && <p>{t('field.age', { age })}</p>}
             {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
-            {profile?.customFields?.map((field) => (
+            {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
               <ProfileField key={field.key} icon={customFieldIconMap[field.key]}>{field.key}: {field.value}</ProfileField>
             ))}
           </div>
