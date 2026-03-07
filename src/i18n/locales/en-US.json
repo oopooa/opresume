@@ -17,7 +17,7 @@
     "expand": "Expand",
     "show": "Show",
     "hide": "Hide",
-    "yearsExp": "{{years}} yrs exp"
+    "yearsExp": "{{years}} yrs"
   },
   "toolbar": {
     "template": "Template",
@@ -59,7 +59,7 @@
     "ageLabel": "Age",
     "mobile": "Phone",
     "email": "Email",
-    "workExpYear": "Years of Experience",
+    "workExpYear": "Experience",
     "positionTitle": "Position",
     "customFields": "Custom Fields",
     "customFieldKey": "Field Name",
