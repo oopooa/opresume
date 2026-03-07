@@ -29,7 +29,6 @@ export function Toolbar() {
       <div className="flex items-center gap-1">
         <TemplateSelector />
         <ThemePanel />
-        <LangSwitcher />
         <Separator orientation="vertical" className="mx-1 h-5" />
         <Button
           variant="outline"
@@ -70,6 +69,8 @@ export function Toolbar() {
           <Printer className="h-3.5 w-3.5" />
           {t('toolbar.print')}
         </Button>
+        <Separator orientation="vertical" className="mx-1 h-5" />
+        <LangSwitcher />
       </div>
     </header>
   );
