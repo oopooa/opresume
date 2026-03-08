@@ -112,9 +112,9 @@
   },
   "template": {
     "template1": "Classic",
-    "template2": "Minimal",
-    "template3": "Fresh",
-    "template4": "Single Column"
+    "template2": "Compact",
+    "template3": "Centered",
+    "template4": "Formal"
   },
   "theme": {
     "onyxBlack": "Onyx Black",
