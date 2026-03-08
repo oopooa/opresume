@@ -66,6 +66,7 @@
     "mobile": "手机号",
     "email": "邮箱",
     "workExpYear": "工作经验",
+    "workPlace": "工作地点",
     "positionTitle": "职位",
     "customFields": "自定义字段",
     "customFieldKey": "字段名",

@@ -101,19 +101,23 @@ export function useCustomFieldIconMap(): Record<string, string> {
   return useUIStore((s) => s.customFieldIconMap);
 }
 
-/** Profile 字段带图标渲染 */
+/** Profile 字段带图标渲染，图标隐藏时回退显示文字标签 */
 export function ProfileField({
   icon,
+  label,
   children,
   className,
 }: {
   icon?: string;
+  label?: string;
   children: ReactNode;
   className?: string;
 }) {
+  const showIcons = useUIStore((s) => s.showIcons);
   return (
     <p className={cn('flex items-center gap-1.5', className)}>
       <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
+      {!showIcons && label && <span className="shrink-0 text-gray-400">{label}:</span>}
       <span>{children}</span>
     </p>
   );

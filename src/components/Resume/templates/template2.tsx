@@ -47,13 +47,13 @@ function Template2Shell({ config, mainContent }: LayoutShellProps) {
                 {profile?.positionTitle && <p className="mt-0.5 text-sm text-gray-500">{profile.positionTitle}</p>}
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-600">
-                {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')}>{mask(profile.mobile, 'mobile')}</ProfileField>}
-                {profile?.email && <ProfileField icon={getProfileIcon('email')}>{mask(profile.email, 'email')}</ProfileField>}
-                {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')}>{mask(profile.workPlace, 'workPlace')}</ProfileField>}
-                {age !== null && !profile?.ageHidden && <ProfileField icon={getProfileIcon('age')}>{t('field.age', { age })}</ProfileField>}
-                {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
+                {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')} label={t('field.mobile')}>{mask(profile.mobile, 'mobile')}</ProfileField>}
+                {profile?.email && <ProfileField icon={getProfileIcon('email')} label={t('field.email')}>{mask(profile.email, 'email')}</ProfileField>}
+                {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')} label={t('field.workPlace')}>{mask(profile.workPlace, 'workPlace')}</ProfileField>}
+                {age !== null && !profile?.ageHidden && <ProfileField icon={getProfileIcon('age')} label={t('field.ageLabel')}>{t('field.age', { age })}</ProfileField>}
+                {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
                 {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
-                  <ProfileField key={field.key} icon={customFieldIconMap[field.key]}>{field.key}: {field.value}</ProfileField>
+                  <ProfileField key={field.key} icon={customFieldIconMap[field.key]} label={field.key}>{field.value}</ProfileField>
                 ))}
               </div>
             </div>

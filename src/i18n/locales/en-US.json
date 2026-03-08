@@ -66,6 +66,7 @@
     "mobile": "Phone",
     "email": "Email",
     "workExpYear": "Experience",
+    "workPlace": "Location",
     "positionTitle": "Position",
     "customFields": "Custom Fields",
     "customFieldKey": "Field Name",
