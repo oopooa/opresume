@@ -134,8 +134,8 @@ export function AppearanceDrawer() {
                   tabIndex={0}
                   onClick={() => setTemplateDialogOpen(true)}
                   className={cn(
-                    'relative block w-full max-w-40 cursor-pointer overflow-hidden rounded-lg ring-1 ring-gray-200 transition-all hover:ring-gray-300 hover:shadow-md text-left',
-                    drawerReady && 'group',
+                    'relative block w-full max-w-40 cursor-pointer overflow-hidden rounded-lg ring-1 ring-gray-200 transition-all text-left',
+                    drawerReady ? 'group hover:ring-gray-300 hover:shadow-md' : 'pointer-events-none',
                   )}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
