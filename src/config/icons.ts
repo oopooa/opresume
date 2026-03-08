@@ -32,7 +32,7 @@ import {
   User, UserCircle, Heart, Smile, CircleUser, IdCard, UserPlus,
   Users, Fingerprint, Baby, PersonStanding,
   // 时间/日期
-  Calendar, Clock, Timer, CalendarDays, CalendarCheck, Hourglass, AlarmClock,
+  Calendar, Clock, Timer, CalendarDays, CalendarCheck, Hourglass, AlarmClock, Cake,
   // 文件/文档
   File, FileCheck, FilePlus, FileSearch, FileSpreadsheet, FileBarChart,
   Folder, Save, Download, Upload, Clipboard, ClipboardList, ClipboardCheck,
@@ -92,7 +92,7 @@ export const ICON_REGISTRY: Record<string, LucideIcon> = {
   User, UserCircle, Heart, Smile, CircleUser, IdCard, UserPlus,
   Users, Fingerprint, Baby, PersonStanding,
   // 时间/日期
-  Calendar, Clock, Timer, CalendarDays, CalendarCheck, Hourglass, AlarmClock,
+  Calendar, Clock, Timer, CalendarDays, CalendarCheck, Hourglass, AlarmClock, Cake,
   // 文件/文档
   File, FileCheck, FilePlus, FileSearch, FileSpreadsheet, FileBarChart,
   Folder, Save, Download, Upload, Clipboard, ClipboardList, ClipboardCheck,
@@ -456,5 +456,6 @@ export const DEFAULT_PROFILE_ICONS: Record<string, string> = {
   mobile: 'Phone',
   email: 'Mail',
   workPlace: 'MapPin',
+  age: 'Cake',
   workExpYear: 'Clock',
 };
