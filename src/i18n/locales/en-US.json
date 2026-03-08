@@ -113,6 +113,7 @@
   "template": {
     "template1": "Classic",
     "template2": "Minimal",
+    "template3": "Fresh",
     "template4": "Single Column"
   },
   "theme": {
