@@ -7,7 +7,11 @@ import { definitions, defaultDefinition } from './templates';
 function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: ResumeConfig }) {
   const { sidebarContent, mainContent } = useTemplateModules(def, config);
   const Shell = def.LayoutShell;
-  return <Shell config={config} sidebarContent={sidebarContent} mainContent={mainContent} />;
+  return (
+    <div className="resume-layout">
+      <Shell config={config} sidebarContent={sidebarContent} mainContent={mainContent} />
+    </div>
+  );
 }
 
 export function ResumeView({ config, templateId }: { config: ResumeConfig; templateId?: string }) {

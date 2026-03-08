@@ -56,7 +56,7 @@ function Template4Shell({ config, mainContent }: LayoutShellProps) {
 
   return (
     <div className="relative min-h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
-      <div className="px-8 py-6 pl-10">
+      <div className="resume-padding resume-padding-offset-left">
         <EditableSection module="profile">
           <div className="mb-5 flex items-center gap-4 border-b-2 border-resume-primary pb-4">
             <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />

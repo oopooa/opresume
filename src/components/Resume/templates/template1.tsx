@@ -35,8 +35,8 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
   const mask = usePrivacyMask();
 
   return (
-    <div className="flex min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
-      <aside className="w-[70mm] shrink-0 bg-gray-50 p-5 print:bg-gray-50">
+    <div className="resume-padding flex min-h-[297mm] w-[210mm] gap-5 bg-white text-gray-800 shadow-lg print:shadow-none">
+      <aside className="w-[70mm] shrink-0 bg-gray-50 p-4 print:bg-gray-50">
         <EditableSection module="profile">
           <div className="mb-4 text-center">
             <ResumeAvatar avatar={avatar} name={profile?.name} className="mx-auto mb-2" />
@@ -60,7 +60,7 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
         {sidebarContent}
       </aside>
 
-      <main className="flex-1 p-5">
+      <main className="flex-1">
         {mainContent}
       </main>
     </div>

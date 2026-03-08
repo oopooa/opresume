@@ -35,7 +35,7 @@ export function useTemplateModules(
   function renderModule(key: string): ReactNode {
     const Mod = DEFAULT_MODULES[key];
     if (!Mod) return null;
-    return <div key={key}><Mod config={config} tokens={tokens} /></div>;
+    return <div key={key} className="resume-module"><Mod config={config} tokens={tokens} /></div>;
   }
 
   return {

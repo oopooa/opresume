@@ -44,7 +44,16 @@
     "changeTemplate": "Change Template",
     "privacyMode": "Privacy Mode",
     "privacyOn": "Sensitive info is masked",
-    "privacyOff": "Show full info"
+    "privacyOff": "Show full info",
+    "typography": "Typography",
+    "pageMargin": "Page Margin",
+    "moduleGap": "Module Spacing",
+    "lineHeight": "Line Height",
+    "compact": "Compact",
+    "standard": "Standard",
+    "spacious": "Spacious",
+    "narrow": "Narrow",
+    "wide": "Wide"
   },
   "module": {
     "profile": "Profile",

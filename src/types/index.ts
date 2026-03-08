@@ -13,4 +13,4 @@ export type {
   ResumeConfig,
 } from './resume';
 
-export type { ThemeConfig, PresetTheme } from './theme';
+export type { ThemeConfig, PresetTheme, SpacingPreset, LayoutConfig } from './theme';

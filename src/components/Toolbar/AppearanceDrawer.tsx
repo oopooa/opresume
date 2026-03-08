@@ -8,6 +8,7 @@ import { useResumeStore } from '@/store/resume';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet,
@@ -30,6 +31,7 @@ import {
 } from '@/components/ui/tooltip';
 import { templateIds } from '@/components/Resume/templates';
 import { ResumeView } from '@/components/Resume';
+import type { SpacingPreset } from '@/types';
 
 const PRESETS = [
   { key: 'onyxBlack', color: '#18181B', tagColor: '#71717A' },
@@ -42,6 +44,34 @@ const PRESETS = [
   { key: 'espressoBrown', color: '#4E342E', tagColor: '#D97706' },
 ];
 
+const SPACING_PRESETS: SpacingPreset[] = ['compact', 'standard', 'spacious'];
+
+function SpacingPresetGroup({ value, onChange, labels }: {
+  value: SpacingPreset;
+  onChange: (v: SpacingPreset) => void;
+  labels: Record<SpacingPreset, string>;
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5">
+      {SPACING_PRESETS.map((preset) => (
+        <button
+          key={preset}
+          type="button"
+          onClick={() => onChange(preset)}
+          className={cn(
+            'rounded-md border px-2 py-1.5 text-xs font-medium transition-all',
+            value === preset
+              ? 'border-gray-800 bg-gray-50 text-gray-900'
+              : 'border-gray-200 text-gray-500 hover:border-gray-300',
+          )}
+        >
+          {labels[preset]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function AppearanceDrawer() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -52,6 +82,10 @@ export function AppearanceDrawer() {
   const updateTheme = useUIStore((s) => s.updateTheme);
   const showIcons = useUIStore((s) => s.showIcons);
   const toggleIcons = useUIStore((s) => s.toggleIcons);
+  const layout = useUIStore((s) => s.layout);
+  const setPageMargin = useUIStore((s) => s.setPageMargin);
+  const setModuleGap = useUIStore((s) => s.setModuleGap);
+  const setLineHeight = useUIStore((s) => s.setLineHeight);
   const config = useResumeStore((s) => s.config);
 
   const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
@@ -213,6 +247,37 @@ export function AppearanceDrawer() {
                 <p className="mt-1 text-xs text-muted-foreground">
                   {showIcons ? t('toolbar.showIcons') : t('toolbar.hideIcons')}
                 </p>
+              </section>
+
+              {/* 排版 */}
+              <section>
+                <h3 className="mb-3 text-sm font-medium text-foreground">{t('toolbar.typography')}</h3>
+                <div className="space-y-4">
+                  {/* 页边距 */}
+                  <div>
+                    <span className="mb-1.5 block text-xs text-muted-foreground">{t('toolbar.pageMargin')}</span>
+                    <SpacingPresetGroup value={layout.pageMargin} onChange={setPageMargin} labels={{ compact: t('toolbar.narrow'), standard: t('toolbar.standard'), spacious: t('toolbar.wide') }} />
+                  </div>
+                  {/* 模块间距 */}
+                  <div>
+                    <span className="mb-1.5 block text-xs text-muted-foreground">{t('toolbar.moduleGap')}</span>
+                    <SpacingPresetGroup value={layout.moduleGap} onChange={setModuleGap} labels={{ compact: t('toolbar.compact'), standard: t('toolbar.standard'), spacious: t('toolbar.spacious') }} />
+                  </div>
+                  {/* 行间距 */}
+                  <div>
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{t('toolbar.lineHeight')}</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">{layout.lineHeight.toFixed(1)}</span>
+                    </div>
+                    <Slider
+                      value={[layout.lineHeight]}
+                      min={1.2}
+                      max={1.8}
+                      step={0.1}
+                      onValueChange={([v]) => setLineHeight(v)}
+                    />
+                  </div>
+                </div>
               </section>
             </div>
           </ScrollArea>

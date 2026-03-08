@@ -37,7 +37,7 @@ function Template2Shell({ config, mainContent }: LayoutShellProps) {
 
   return (
     <div className="min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
-      <div className="px-8 py-6">
+      <div className="resume-padding">
         <EditableSection module="profile">
           <div className="mb-5 flex items-stretch gap-4 border-b border-gray-200 pb-4">
             <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />

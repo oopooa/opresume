@@ -32,6 +32,10 @@
 
     --resume-primary: #2f5785;
     --resume-tag: #8bc34a;
+    --resume-page-padding: 16mm 18mm;
+    --resume-page-padding-x: 18mm;
+    --resume-module-gap: 24px;
+    --resume-line-height: 1.5;
 
     --resume-primary-light: color-mix(in srgb, var(--resume-primary) 12%, white);
     --editor-module: #f8fafc;
@@ -157,4 +161,38 @@
   color: hsl(var(--primary));
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* 排版：模块间距由 CSS 变量统一控制，穿透 EditableSection 包装层覆盖 Tailwind mb-X */
+div.resume-module > div > section,
+div.resume-module > div > div {
+  margin-bottom: var(--resume-module-gap);
+}
+div.resume-module:last-child > div > section,
+div.resume-module:last-child > div > div {
+  margin-bottom: 0;
+}
+
+/* 排版：行间距由 CSS 变量控制，覆盖 Tailwind text-xs/text-sm 等自带的 line-height */
+div.resume-layout p,
+div.resume-layout li,
+div.resume-layout span,
+div.resume-layout h1,
+div.resume-layout h2,
+div.resume-layout h3,
+div.resume-layout h4,
+div.resume-layout td,
+div.resume-layout th,
+div.resume-layout a {
+  line-height: var(--resume-line-height);
+}
+
+/* 排版：页边距由 CSS 变量控制 */
+.resume-padding {
+  padding: var(--resume-page-padding);
+}
+
+/* Template4 左侧额外缩进 */
+.resume-padding-offset-left {
+  padding-left: calc(var(--resume-page-padding-x) + 4mm);
 }

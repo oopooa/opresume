@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '@/i18n';
-import type { ThemeConfig } from '@/types';
+import type { ThemeConfig, LayoutConfig, SpacingPreset } from '@/types';
 
 interface UIStore {
   theme: ThemeConfig;
@@ -18,6 +18,8 @@ interface UIStore {
   showIcons: boolean;
   /** 隐私模式：对敏感信息进行打码显示 */
   privacyMode: boolean;
+  /** 排版配置 */
+  layout: LayoutConfig;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
@@ -28,6 +30,9 @@ interface UIStore {
   togglePrivacy: () => void;
   updateModuleIcon: (module: string, icon: string | undefined) => void;
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
+  setPageMargin: (preset: SpacingPreset) => void;
+  setModuleGap: (preset: SpacingPreset) => void;
+  setLineHeight: (value: number) => void;
 }
 
 export const useUIStore = create<UIStore>()(
@@ -43,6 +48,7 @@ export const useUIStore = create<UIStore>()(
       customFieldIconMap: {},
       showIcons: true,
       privacyMode: false,
+      layout: { pageMargin: 'standard', moduleGap: 'standard', lineHeight: 1.5 },
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -84,6 +90,15 @@ export const useUIStore = create<UIStore>()(
           const { [fieldKey]: _, ...rest } = s.customFieldIconMap;
           return { customFieldIconMap: rest };
         }),
+
+      setPageMargin: (preset) =>
+        set((s) => ({ layout: { ...s.layout, pageMargin: preset } })),
+
+      setModuleGap: (preset) =>
+        set((s) => ({ layout: { ...s.layout, moduleGap: preset } })),
+
+      setLineHeight: (value) =>
+        set((s) => ({ layout: { ...s.layout, lineHeight: value } })),
     }),
     {
       name: 'opresume_ui',
@@ -96,6 +111,7 @@ export const useUIStore = create<UIStore>()(
         customFieldIconMap: state.customFieldIconMap,
         showIcons: state.showIcons,
         privacyMode: state.privacyMode,
+        layout: state.layout,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.lang) {

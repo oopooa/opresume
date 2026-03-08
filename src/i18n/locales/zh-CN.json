@@ -44,7 +44,16 @@
     "changeTemplate": "更换模板",
     "privacyMode": "隐私模式",
     "privacyOn": "敏感信息已打码",
-    "privacyOff": "显示完整信息"
+    "privacyOff": "显示完整信息",
+    "typography": "排版",
+    "pageMargin": "页边距",
+    "moduleGap": "模块间距",
+    "lineHeight": "行间距",
+    "compact": "紧凑",
+    "standard": "标准",
+    "spacious": "宽松",
+    "narrow": "窄",
+    "wide": "宽"
   },
   "module": {
     "profile": "基本信息",
