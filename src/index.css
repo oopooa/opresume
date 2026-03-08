@@ -34,8 +34,8 @@
     --resume-tag: #8bc34a;
 
     --resume-primary-light: color-mix(in srgb, var(--resume-primary) 12%, white);
-    --editor-module: color-mix(in srgb, var(--resume-primary) 6%, white);
-    --editor-module-active: color-mix(in srgb, var(--resume-primary) 12%, white);
+    --editor-module: #f8fafc;
+    --editor-module-active: #f8fafc;
     --editor-drop: color-mix(in srgb, var(--resume-primary) 40%, white)
   }
   .dark {

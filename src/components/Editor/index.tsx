@@ -108,12 +108,13 @@ function SortableModuleHeader({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'flex items-center gap-1 rounded-lg px-3 transition-colors',
+        'relative overflow-hidden flex items-center gap-1 rounded-lg px-3 transition-colors',
         'bg-editor-module',
         expanded && 'bg-editor-module-active',
       )}
       id={`editor-${module}`}
     >
+      <span className={cn('absolute left-0 top-0 bottom-0 w-[3px] transition-colors', expanded ? 'bg-resume-primary' : 'bg-transparent')} />
       <Button
         variant="ghost"
         size="icon"
@@ -597,12 +598,13 @@ export function Editor() {
                 <Collapsible open={isExpanded} onOpenChange={() => toggle('profile')}>
                   <div
                     className={cn(
-                      'flex items-center gap-1 rounded-lg px-3 transition-colors',
+                      'relative overflow-hidden flex items-center gap-1 rounded-lg px-3 transition-colors',
                       'bg-editor-module',
                       isExpanded && 'bg-editor-module-active',
                     )}
                     id="editor-profile"
                   >
+                    <span className={cn('absolute left-0 top-0 bottom-0 w-[3px] transition-colors', isExpanded ? 'bg-resume-primary' : 'bg-transparent')} />
                     <CollapsibleTrigger asChild>
                       <button
                         type="button"
