@@ -78,6 +78,12 @@
     @apply border-border;
   }
 
+  /* 抽屉/弹窗自动聚焦时隐藏焦点轮廓，仅键盘 Tab 导航时显示 */
+  [role="dialog"] :focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
