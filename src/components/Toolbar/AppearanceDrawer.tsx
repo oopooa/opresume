@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Palette, Check } from 'lucide-react';
+import { Palette, Check, ArrowRightLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
@@ -143,8 +143,8 @@ export function AppearanceDrawer() {
                   tabIndex={0}
                   onClick={() => setTemplateDialogOpen(true)}
                   className={cn(
-                    'relative block w-full max-w-40 cursor-pointer overflow-hidden rounded-lg ring-1 ring-gray-200 transition-all text-left',
-                    drawerReady ? 'group hover:ring-gray-300 hover:shadow-md' : 'pointer-events-none',
+                    'w-full cursor-pointer overflow-hidden rounded-xl ring-1 ring-gray-200 transition-all',
+                    drawerReady ? 'hover:ring-gray-300 hover:shadow-md' : 'pointer-events-none',
                   )}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -153,20 +153,29 @@ export function AppearanceDrawer() {
                     }
                   }}
                 >
-                  <div className="relative h-52 w-full overflow-hidden bg-white">
-                    {config && (
-                      <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.20]">
-                        <ResumeView config={config} templateId={template} disablePagination />
+                  {/* 静态骨架 */}
+                  <div className="bg-gray-50/50 px-6 py-5">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-4 w-10 rounded" style={{ backgroundColor: theme.color }} />
+                        <div className="h-2.5 w-20 rounded-full bg-gray-200" />
                       </div>
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/40">
-                      <span className="text-sm font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
-                        {t('toolbar.changeTemplate')}
-                      </span>
+                      <div className="space-y-2 pt-0.5">
+                        <div className="h-2 w-full rounded-full bg-gray-200/70" />
+                        <div className="h-2 w-3/4 rounded-full bg-gray-200/70" />
+                        <div className="h-2 w-full rounded-full bg-gray-200/70" />
+                        <div className="h-2 w-5/6 rounded-full bg-gray-200/70" />
+                        <div className="h-2 w-2/3 rounded-full bg-gray-200/70" />
+                      </div>
                     </div>
                   </div>
-                  <div className="border-t border-gray-100 bg-white px-3 py-2 text-center">
-                    <span className="text-xs font-medium text-gray-600">{t(`template.${template}`)}</span>
+                  {/* 模板信息 */}
+                  <div className="flex items-center justify-between border-t border-gray-100 bg-white px-4 py-3">
+                    <div>
+                      <p className="text-[11px] text-muted-foreground">{t('toolbar.currentTemplate')}</p>
+                      <p className="text-sm font-semibold text-foreground">{t(`template.${template}`)}</p>
+                    </div>
+                    <ArrowRightLeft className="h-4 w-4 text-gray-400" />
                   </div>
                 </div>
               </section>

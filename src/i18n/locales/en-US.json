@@ -42,6 +42,7 @@
     "iconMode": "Icons",
     "appearanceSettings": "Appearance",
     "changeTemplate": "Change Template",
+    "currentTemplate": "Current Template",
     "privacyMode": "Privacy Mode",
     "privacyOn": "Sensitive info is masked",
     "privacyOff": "Show full info",
