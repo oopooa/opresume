@@ -51,17 +51,17 @@ function SpacingPresetGroup({ value, onChange, labels }: {
   labels: Record<SpacingPreset, string>;
 }) {
   return (
-    <div className="grid grid-cols-3 gap-1.5">
+    <div className="grid grid-cols-3 rounded-full bg-gray-100 p-1">
       {SPACING_PRESETS.map((preset) => (
         <button
           key={preset}
           type="button"
           onClick={() => onChange(preset)}
           className={cn(
-            'rounded-md border px-2 py-1.5 text-xs font-medium transition-all',
+            'rounded-full px-3 py-1.5 text-sm font-medium transition-all',
             value === preset
-              ? 'border-gray-800 bg-gray-50 text-gray-900'
-              : 'border-gray-200 text-gray-500 hover:border-gray-300',
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700',
           )}
         >
           {labels[preset]}
@@ -157,7 +157,6 @@ export function AppearanceDrawer() {
                   <div className="bg-gray-50/50 px-6 py-5">
                     <div className="space-y-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="h-4 w-10 rounded" style={{ backgroundColor: theme.color }} />
                         <div className="h-2.5 w-20 rounded-full bg-gray-200" />
                       </div>
                       <div className="space-y-2 pt-0.5">
@@ -182,40 +181,41 @@ export function AppearanceDrawer() {
 
               {/* 主题配色 */}
               <section>
-                <h3 className="mb-3 text-sm font-medium text-foreground">{t('toolbar.theme')}</h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-foreground">{t('toolbar.theme')}</h3>
+                  {(() => {
+                    const key = PRESETS.find((p) => p.color === theme.color)?.key;
+                    return key ? (
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {t(`theme.${key}`)}
+                      </span>
+                    ) : null;
+                  })()}
+                </div>
+                <div className="flex flex-wrap gap-3">
                   {PRESETS.map((preset) => {
                     const active = theme.color === preset.color;
                     return (
                       <button
                         key={preset.key}
                         type="button"
+                        aria-label={t(`theme.${preset.key}`)}
                         onClick={() => updateTheme({ color: preset.color, tagColor: preset.tagColor })}
-                        className={cn(
-                          'flex items-center gap-2.5 rounded-lg border px-3 py-2 text-left transition-all',
-                          active
-                            ? 'border-gray-800 bg-gray-50'
-                            : 'border-gray-200 hover:border-gray-300',
-                        )}
-                      >
-                        <span
-                          className="h-4 w-4 shrink-0 rounded-full"
-                          style={{ backgroundColor: preset.color }}
-                        />
-                        <span className={cn(
-                          'text-xs font-medium',
-                          active ? 'text-gray-900' : 'text-gray-600',
-                        )}>
-                          {t(`theme.${preset.key}`)}
-                        </span>
-                      </button>
+                        className="h-7 w-7 shrink-0 rounded-full transition-shadow"
+                        style={{
+                          backgroundColor: preset.color,
+                          boxShadow: active
+                            ? `0 0 0 2px #fff, 0 0 0 4px ${preset.color}`
+                            : undefined,
+                        }}
+                      />
                     );
                   })}
                 </div>
               </section>
 
               {/* 图标显示 */}
-              <section>
+              <section className="border-t border-gray-100 pt-6">
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">{t('toolbar.iconMode')}</Label>
                   <Switch
@@ -224,40 +224,33 @@ export function AppearanceDrawer() {
                     aria-label={showIcons ? t('toolbar.hideIcons') : t('toolbar.showIcons')}
                   />
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {showIcons ? t('toolbar.showIcons') : t('toolbar.hideIcons')}
-                </p>
               </section>
 
-              {/* 排版 */}
+              {/* 页边距 */}
               <section>
-                <h3 className="mb-3 text-sm font-medium text-foreground">{t('toolbar.typography')}</h3>
-                <div className="space-y-4">
-                  {/* 页边距 */}
-                  <div>
-                    <span className="mb-1.5 block text-xs text-muted-foreground">{t('toolbar.pageMargin')}</span>
-                    <SpacingPresetGroup value={layout.pageMargin} onChange={setPageMargin} labels={{ compact: t('toolbar.narrow'), standard: t('toolbar.standard'), spacious: t('toolbar.wide') }} />
-                  </div>
-                  {/* 模块间距 */}
-                  <div>
-                    <span className="mb-1.5 block text-xs text-muted-foreground">{t('toolbar.moduleGap')}</span>
-                    <SpacingPresetGroup value={layout.moduleGap} onChange={setModuleGap} labels={{ compact: t('toolbar.compact'), standard: t('toolbar.standard'), spacious: t('toolbar.spacious') }} />
-                  </div>
-                  {/* 行间距 */}
-                  <div>
-                    <div className="mb-1.5 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{t('toolbar.lineHeight')}</span>
-                      <span className="text-xs tabular-nums text-muted-foreground">{layout.lineHeight.toFixed(1)}</span>
-                    </div>
-                    <Slider
-                      value={[layout.lineHeight]}
-                      min={1.2}
-                      max={1.8}
-                      step={0.1}
-                      onValueChange={([v]) => setLineHeight(v)}
-                    />
-                  </div>
+                <h3 className="mb-2.5 text-sm font-medium text-foreground">{t('toolbar.pageMargin')}</h3>
+                <SpacingPresetGroup value={layout.pageMargin} onChange={setPageMargin} labels={{ compact: t('toolbar.narrow'), standard: t('toolbar.standard'), spacious: t('toolbar.wide') }} />
+              </section>
+
+              {/* 模块间距 */}
+              <section>
+                <h3 className="mb-2.5 text-sm font-medium text-foreground">{t('toolbar.moduleGap')}</h3>
+                <SpacingPresetGroup value={layout.moduleGap} onChange={setModuleGap} labels={{ compact: t('toolbar.compact'), standard: t('toolbar.standard'), spacious: t('toolbar.spacious') }} />
+              </section>
+
+              {/* 行间距 */}
+              <section>
+                <div className="mb-2.5 flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-foreground">{t('toolbar.lineHeight')}</h3>
+                  <span className="text-sm font-medium tabular-nums text-muted-foreground">{layout.lineHeight.toFixed(1)}</span>
                 </div>
+                <Slider
+                  value={[layout.lineHeight]}
+                  min={1.2}
+                  max={1.8}
+                  step={0.1}
+                  onValueChange={([v]) => setLineHeight(v)}
+                />
               </section>
             </div>
           </ScrollArea>
