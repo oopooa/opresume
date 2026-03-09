@@ -581,7 +581,7 @@ export function Editor() {
 
   return (
     <Sheet open={editorOpen} onOpenChange={(isOpen) => { if (!isOpen) closeEditor(); }}>
-      <SheetContent side="right" hideClose className="flex w-[380px] flex-col p-0 print:hidden sm:max-w-[380px]">
+      <SheetContent side="right" className="flex w-[380px] flex-col p-0 print:hidden sm:max-w-[380px]">
         <SheetHeader className="border-b px-4 py-3">
           <SheetTitle>{t('toolbar.editResume')}</SheetTitle>
           <SheetDescription className="sr-only">{t('toolbar.editResume')}</SheetDescription>
