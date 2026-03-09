@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RichContent } from '@/components/RichContent';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
-export function AboutMeModule({ config, tokens }: ModuleProps) {
+export function AboutMeModule({ config, tokens, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('aboutme');
   const { SectionTitle } = tokens.components;
@@ -12,7 +12,7 @@ export function AboutMeModule({ config, tokens }: ModuleProps) {
   return (
     <EditableSection module="aboutme">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} icon={moduleIcon} />
+        {showTitle && <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} icon={moduleIcon} />}
         <RichContent content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
       </section>
     </EditableSection>

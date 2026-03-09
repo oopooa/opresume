@@ -1,6 +1,7 @@
 import type { ReactNode, ComponentType } from 'react';
 import type { ResumeConfig } from '@/types';
-import type { TemplateDefinition, ModuleProps } from '../types';
+import type { TemplateDefinition, ModuleProps, StyleTokens } from '../types';
+import type { PageSlice } from '@/utils/pagination';
 import { getEffectiveLayout } from '@/config/layout';
 
 import { EducationModule } from './EducationModule';
@@ -11,8 +12,8 @@ import { WorkListModule } from './WorkListModule';
 import { AboutMeModule } from './AboutMeModule';
 import { SkillModule } from './SkillModule';
 
-/** 共享默认模块映射 */
-const DEFAULT_MODULES: Record<string, ComponentType<ModuleProps>> = {
+/** 模块组件映射表 */
+export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
   educationList: EducationModule,
   awardList: AwardModule,
   workExpList: WorkExpModule,
@@ -33,13 +34,47 @@ export function useTemplateModules(
   const tokens = def.getTokens();
 
   function renderModule(key: string): ReactNode {
-    const Mod = DEFAULT_MODULES[key];
+    const Mod = MODULE_COMPONENTS[key];
     if (!Mod) return null;
-    return <div key={key} className="resume-module"><Mod config={config} tokens={tokens} /></div>;
+    return (
+      <div key={key} className="resume-module" data-module-key={key}>
+        <Mod config={config} tokens={tokens} />
+      </div>
+    );
   }
 
   return {
     sidebarContent: <>{layout.sidebar.map((k) => renderModule(k))}</>,
     mainContent: <>{layout.main.map((k) => renderModule(k))}</>,
   };
+}
+
+/**
+ * 根据分页切片渲染单页内的模块列表。
+ */
+export function renderPageSlices(
+  slices: PageSlice[],
+  config: ResumeConfig,
+  tokens: StyleTokens,
+): ReactNode {
+  return (
+    <>
+      {slices.map((slice) => {
+        const Mod = MODULE_COMPONENTS[slice.moduleKey];
+        if (!Mod) return null;
+        const key = `${slice.moduleKey}-${slice.startItem}`;
+        const hasItems = slice.endItem > 0;
+        return (
+          <div key={key} className="resume-module" data-module-key={slice.moduleKey}>
+            <Mod
+              config={config}
+              tokens={tokens}
+              showTitle={slice.showTitle}
+              itemRange={hasItems ? [slice.startItem, slice.endItem] : undefined}
+            />
+          </div>
+        );
+      })}
+    </>
+  );
 }

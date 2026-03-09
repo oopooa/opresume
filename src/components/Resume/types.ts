@@ -35,6 +35,10 @@ export interface StyleTokens {
 export interface ModuleProps {
   config: ResumeConfig;
   tokens: StyleTokens;
+  /** 列表型模块的条目渲染范围 [start, end)，默认渲染全部 */
+  itemRange?: [number, number];
+  /** 是否显示模块标题（跨页续渲时为 false），默认 true */
+  showTitle?: boolean;
 }
 
 /**
@@ -57,4 +61,6 @@ export interface LayoutShellProps {
   config: ResumeConfig;
   sidebarContent: ReactNode;
   mainContent: ReactNode;
+  /** 页码索引（0 = 首页含 Profile，1+ = 续页不含 Profile），默认 0 */
+  pageIndex?: number;
 }

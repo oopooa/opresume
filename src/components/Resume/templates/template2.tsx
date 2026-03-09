@@ -28,7 +28,7 @@ const tokens: StyleTokens = {
 
 /* ---------- LayoutShell ---------- */
 
-function Template2Shell({ config, mainContent }: LayoutShellProps) {
+function Template2Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps) {
   const { profile, avatar } = config;
   const { t } = useTranslation();
   const age = calculateAge(profile?.birthday);
@@ -38,27 +38,29 @@ function Template2Shell({ config, mainContent }: LayoutShellProps) {
   return (
     <div className="min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
       <div className="resume-padding">
-        <EditableSection module="profile">
-          <div className="mb-5 flex items-stretch gap-4 border-b border-gray-200 pb-4">
-            <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />
-            <div className="flex flex-1 flex-col justify-between">
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">{mask(profile?.name, 'name')}</h1>
-                {profile?.positionTitle && <p className="mt-0.5 text-sm text-gray-500">{profile.positionTitle}</p>}
-              </div>
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-600">
-                {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')} label={t('field.mobile')}>{mask(profile.mobile, 'mobile')}</ProfileField>}
-                {profile?.email && <ProfileField icon={getProfileIcon('email')} label={t('field.email')}>{mask(profile.email, 'email')}</ProfileField>}
-                {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')} label={t('field.workPlace')}>{mask(profile.workPlace, 'workPlace')}</ProfileField>}
-                {age !== null && !profile?.ageHidden && <ProfileField icon={getProfileIcon('age')} label={t('field.ageLabel')}>{t('field.age', { age })}</ProfileField>}
-                {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
-                {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
-                  <ProfileField key={field.key} icon={customFieldIconMap[field.key]} label={field.key}>{field.value}</ProfileField>
-                ))}
+        {pageIndex === 0 && (
+          <EditableSection module="profile">
+            <div className="mb-5 flex items-stretch gap-4 border-b border-gray-200 pb-4">
+              <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />
+              <div className="flex flex-1 flex-col justify-between">
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">{mask(profile?.name, 'name')}</h1>
+                  {profile?.positionTitle && <p className="mt-0.5 text-sm text-gray-500">{profile.positionTitle}</p>}
+                </div>
+                <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-600">
+                  {profile?.mobile && <ProfileField icon={getProfileIcon('mobile')} label={t('field.mobile')}>{mask(profile.mobile, 'mobile')}</ProfileField>}
+                  {profile?.email && <ProfileField icon={getProfileIcon('email')} label={t('field.email')}>{mask(profile.email, 'email')}</ProfileField>}
+                  {profile?.workPlace && <ProfileField icon={getProfileIcon('workPlace')} label={t('field.workPlace')}>{mask(profile.workPlace, 'workPlace')}</ProfileField>}
+                  {age !== null && !profile?.ageHidden && <ProfileField icon={getProfileIcon('age')} label={t('field.ageLabel')}>{t('field.age', { age })}</ProfileField>}
+                  {profile?.workExpYear && <ProfileField icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')}>{t('common.yearsExp', { years: profile.workExpYear })}</ProfileField>}
+                  {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
+                    <ProfileField key={field.key} icon={customFieldIconMap[field.key]} label={field.key}>{field.value}</ProfileField>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </EditableSection>
+          </EditableSection>
+        )}
         {mainContent}
       </div>
     </div>

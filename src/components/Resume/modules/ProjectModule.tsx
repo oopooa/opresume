@@ -4,20 +4,22 @@ import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
 import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
-export function ProjectModule({ config, tokens }: ModuleProps) {
+export function ProjectModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('projectList');
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'projectList') || !config.projectList?.length) return null;
 
   const isDetailed = tokens.variants.project === 'detailed';
+  const list = itemRange ? config.projectList.slice(itemRange[0], itemRange[1]) : config.projectList;
+  const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
     <EditableSection module="projectList">
       <section className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />
-        {config.projectList.map((proj) => (
-          <div key={proj.id} className={tokens.spacing.item}>
+        {showTitle && <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />}
+        {list.map((proj, i) => (
+          <div key={proj.id} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
               <div className={cn(isDetailed ? 'flex items-baseline gap-2' : 'flex items-center gap-2')}>
                 <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>

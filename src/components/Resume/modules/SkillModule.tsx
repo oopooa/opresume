@@ -63,7 +63,7 @@ function SkillTagList({ skills, tokens }: SkillListProps) {
   );
 }
 
-export function SkillModule({ config, tokens }: ModuleProps) {
+export function SkillModule({ config, tokens, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('skillList');
   const skillList = config.skillList;
@@ -74,7 +74,7 @@ export function SkillModule({ config, tokens }: ModuleProps) {
   return (
     <EditableSection module="skillList">
       <div className={tokens.spacing.module}>
-        <SectionTitle title={getTitle(config, 'skillList', t('module.skillList'))} icon={moduleIcon} />
+        {showTitle && <SectionTitle title={getTitle(config, 'skillList', t('module.skillList'))} icon={moduleIcon} />}
         {tokens.variants.skill === 'bar' && <SkillBarList skills={skillList} tokens={tokens} />}
         {tokens.variants.skill === 'list' && <SkillNumberList skills={skillList} tokens={tokens} />}
         {tokens.variants.skill === 'tags' && <SkillTagList skills={skillList} tokens={tokens} />}

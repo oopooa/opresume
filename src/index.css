@@ -110,6 +110,20 @@
   section > div {
     break-inside: avoid;
   }
+
+  /* 分页模式：每个 .resume-page 独占一个打印页面 */
+  .resume-page {
+    break-after: page;
+    break-inside: avoid;
+  }
+  .resume-page:last-child {
+    break-after: auto;
+  }
+
+  /* 打印时隐藏测量容器 */
+  .resume-measure-container {
+    display: none;
+  }
 }
 
 /* 富文本渲染样式（简历预览和打印） */
@@ -195,4 +209,13 @@ div.resume-layout a {
 /* Template4 左侧额外缩进 */
 .resume-padding-offset-left {
   padding-left: calc(var(--resume-page-padding-x) + 4mm);
+}
+
+/* 分页测量容器：不可见但参与布局计算 */
+.resume-measure-container {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
