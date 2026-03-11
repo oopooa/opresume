@@ -12,6 +12,8 @@
 
 **[👉 在线体验 Live Demo](https://opresume.pages.dev)**
 
+<img src="docs/images/mockup1.png" alt="OpResume Preview" width="800" />
+
 </div>
 
 ## ✨ 核心特性
