@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Download, Save, PenLine } from 'lucide-react';
+import { Download, Github, Save, PenLine } from 'lucide-react';
 import { useResumeStore } from '@/store/resume';
 import { useUIStore } from '@/store/ui';
 import { saveWithToast } from '@/hooks/useSaveShortcut';
@@ -72,6 +72,24 @@ export function FloatingToolbar() {
             </Button>
           </TooltipTrigger>
           <TooltipContent side="left">{t('toolbar.print')}</TooltipContent>
+        </Tooltip>
+
+        <div className="mx-auto h-px w-5 bg-border" />
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-xl text-muted-foreground hover:text-foreground"
+              asChild
+            >
+              <a href="https://github.com/oopooa/opresume" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <Github className="h-4 w-4" />
+              </a>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">GitHub</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>
