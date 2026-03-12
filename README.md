@@ -10,6 +10,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+简体中文 | [English](./README.en.md)
+
 **[👉 在线体验 Live Demo](https://opresume.pages.dev)**
 
 <img src="docs/images/mockup1.png" alt="OpResume Preview" width="800" />
