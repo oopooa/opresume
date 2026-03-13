@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Palette, Check, ArrowRightLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
-import { useResumeStore } from '@/store/resume';
+import { sampleResume } from '@/config/sample-resume';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -85,7 +85,6 @@ export function AppearanceDrawer() {
   const setPageMargin = useUIStore((s) => s.setPageMargin);
   const setModuleGap = useUIStore((s) => s.setModuleGap);
   const setLineHeight = useUIStore((s) => s.setLineHeight);
-  const config = useResumeStore((s) => s.config);
 
   // drawer 动画完成后才启用缩略图 hover 效果，避免鼠标滑过时误触
   const [drawerReady, setDrawerReady] = useState(false);
@@ -288,11 +287,9 @@ export function AppearanceDrawer() {
                       </span>
                     )}
                     <div className="relative h-72 w-full overflow-hidden">
-                      {config && (
-                        <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.28]">
-                          <ResumeView config={config} templateId={key} disablePagination />
-                        </div>
-                      )}
+                      <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.28]">
+                        <ResumeView config={sampleResume} templateId={key} disablePagination />
+                      </div>
                     </div>
                     <div className="border-t border-gray-100 px-3 py-2.5 text-center">
                       <p className={cn(

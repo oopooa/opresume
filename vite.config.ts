@@ -6,6 +6,7 @@ import { existsSync, unlinkSync } from 'fs';
 
 const DATA_FILE = path.resolve(__dirname, 'data/resume.json');
 const DATA_DIR = path.resolve(__dirname, 'data');
+const SAMPLE_FILE = path.resolve(__dirname, 'src/config/sample-resume.json');
 
 const MIME_EXT: Record<string, string> = {
   'image/png': '.png',
@@ -16,6 +17,17 @@ const EXT_MIME: Record<string, string> = Object.fromEntries(
   Object.entries(MIME_EXT).map(([m, e]) => [e, m]),
 );
 
+/** 从示例数据生成用户初始数据（重置头像配置） */
+async function readSampleAsUserData(): Promise<string> {
+  const raw = await fs.readFile(SAMPLE_FILE, 'utf-8');
+  const sample = JSON.parse(raw);
+  if (sample.avatar) {
+    sample.avatar.hidden = false;
+    delete sample.avatar.src;
+  }
+  return JSON.stringify(sample, null, 2);
+}
+
 function resumeApiPlugin(): Plugin {
   return {
     name: 'resume-api',
@@ -23,6 +35,10 @@ function resumeApiPlugin(): Plugin {
       server.middlewares.use('/api/resume', async (req, res) => {
         try {
           if (req.method === 'GET') {
+            if (!existsSync(DATA_FILE)) {
+              await fs.mkdir(DATA_DIR, { recursive: true });
+              await fs.writeFile(DATA_FILE, await readSampleAsUserData(), 'utf-8');
+            }
             const data = await fs.readFile(DATA_FILE, 'utf-8');
             res.setHeader('Content-Type', 'application/json');
             res.end(data);
@@ -131,12 +147,16 @@ function resumeApiPlugin(): Plugin {
       });
     },
     async writeBundle() {
-      if (!existsSync(DATA_FILE)) {
-        console.warn(`[resume-api] ${DATA_FILE} 不存在，跳过复制到 dist`);
-        return;
-      }
       const outDir = path.resolve(__dirname, 'dist/data');
       await fs.mkdir(outDir, { recursive: true });
+
+      // data/resume.json 不存在时，从示例数据初始化到 dist
+      let resumeRaw: string;
+      if (!existsSync(DATA_FILE)) {
+        resumeRaw = await readSampleAsUserData();
+      } else {
+        resumeRaw = await fs.readFile(DATA_FILE, 'utf-8');
+      }
 
       // 复制头像文件，记录实际路径
       let avatarStaticPath: string | null = null;
@@ -149,11 +169,10 @@ function resumeApiPlugin(): Plugin {
       }
 
       // 复制 resume.json，将 /api/avatar 替换为静态文件路径
-      const raw = await fs.readFile(DATA_FILE, 'utf-8');
-      let output = raw;
+      let output = resumeRaw;
       if (avatarStaticPath) {
         try {
-          const config = JSON.parse(raw);
+          const config = JSON.parse(resumeRaw);
           if (config.avatar?.src?.startsWith('/api/avatar')) {
             config.avatar.src = avatarStaticPath;
             output = JSON.stringify(config, null, 2);

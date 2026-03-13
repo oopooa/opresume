@@ -1,5 +1,6 @@
 import type { ResumeConfig } from '@/types';
 import { migrateMarkdownFields } from '@/utils/migrate-markdown';
+import { sampleResume } from '@/config/sample-resume';
 
 const API_URL = '/api/resume';
 
@@ -48,7 +49,9 @@ export async function loadConfig(): Promise<ResumeConfig> {
 
   const res = await fetch('/data/resume.json');
   if (!res.ok) {
-    throw new Error(`加载简历数据失败 (${res.status})`);
+    return migrateMarkdownFields(
+      addCustomFieldIds({ ...sampleResume, avatar: { ...sampleResume.avatar, hidden: false } }),
+    );
   }
   config = await res.json();
   return migrateMarkdownFields(addCustomFieldIds(config));
