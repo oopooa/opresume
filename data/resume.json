@@ -13,12 +13,8 @@
     "workExpYear": "5",
     "positionTitle": "高级前端工程师",
     "ageHidden": true,
-    "birthday": "1996-05-06",
+    "birthday": "1995-07-27",
     "customFields": [
-      {
-        "key": "GitHub",
-        "value": "aabbcc"
-      },
       {
         "key": "工作地点",
         "value": "成都"
@@ -177,15 +173,9 @@
   "workList": [
     {
       "id": "portfolio-1",
-      "workName": "个人技术博客",
+      "workName": "个人项目地址",
       "workDesc": "基于 Next.js + MDX 搭建，累计发表 80+ 篇技术文章，月访问量 5000+",
-      "visitLink": "https://example.com/blog"
-    },
-    {
-      "id": "portfolio-2",
-      "workName": "React 状态管理库 mini-zustand",
-      "workDesc": "仿 Zustand 实现的轻量状态管理库，GitHub 800+ Star",
-      "visitLink": "https://github.com/example/mini-zustand"
+      "visitLink": "https://github.com/oopooa/opresume"
     }
   ],
   "aboutme": {
