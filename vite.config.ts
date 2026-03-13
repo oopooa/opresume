@@ -137,14 +137,30 @@ function resumeApiPlugin(): Plugin {
       }
       const outDir = path.resolve(__dirname, 'dist/data');
       await fs.mkdir(outDir, { recursive: true });
-      await fs.copyFile(DATA_FILE, path.resolve(outDir, 'resume.json'));
-      // 复制头像文件
+
+      // 复制头像文件，记录实际路径
+      let avatarStaticPath: string | null = null;
       for (const ext of Object.values(MIME_EXT)) {
         const src = path.join(DATA_DIR, `avatar${ext}`);
         if (existsSync(src)) {
           await fs.copyFile(src, path.resolve(outDir, `avatar${ext}`));
+          avatarStaticPath = `/data/avatar${ext}`;
         }
       }
+
+      // 复制 resume.json，将 /api/avatar 替换为静态文件路径
+      const raw = await fs.readFile(DATA_FILE, 'utf-8');
+      let output = raw;
+      if (avatarStaticPath) {
+        try {
+          const config = JSON.parse(raw);
+          if (config.avatar?.src?.startsWith('/api/avatar')) {
+            config.avatar.src = avatarStaticPath;
+            output = JSON.stringify(config, null, 2);
+          }
+        } catch { /* 解析失败则原样复制 */ }
+      }
+      await fs.writeFile(path.resolve(outDir, 'resume.json'), output);
     },
   };
 }
