@@ -125,7 +125,7 @@ export function Toolbar() {
           </TooltipProvider>
           <LangSwitcher />
           <div onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
-            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
