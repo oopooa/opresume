@@ -54,7 +54,14 @@
     "standard": "Standard",
     "spacious": "Spacious",
     "narrow": "Narrow",
-    "wide": "Wide"
+    "wide": "Wide",
+    "jsonMenu": "Data",
+    "importWarning": "Overwrite current resume data?",
+    "importWarningDesc": "This action cannot be undone. Please back up your existing data before proceeding.",
+    "importConfirm": "Confirm Overwrite",
+    "importSuccess": "Imported successfully",
+    "importFormatError": "JSON format does not match resume data schema",
+    "importParseFailed": "Failed to parse JSON"
   },
   "module": {
     "profile": "Profile",

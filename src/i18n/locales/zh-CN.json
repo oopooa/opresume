@@ -54,7 +54,14 @@
     "standard": "标准",
     "spacious": "宽松",
     "narrow": "窄",
-    "wide": "宽"
+    "wide": "宽",
+    "jsonMenu": "数据管理",
+    "importWarning": "确认覆盖当前简历数据？",
+    "importWarningDesc": "此操作不可撤销。建议在导入前先备份现有数据。",
+    "importConfirm": "确认覆盖",
+    "importSuccess": "导入成功",
+    "importFormatError": "JSON 格式不符合简历数据规范",
+    "importParseFailed": "JSON 解析失败"
   },
   "module": {
     "profile": "基本信息",

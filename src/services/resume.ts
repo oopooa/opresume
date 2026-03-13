@@ -71,7 +71,7 @@ export async function saveConfig(config: ResumeConfig): Promise<void> {
   }
 }
 
-export function exportConfig(config: ResumeConfig): void {
+export function exportConfig(config: ResumeConfig, filename?: string): void {
   const cleaned = removeCustomFieldIds(config);
   const blob = new Blob(
     [JSON.stringify(cleaned, null, 2)],
@@ -80,7 +80,7 @@ export function exportConfig(config: ResumeConfig): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'resume.json';
+  a.download = filename || 'resume.json';
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -99,4 +99,29 @@ export function importConfig(file: File): Promise<ResumeConfig> {
     reader.onerror = () => reject(reader.error);
     reader.readAsText(file);
   });
+}
+
+/** 校验导入的数据是否符合 ResumeConfig 基本结构 */
+export function validateConfig(data: unknown): data is ResumeConfig {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
+  const obj = data as Record<string, unknown>;
+  const knownKeys = [
+    'profile', 'avatar', 'educationList', 'workExpList', 'projectList',
+    'skillList', 'awardList', 'workList', 'aboutme',
+    'titleNameMap', 'moduleHidden', 'moduleLayout', 'locales',
+  ];
+  if (!knownKeys.some((k) => k in obj)) return false;
+  if ('profile' in obj && obj.profile !== undefined) {
+    if (typeof obj.profile !== 'object' || obj.profile === null) return false;
+    const p = obj.profile as Record<string, unknown>;
+    if ('name' in p && typeof p.name !== 'string') return false;
+  }
+  const listKeys = ['educationList', 'workExpList', 'projectList', 'skillList', 'awardList', 'workList'];
+  for (const key of listKeys) {
+    if (key in obj && obj[key] !== undefined) {
+      if (!Array.isArray(obj[key])) return false;
+      if ((obj[key] as unknown[]).some((item) => typeof item !== 'object' || item === null)) return false;
+    }
+  }
+  return true;
 }
