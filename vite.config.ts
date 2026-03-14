@@ -114,7 +114,7 @@ function resumeApiPlugin(): Plugin {
           await new Promise<void>((resolve, reject) => {
             req.on('data', (chunk: Uint8Array) => {
               totalSize += chunk.length;
-              if (totalSize > 2 * 1024 * 1024) { reject(new Error('FILE_TOO_LARGE')); return; }
+              if (totalSize > 500 * 1024) { reject(new Error('FILE_TOO_LARGE')); return; }
               chunks.push(chunk);
             });
             req.on('end', resolve);
@@ -137,7 +137,7 @@ function resumeApiPlugin(): Plugin {
         } catch (e) {
           if (e instanceof Error && e.message === 'FILE_TOO_LARGE') {
             res.statusCode = 413;
-            res.end(JSON.stringify({ error: '文件大小超过 2MB' }));
+            res.end(JSON.stringify({ error: '文件大小超过 500KB' }));
             return;
           }
           res.statusCode = 500;
