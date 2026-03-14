@@ -2,7 +2,7 @@
 
 # OpResume
 
-**Local-first, beautifully crafted professional resume builder** — Fork & go, live preview, secure export
+**No login, beautifully crafted online resume builder** — Data stored locally only, zero leak risk, export anytime
 
 [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -12,7 +12,7 @@
 
 [简体中文](./README.md) | English
 
-**[👉 Live Demo](https://opresume.pages.dev)**
+**[👉 Get Started](https://opresume.pages.dev)**
 
 <img src="docs/images/mockup1.png" alt="OpResume Preview" width="800" />
 
@@ -32,9 +32,10 @@
 - **Smooth drag & drop sorting**: Powered by `@dnd-kit`, entries within work experience, project descriptions, and other sections can be freely reordered via drag and drop.
 - **Rich text & smart calculation**: Tiptap-based rich text editor supports bold, lists, and links; the system also auto-calculates age and years of experience from birthday and start date.
 
-### 🔒 Pure Local Architecture
-- **No backend, no database**: In dev mode, Vite API middleware reads/writes the local `data/resume.json` directly; in production, it relies purely on `localStorage` — your data never leaves your machine.
-- **Native PDF export**: No third-party PDF rendering libraries — uses the browser's native `window.print()` for high-fidelity export, with **text fully parseable by ATS systems**.
+### 🔒 Data Security & Export
+- **No login, zero upload**: All data is stored exclusively in the browser's `localStorage` — no backend, no database, your privacy is fully in your hands.
+- **JSON import/export**: One-click export of your complete resume configuration as a JSON file for backup, migration, or cross-device use; import existing configurations to restore instantly.
+- **Native PDF export**: Uses the browser's native `window.print()` for high-fidelity export, with selectable text and **ATS-friendly** output.
 
 ---
 

@@ -2,7 +2,7 @@
 
 # OpResume
 
-**纯本地、高颜值的专业简历生成器** — Fork 即用，实时预览，安全导出
+**免登录、高颜值的在线简历生成器** — 数据仅本地存储，无泄漏风险，随时导出
 
 [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -12,7 +12,7 @@
 
 简体中文 | [English](./README.en.md)
 
-**[👉 在线体验 Live Demo](https://opresume.pages.dev)**
+**[👉 即刻开始](https://opresume.pages.dev)**
 
 <img src="docs/images/mockup1.png" alt="OpResume Preview" width="800" />
 
@@ -32,9 +32,10 @@
 - **丝滑拖拽排序**：基于 `@dnd-kit`，工作经历、项目描述等模块内的条目均可自由拖拽调整顺序。
 - **富文本与智能推算**：基于 Tiptap 的富文本编辑器支持加粗、列表与链接；系统还会根据生日和入职时间自动推算年龄与工作年限。
 
-### 🔒 纯净的本地架构
-- **无后端无数据库**：开发模式下利用 Vite API 中间件直接读写本地 `data/resume.json`；生产环境下纯依靠 `localStorage`，数据绝不上云。
-- **原生 PDF 导出**：不依赖第三方 PDF 渲染库，直接基于浏览器原生的 `window.print()` 实现高保真导出，**文字可被 ATS 机器完美解析**。
+### 🔒 数据安全与导出
+- **免登录零上传**：所有数据仅存储在浏览器 `localStorage` 中，无后端、无数据库，隐私完全由你掌控。
+- **JSON 导入/导出**：一键导出完整简历配置为 JSON 文件，方便备份、迁移或跨设备使用；支持导入已有配置快速恢复。
+- **原生 PDF 导出**：基于浏览器原生 `window.print()` 实现高保真导出，文字可选中复制，**ATS 友好**。
 
 ---
 
