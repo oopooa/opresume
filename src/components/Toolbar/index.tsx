@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { LangSwitcher } from './LangSwitcher';
 
 export { FloatingToolbar } from './FloatingToolbar';
@@ -112,6 +113,9 @@ export function Toolbar() {
           <span className="text-base font-bold text-gray-800 tracking-tight">
             Resume
           </span>
+          <Badge variant="secondary" className="ml-1.5 translate-y-px px-1.5 py-0 text-[10px] leading-4 font-medium text-muted-foreground">
+            v{__APP_VERSION__}
+          </Badge>
         </div>
         <div className="flex items-center gap-2">
           <TooltipProvider delayDuration={300}>

@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs/promises';
-import { existsSync, unlinkSync } from 'fs';
+import { existsSync, unlinkSync, readFileSync } from 'fs';
 
 const DATA_FILE = path.resolve(__dirname, 'data/resume.json');
 const DATA_DIR = path.resolve(__dirname, 'data');
@@ -184,8 +184,15 @@ function resumeApiPlugin(): Plugin {
   };
 }
 
+const pkg = JSON.parse(
+  readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8'),
+);
+
 export default defineConfig({
   plugins: [react(), resumeApiPlugin()],
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
