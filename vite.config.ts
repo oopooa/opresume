@@ -191,4 +191,29 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-tiptap': [
+            '@tiptap/react',
+            '@tiptap/starter-kit',
+            '@tiptap/extension-link',
+            '@tiptap/extension-placeholder',
+          ],
+          'vendor-dnd': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+          'vendor-i18n': ['i18next', 'react-i18next'],
+          'vendor-radix': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-select',
+            '@radix-ui/react-scroll-area',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-alert-dialog',
+            '@radix-ui/react-collapsible',
+          ],
+        },
+      },
+    },
+  },
 });

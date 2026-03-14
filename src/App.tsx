@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useResumeStore } from '@/store/resume';
 import { useThemeEffect } from '@/hooks/useThemeEffect';
 import { useSaveShortcut } from '@/hooks/useSaveShortcut';
 import { Toolbar, FloatingToolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
-import { Editor } from '@/components/Editor';
 import { Toaster } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
+
+const Editor = lazy(() =>
+  import('@/components/Editor').then((m) => ({ default: m.Editor })),
+);
 
 function App() {
   const { config, loading, error, load } = useResumeStore();
@@ -45,7 +48,9 @@ function App() {
         <ResumeView config={config} />
       </main>
       <FloatingToolbar />
-      <Editor />
+      <Suspense>
+        <Editor />
+      </Suspense>
       <Toaster />
     </div>
   );
