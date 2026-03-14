@@ -124,12 +124,15 @@ export function Toolbar() {
             </Tooltip>
           </TooltipProvider>
           <LangSwitcher />
-          <div onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
-            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
+          <div onMouseEnter={openMenu} onMouseLeave={scheduleClose} onMouseMove={openMenu}>
+            <DropdownMenu open={menuOpen} onOpenChange={(open) => {
+              if (open) openMenu();
+              else scheduleClose();
+            }} modal={false}>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent bg-muted/40 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none"
                 >
                   <FileJson className="h-3.5 w-3.5" />
                   {t('toolbar.jsonMenu')}
