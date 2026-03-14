@@ -137,16 +137,16 @@ export function Toolbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="min-w-36"
+                className="min-w-0"
                 onMouseEnter={openMenu}
                 onMouseLeave={scheduleClose}
               >
                 <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
-                  <FileUp className="mr-2 h-4 w-4" />
+                  <FileUp className="h-4 w-4" />
                   {t('toolbar.importJSON')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleExport}>
-                  <FileDown className="mr-2 h-4 w-4" />
+                  <FileDown className="h-4 w-4" />
                   {t('toolbar.exportJSON')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
