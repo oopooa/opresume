@@ -57,6 +57,24 @@ export function AvatarEditor({ avatar, onChange }: AvatarEditorProps) {
     async (file: File) => {
       if (!ACCEPTED_TYPES.has(file.type)) { toast.error(t('field.invalidFileType')); return; }
       if (file.size > MAX_SIZE) { toast.error(t('field.fileTooLarge')); return; }
+
+      // 生产环境：转为 base64 data URL，随 config 存入 localStorage
+      if (!import.meta.env.DEV) {
+        try {
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          set({ src: dataUrl });
+        } catch (e) {
+          toast.error(e instanceof Error ? e.message : t('field.uploadFailed'));
+        }
+        return;
+      }
+
+      // 开发环境：上传到 Vite API 中间件，保存到 data/ 目录
       try {
         const res = await fetch('/api/avatar', { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
         const json = await res.json();
