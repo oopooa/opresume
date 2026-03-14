@@ -61,7 +61,12 @@
     "importConfirm": "确认覆盖",
     "importSuccess": "导入成功",
     "importFormatError": "JSON 格式不符合简历数据规范",
-    "importParseFailed": "JSON 解析失败"
+    "importParseFailed": "JSON 解析失败",
+    "clearData": "清空数据",
+    "clearWarning": "确认清空当前简历数据？",
+    "clearWarningDesc": "此操作不可撤销。",
+    "clearConfirm": "确认清空",
+    "clearSuccess": "数据已清空"
   },
   "module": {
     "profile": "基本信息",

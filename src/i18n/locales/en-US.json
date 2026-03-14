@@ -61,7 +61,12 @@
     "importConfirm": "Confirm Overwrite",
     "importSuccess": "Imported successfully",
     "importFormatError": "JSON format does not match resume data schema",
-    "importParseFailed": "Failed to parse JSON"
+    "importParseFailed": "Failed to parse JSON",
+    "clearData": "Clear Data",
+    "clearWarning": "Clear current resume data?",
+    "clearWarningDesc": "This action cannot be undone.",
+    "clearConfirm": "Confirm Clear",
+    "clearSuccess": "Data cleared"
   },
   "module": {
     "profile": "Profile",

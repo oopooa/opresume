@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { EyeOff, Eye, FileJson, FileUp, FileDown, TriangleAlert } from 'lucide-react';
+import { EyeOff, Eye, FileJson, FileUp, FileDown, Trash2, TriangleAlert } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -38,11 +39,13 @@ export function Toolbar() {
   const togglePrivacy = useUIStore((s) => s.togglePrivacy);
   const config = useResumeStore((s) => s.config);
   const update = useResumeStore((s) => s.update);
+  const reset = useResumeStore((s) => s.reset);
   const save = useResumeStore((s) => s.save);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [clearAlertOpen, setClearAlertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -69,6 +72,16 @@ export function Toolbar() {
     e.target.value = '';
     setPendingFile(file);
     setAlertOpen(true);
+  };
+
+  const handleClearConfirm = async () => {
+    reset();
+    try {
+      await save();
+      toast.success(t('toolbar.clearSuccess'));
+    } catch {
+      toast.error(t('common.saveError'));
+    }
   };
 
   const handleImportConfirm = async () => {
@@ -152,6 +165,14 @@ export function Toolbar() {
                   <FileDown className="h-4 w-4" />
                   {t('toolbar.exportJSON')}
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => setClearAlertOpen(true)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  {t('toolbar.clearData')}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -183,6 +204,27 @@ export function Toolbar() {
               onClick={handleImportConfirm}
             >
               {t('toolbar.importConfirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={clearAlertOpen} onOpenChange={setClearAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <TriangleAlert className="h-5 w-5 text-destructive" />
+              {t('toolbar.clearWarning')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{t('toolbar.clearWarningDesc')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
+              onClick={handleClearConfirm}
+            >
+              {t('toolbar.clearConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

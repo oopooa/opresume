@@ -11,6 +11,7 @@ interface ResumeStore {
   dirty: boolean;
   load: () => Promise<void>;
   update: (partial: Partial<ResumeConfig>) => void;
+  reset: () => void;
   save: () => Promise<void>;
   clearSaveError: () => void;
 }
@@ -38,6 +39,10 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     if (!prev) return;
     const next = { ...prev, ...partial };
     set({ config: next, saveError: null, dirty: true });
+  },
+
+  reset: () => {
+    set({ config: {} as ResumeConfig, dirty: true, saveError: null });
   },
 
   save: async () => {
