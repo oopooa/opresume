@@ -3,6 +3,7 @@ import { migrateMarkdownFields } from '@/utils/migrate-markdown';
 import { sampleResume } from '@/config/sample-resume';
 
 const API_URL = '/api/resume';
+const LS_KEY = 'opresume-config';
 
 function isDev(): boolean {
   return import.meta.env.DEV;
@@ -47,6 +48,21 @@ export async function loadConfig(): Promise<ResumeConfig> {
     }
   }
 
+  // 生产模式：优先从 localStorage 读取用户编辑过的数据
+  const cached = localStorage.getItem(LS_KEY);
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (validateConfig(parsed)) {
+        config = parsed;
+        return migrateMarkdownFields(addCustomFieldIds(config));
+      }
+      localStorage.removeItem(LS_KEY);
+    } catch {
+      localStorage.removeItem(LS_KEY);
+    }
+  }
+
   const res = await fetch('/data/resume.json');
   if (!res.ok) {
     return migrateMarkdownFields(
@@ -58,8 +74,8 @@ export async function loadConfig(): Promise<ResumeConfig> {
 }
 
 export async function saveConfig(config: ResumeConfig): Promise<void> {
+  const cleaned = removeCustomFieldIds(config);
   if (isDev()) {
-    const cleaned = removeCustomFieldIds(config);
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -68,6 +84,8 @@ export async function saveConfig(config: ResumeConfig): Promise<void> {
     if (!res.ok) {
       throw new Error(`保存失败 (${res.status})`);
     }
+  } else {
+    localStorage.setItem(LS_KEY, JSON.stringify(cleaned));
   }
 }
 
