@@ -105,7 +105,7 @@ export function Toolbar() {
 
   return (
     <>
-      <header className="flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
+      <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
         <div className="flex items-center gap-0.5 select-none">
           <span className="flex h-7 w-8 items-center justify-center rounded-md border border-black bg-[#2d3748] text-sm font-bold text-white">
             Op
