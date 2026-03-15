@@ -1,0 +1,97 @@
+name: Bug 报告 (Bug Report)
+description: 提交一个 Bug 报告
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您提交 Bug 报告！请尽量填写以下信息，以便我们更快定位和修复问题。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug 描述 (实际行为)
+      description: 简要描述你遇到的问题，即实际发生了什么错误？
+      placeholder: 清晰地描述这个 Bug 是什么。例如：导入 JSON 后页面白屏。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+      description: 描述你期望发生的正常行为是什么。
+      placeholder: 期望能够成功渲染出简历内容，而不是报错。
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 描述如何稳定复现这个问题。
+      placeholder: |
+        1. 进入 '...'
+        2. 点击 '...'
+        3. 滚动到 '...'
+        4. 看到错误
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: OpResume 版本号
+      description: 您可以在页面 logo 旁边或者 package.json 中找到它。
+      placeholder: "例如: v1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deploy
+    attributes:
+      label: 使用方式
+      description: 你是如何运行 OpResume 的？
+      options:
+        - 在线网页体验 (opresume.pages.dev)
+        - 本地开发 (npm run dev)
+        - 本地静态部署 (npm run build)
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: 浏览器
+      description: 你使用的浏览器及版本。
+      placeholder: "例如: Chrome 130, Safari 18, Firefox 135"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: 操作系统
+      description: 你使用的操作系统。
+      placeholder: "例如: macOS 15, Windows 11, Ubuntu 24.04"
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图或录屏 (推荐)
+      description: 如果有的话，请添加截图来帮助说明问题。
+      placeholder: 直接拖拽或粘贴截图到这里。
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 补充信息
+      description: 添加任何其他有助于定位问题的信息。
+      placeholder: 例如控制台 (Console) 的报错信息、涉及的特定 JSON 数据片段等。
+    validations:
+      required: false

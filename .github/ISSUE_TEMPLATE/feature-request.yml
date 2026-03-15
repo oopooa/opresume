@@ -1,0 +1,59 @@
+name: 新功能建议 (Feature Request)
+description: 提交一个新功能建议
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您为 OpResume 提出新想法！请尽可能详细地描述您的建议，以帮助我们更好地理解和评估。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 痛点描述 (当前遇到的问题)
+      description: 您的建议是否为了解决某个让您感到不便的问题？
+      placeholder: 比如：每次添加新的工作经历时，都需要手动调整顺序，非常麻烦...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 期望的解决方案
+      description: 描述您希望这个新功能是什么样的，以及它应该如何工作。
+      placeholder: 希望在项目经历列表的侧边栏增加一个拖拽排序的图标，可以通过鼠标直接拖拽调整顺序。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 功能类别
+      description: 这个功能主要涉及 OpResume 的哪个方面？
+      options:
+        - 🎨 界面交互 (UI/UX)
+        - 📄 简历模板与排版 (Templates & Layout)
+        - 💾 数据与 JSON (导入/导出/持久化)
+        - 🚀 性能与架构
+        - 🛠 其他 (Other)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案 (可选)
+      description: 目前您是如何绕过这个问题的？
+      placeholder: 目前我只能把 JSON 导出来，手动在代码编辑器里把数组元素的顺序调换，然后再重新导入...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 补充信息与参考 (可选)
+      description: 添加任何其他有助于理解此功能的上下文信息（如参考链接、其他产品的优秀设计草图等）。
+      placeholder: 直接拖拽或粘贴参考截图到这里，或者附上相关链接。
+    validations:
+      required: false
