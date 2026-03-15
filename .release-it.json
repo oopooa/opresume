@@ -15,7 +15,9 @@
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": "angular",
-      "infile": "CHANGELOG.md"
+      "infile": "CHANGELOG.md",
+      "header": "# 更新日志 (Changelog)\n\n",
+      "ignoreRecommendedBump": true
     }
   },
   "hooks": {
