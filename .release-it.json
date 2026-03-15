@@ -7,7 +7,9 @@
   "github": {
     "release": true,
     "releaseName": "v${version}",
-    "autoGenerate": false
+    "autoGenerate": false,
+    "web": true,
+    "releaseNotes": "node scripts/extract-changelog.js"
   },
   "npm": {
     "publish": false
