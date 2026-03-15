@@ -14,9 +14,26 @@
   },
   "plugins": {
     "@release-it/conventional-changelog": {
-      "preset": "angular",
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {"type": "feat", "section": "✨ 新特性 (Features)"},
+          {"type": "fix", "section": "🐛 Bug 修复 (Bug Fixes)"},
+          {"type": "perf", "section": "⚡️ 性能优化 (Performance)"},
+          {"type": "revert", "section": "⏪ 回滚 (Reverts)"},
+          {"type": "chore", "hidden": true},
+          {"type": "docs", "hidden": true},
+          {"type": "style", "hidden": true},
+          {"type": "refactor", "hidden": true},
+          {"type": "test", "hidden": true}
+        ]
+      },
       "infile": "CHANGELOG.md",
-      "header": "# 更新日志 (Changelog)\n\n"
+      "header": "# 更新日志 (Changelog)\n\n",
+      "writerOpts": {
+        "headerPartial": "## v{{version}} ({{date}})\n",
+        "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{#if subject}}{{{subject}}}{{else}}{{{header}}}{{/if}}\n"
+      }
     }
   },
   "hooks": {
