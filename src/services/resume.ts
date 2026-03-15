@@ -91,8 +91,9 @@ export async function saveConfig(config: ResumeConfig): Promise<void> {
 
 export function exportConfig(config: ResumeConfig, filename?: string): void {
   const cleaned = removeCustomFieldIds(config);
+  const output = { ...cleaned, opresumeVersion: __APP_VERSION__ };
   const blob = new Blob(
-    [JSON.stringify(cleaned, null, 2)],
+    [JSON.stringify(output, null, 2)],
     { type: 'application/json' },
   );
   const url = URL.createObjectURL(blob);
@@ -108,7 +109,7 @@ export function importConfig(file: File): Promise<ResumeConfig> {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const config = JSON.parse(reader.result as string);
+        const { opresumeVersion: _, ...config } = JSON.parse(reader.result as string);
         resolve(migrateMarkdownFields(addCustomFieldIds(config)));
       } catch {
         reject(new Error('JSON 解析失败'));
