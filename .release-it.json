@@ -37,6 +37,6 @@
     }
   },
   "hooks": {
-    "before:git:release": "echo '\n⚠️  版本号已更新，CHANGELOG.md 已生成！\n👉 请现在打开 CHANGELOG.md 文件进行检查和修改。\n👉 修改保存后，回到终端按任意键继续发布流程...\n' && read -n 1 -s -r < /dev/tty"
+    "before:git:release": "echo '\n⚠️  版本号已更新，CHANGELOG.md 已生成！\n👉 请现在打开 CHANGELOG.md 文件进行检查和修改。\n👉 修改保存后，请回到终端按【回车键 (Enter)】继续发布流程...\n' && read dummy < /dev/tty"
   }
 }
