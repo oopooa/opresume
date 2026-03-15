@@ -16,8 +16,7 @@
     "@release-it/conventional-changelog": {
       "preset": "angular",
       "infile": "CHANGELOG.md",
-      "header": "# 更新日志 (Changelog)\n\n",
-      "ignoreRecommendedBump": true
+      "header": "# 更新日志 (Changelog)\n\n"
     }
   },
   "hooks": {
