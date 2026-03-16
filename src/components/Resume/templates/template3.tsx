@@ -78,6 +78,7 @@ function Template3Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
 
 const definition: TemplateDefinition = {
   id: 'template3',
+  tags: ['singleColumn', 'multiPage'],
   defaultLayout: {
     sidebar: [],
     main: ['workExpList', 'projectList', 'skillList', 'educationList', 'awardList', 'workList', 'aboutme'],

@@ -139,6 +139,12 @@
     "template3": "Centered",
     "template4": "Formal"
   },
+  "templateTag": {
+    "twoColumn": "Two-column",
+    "singleColumn": "Single-column",
+    "multiPage": "Multi-page",
+    "singlePage": "Single-page"
+  },
   "theme": {
     "onyxBlack": "Onyx Black",
     "executiveNavy": "Executive Navy",

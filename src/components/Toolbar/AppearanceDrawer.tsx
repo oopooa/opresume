@@ -28,7 +28,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-import { templateIds } from '@/components/Resume/templates';
+import { templateIds, definitions } from '@/components/Resume/templates';
 import { ResumeView } from '@/components/Resume';
 import type { SpacingPreset } from '@/types';
 
@@ -44,6 +44,8 @@ const PRESETS = [
 ];
 
 const SPACING_PRESETS: SpacingPreset[] = ['compact', 'standard', 'spacious'];
+
+const MAX_VISIBLE_TAGS = 4;
 
 function SpacingPresetGroup({ value, onChange, labels }: {
   value: SpacingPreset;
@@ -291,13 +293,51 @@ export function AppearanceDrawer() {
                         <ResumeView config={sampleResume} templateId={key} disablePagination />
                       </div>
                     </div>
-                    <div className="border-t border-gray-100 px-3 py-2.5 text-center">
+                    <div className="border-t border-gray-100 px-3 py-2.5">
                       <p className={cn(
                         'text-sm font-medium',
                         selected ? 'text-resume-primary' : 'text-gray-700',
                       )}>
                         {label}
                       </p>
+                      {(() => {
+                        const tags = definitions[key].tags;
+                        const visible = tags.slice(0, MAX_VISIBLE_TAGS);
+                        const overflow = tags.length - MAX_VISIBLE_TAGS;
+                        return (
+                          <div className="mt-2 flex flex-wrap items-center gap-1">
+                            {visible.map((tag) => (
+                              <span
+                                key={tag}
+                                className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500"
+                              >
+                                {t(`templateTag.${tag}`)}
+                              </span>
+                            ))}
+                            {overflow > 0 && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className="cursor-default rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-400">
+                                    +{overflow}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom" className="border border-gray-200/80 bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+                                  <div className="flex flex-wrap gap-1">
+                                    {tags.slice(MAX_VISIBLE_TAGS).map((tag) => (
+                                      <span
+                                        key={tag}
+                                        className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500"
+                                      >
+                                        {t(`templateTag.${tag}`)}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   </button>
                 );

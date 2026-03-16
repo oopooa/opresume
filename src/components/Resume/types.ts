@@ -50,6 +50,8 @@ export interface ModuleProps {
 export interface TemplateDefinition {
   /** 模板唯一标识，同时用作 i18n 键名（`template.${id}`）和布局配置键 */
   id: string;
+  /** 模板特征标签，值为 i18n 键名后缀（完整键名 `templateTag.${tag}`） */
+  tags: string[];
   /** 默认模块布局：sidebar 和 main 各放哪些模块（不含 profile） */
   defaultLayout: ModuleLayout;
   getTokens: () => StyleTokens;

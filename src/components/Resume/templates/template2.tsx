@@ -71,6 +71,7 @@ function Template2Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
 
 const definition: TemplateDefinition = {
   id: 'template2',
+  tags: ['singleColumn', 'multiPage'],
   defaultLayout: {
     sidebar: [],
     main: ['workExpList', 'projectList', 'skillList', 'educationList', 'awardList', 'workList', 'aboutme'],

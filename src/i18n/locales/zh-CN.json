@@ -139,6 +139,12 @@
     "template3": "清新居中",
     "template4": "正式徽章"
   },
+  "templateTag": {
+    "twoColumn": "双栏",
+    "singleColumn": "单栏",
+    "multiPage": "多页",
+    "singlePage": "单页"
+  },
   "theme": {
     "onyxBlack": "曜石黑",
     "executiveNavy": "沉稳商务蓝",

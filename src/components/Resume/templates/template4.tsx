@@ -95,6 +95,7 @@ function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
 
 const definition: TemplateDefinition = {
   id: 'template4',
+  tags: ['singleColumn', 'multiPage'],
   defaultLayout: {
     sidebar: [],
     main: ['workExpList', 'projectList', 'skillList', 'educationList', 'awardList', 'workList', 'aboutme'],
