@@ -32,6 +32,7 @@
       },
       "infile": "CHANGELOG.md",
       "header": "# 更新日志 (Changelog)\n\n",
+      "releaseCount": 1,
       "writerOpts": {
         "headerPartial": "## v{{version}} ({{date}})\n",
         "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{#if subject}}{{{subject}}}{{else}}{{{header}}}{{/if}}\n"
