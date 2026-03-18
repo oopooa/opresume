@@ -1,0 +1,184 @@
+{
+  "avatar": {
+    "width": 90,
+    "height": 126,
+    "borderRadius": 0,
+    "hidden": false,
+    "src": "/api/avatar?t=1773238453169"
+  },
+  "profile": {
+    "name": "张三",
+    "mobile": "13800000000",
+    "email": "zhangsan@example.com",
+    "workExpYear": "5",
+    "positionTitle": "高级前端工程师",
+    "ageHidden": true,
+    "birthday": "1995-07-27",
+    "customFields": [
+      {
+        "key": "工作地点",
+        "value": "成都"
+      }
+    ]
+  },
+  "educationList": [
+    {
+      "id": "edu-2",
+      "eduTime": [
+        "2018.09",
+        "2021.06"
+      ],
+      "school": "清华大学",
+      "major": "软件工程",
+      "academicDegree": "硕士"
+    },
+    {
+      "id": "edu-1",
+      "eduTime": [
+        "2014.09",
+        "2018.06"
+      ],
+      "school": "北京大学",
+      "major": "计算机科学与技术",
+      "academicDegree": "本科"
+    }
+  ],
+  "workExpList": [
+    {
+      "id": "work-1",
+      "companyName": "字节跳动",
+      "departmentName": "飞书前端团队",
+      "workTime": [
+        "2023.04",
+        "至今"
+      ],
+      "workDesc": "<ul>\n<li>负责飞书文档协同编辑模块的前端架构设计与核心功能开发，服务千万级日活用户</li>\n<li>主导编辑器性能优化专项，大文档渲染耗时降低 60%，滚动帧率稳定 60fps</li>\n<li>设计并落地前端微模块架构方案，支撑 20+ 业务插件的独立开发与热插拔</li>\n<li>推动团队 TypeScript 严格模式迁移，代码类型覆盖率从 45% 提升至 95%</li>\n</ul>"
+    },
+    {
+      "id": "work-2",
+      "companyName": "蚂蚁集团",
+      "departmentName": "体验技术部",
+      "workTime": [
+        "2021.07",
+        "2023.03"
+      ],
+      "workDesc": "<ul>\n<li>参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+</li>\n<li>负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用</li>\n<li>主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座</li>\n<li>封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%</li>\n</ul>"
+    },
+    {
+      "id": "work-3",
+      "companyName": "美团",
+      "departmentName": "到店事业群前端组",
+      "workTime": [
+        "2020.03",
+        "2021.06"
+      ],
+      "workDesc": "<ul>\n<li>负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理</li>\n<li>实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料</li>\n<li>优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s</li>\n</ul>"
+    }
+  ],
+  "projectList": [
+    {
+      "id": "proj-1",
+      "projectName": "飞书文档协同编辑器",
+      "projectRole": "前端架构师",
+      "projectTime": [
+        "2023.06",
+        "至今"
+      ],
+      "projectDesc": "支持多人实时协同编辑的在线文档系统，基于 CRDT 算法实现冲突解决",
+      "projectContent": "<ul><li><p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p></li><li><p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p></li><li><p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p></li><li><p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p></li></ul>"
+    },
+    {
+      "id": "proj-2",
+      "projectName": "低代码搭建平台",
+      "projectRole": "前端负责人",
+      "projectTime": [
+        "2022.01",
+        "2023.02"
+      ],
+      "projectDesc": "面向内部运营的可视化页面搭建平台，降低非技术人员页面开发门槛",
+      "projectContent": "<ul><li><p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p></li><li><p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p></li><li><p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p></li><li><p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p></li></ul>"
+    },
+    {
+      "id": "proj-3",
+      "projectName": "商家营销海报编辑器",
+      "projectRole": "核心开发",
+      "projectTime": [
+        "2020.06",
+        "2021.03"
+      ],
+      "projectDesc": "基于 Canvas 的在线海报设计工具，支持模板化批量生成营销物料",
+      "projectContent": "<ul><li><p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p></li><li><p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p></li><li><p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p></li></ul>"
+    }
+  ],
+  "skillList": [
+    {
+      "id": "skill-1",
+      "skillName": "React / Next.js",
+      "skillLevel": 95,
+      "skillDesc": "精通"
+    },
+    {
+      "id": "skill-2",
+      "skillName": "TypeScript",
+      "skillLevel": 90,
+      "skillDesc": "精通"
+    },
+    {
+      "id": "skill-3",
+      "skillName": "Vue / Nuxt",
+      "skillLevel": 80,
+      "skillDesc": "熟练使用"
+    },
+    {
+      "id": "skill-4",
+      "skillName": "Node.js / Nest.js",
+      "skillLevel": 75,
+      "skillDesc": "熟练使用"
+    },
+    {
+      "id": "skill-5",
+      "skillName": "Tailwind / CSS",
+      "skillLevel": 90,
+      "skillDesc": "精通"
+    },
+    {
+      "id": "skill-6",
+      "skillName": "Webpack / Vite",
+      "skillLevel": 85,
+      "skillDesc": "熟练掌握"
+    }
+  ],
+  "awardList": [
+    {
+      "id": "award-1",
+      "awardInfo": "字节跳动 2024 年度技术突破奖",
+      "awardTime": "2024.01"
+    },
+    {
+      "id": "award-2",
+      "awardInfo": "蚂蚁集团内部黑客马拉松一等奖",
+      "awardTime": "2022.08"
+    },
+    {
+      "id": "award-3",
+      "awardInfo": "美团年度优秀新人",
+      "awardTime": "2020.12"
+    },
+    {
+      "id": "award-4",
+      "awardInfo": "ACM 区域赛银牌",
+      "awardTime": "2017.11"
+    }
+  ],
+  "workList": [
+    {
+      "id": "portfolio-1",
+      "workName": "个人项目地址",
+      "workDesc": "基于 Next.js + MDX 搭建，累计发表 80+ 篇技术文章，月访问量 5000+",
+      "visitLink": "https://github.com/oopooa/opresume"
+    }
+  ],
+  "aboutme": {
+    "aboutmeDesc": "<p>5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。</p>"
+  }
+}

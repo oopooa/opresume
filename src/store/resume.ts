@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import i18n from '@/i18n';
 import type { ResumeConfig } from '@/types';
-import { loadConfig, saveConfig } from '@/services/resume';
+import { loadResume, saveResume } from '@/services/resume';
+import { convertNewToLegacy, convertLegacyToNew } from '@/utils/legacy-compat';
 
 interface ResumeStore {
   config: ResumeConfig | null;
@@ -26,7 +27,8 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
   load: async () => {
     set({ loading: true, error: null });
     try {
-      const config = await loadConfig();
+      const extended = await loadResume();
+      const config = convertNewToLegacy(extended);
       set({ config, loading: false, dirty: false });
     } catch (e) {
       const msg = e instanceof Error ? e.message : i18n.t('common.loadError');
@@ -49,7 +51,8 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     const { config, dirty } = get();
     if (!config || !dirty) return;
     try {
-      await saveConfig(config);
+      const extended = convertLegacyToNew(config);
+      await saveResume(extended);
       set({ dirty: false, saveError: null });
     } catch (e) {
       const msg = e instanceof Error ? e.message : i18n.t('common.saveError');
@@ -60,3 +63,4 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
 
   clearSaveError: () => set({ saveError: null }),
 }));
+

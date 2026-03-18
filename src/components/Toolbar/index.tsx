@@ -5,7 +5,8 @@ import { EyeOff, Eye, FileJson, FileUp, FileDown, Trash2, TriangleAlert } from '
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
-import { exportConfig, importConfig, validateConfig } from '@/services/resume';
+import { exportResume, importResume } from '@/services/resume';
+import { convertLegacyToNew, convertNewToLegacy } from '@/utils/legacy-compat';
 import {
   Tooltip,
   TooltipContent,
@@ -64,7 +65,8 @@ export function Toolbar() {
     const name = config.profile?.name || '';
     const title = config.profile?.positionTitle || '';
     const filename = [name, title].filter(Boolean).join('-') || 'resume';
-    exportConfig(config, `${filename}.json`);
+    const extended = convertLegacyToNew(config);
+    exportResume(extended, `${filename}.json`);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,11 +90,8 @@ export function Toolbar() {
   const handleImportConfirm = async () => {
     if (!pendingFile) return;
     try {
-      const imported = await importConfig(pendingFile);
-      if (!validateConfig(imported)) {
-        toast.error(t('toolbar.importFormatError'));
-        return;
-      }
+      const extended = await importResume(pendingFile);
+      const imported = convertNewToLegacy(extended);
       update(imported);
       await save();
       toast.success(t('toolbar.importSuccess'));

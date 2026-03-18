@@ -4,6 +4,7 @@ import { Palette, Check, ArrowRightLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { sampleResume } from '@/config/sample-resume';
+import { convertNewToLegacy } from '@/utils/legacy-compat';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -290,7 +291,7 @@ export function AppearanceDrawer() {
                     )}
                     <div className="relative h-72 w-full overflow-hidden">
                       <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.28]">
-                        <ResumeView config={sampleResume} templateId={key} disablePagination />
+                        <ResumeView config={convertNewToLegacy(sampleResume)} templateId={key} disablePagination />
                       </div>
                     </div>
                     <div className="border-t border-gray-100 px-3 py-2.5">
