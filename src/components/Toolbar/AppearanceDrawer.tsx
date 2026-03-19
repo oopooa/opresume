@@ -261,7 +261,7 @@ export function AppearanceDrawer() {
 
       {/* 模板选择 Dialog */}
       <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
-        <DialogContent className="max-w-5xl max-h-[85vh] flex flex-col">
+        <DialogContent className="max-w-5xl max-h-[85vh] flex flex-col" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>{t('toolbar.template')}</DialogTitle>
             <DialogDescription className="sr-only">{t('toolbar.templateDesc')}</DialogDescription>
