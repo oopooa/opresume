@@ -1,4 +1,5 @@
 import type { ModuleProps } from '../types';
+import type { ExtendedAward } from '@/types/extended-json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
@@ -7,9 +8,10 @@ export function AwardModule({ config, tokens, itemRange, showTitle = true }: Mod
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('awardList');
   const { SectionTitle } = tokens.components;
-  if (isHidden(config, 'awardList') || !config.awardList?.length) return null;
+  if (isHidden(config, 'awardList') || !config.awards?.length) return null;
 
-  const list = itemRange ? config.awardList.slice(itemRange[0], itemRange[1]) : config.awardList;
+  const allAwards = config.awards as ExtendedAward[];
+  const list = itemRange ? allAwards.slice(itemRange[0], itemRange[1]) : allAwards;
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
@@ -18,7 +20,7 @@ export function AwardModule({ config, tokens, itemRange, showTitle = true }: Mod
         {showTitle && <SectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} icon={moduleIcon} />}
         {list.map((award, i) => (
           <div
-            key={award.id}
+            key={award['x-op-id'] ?? i}
             data-item-index={indexOffset + i}
             className={cn(
               tokens.spacing.item,
@@ -27,11 +29,11 @@ export function AwardModule({ config, tokens, itemRange, showTitle = true }: Mod
               !tokens.layout.awardTimeInline && tokens.layout.flexAlign,
             )}
           >
-            <span>{award.awardInfo}</span>
-            {award.awardTime && (
+            <span>{award.title}</span>
+            {award.date && (
               tokens.layout.awardTimeInline
-                ? <span className={cn('ml-1', tokens.colors.muted)}>({award.awardTime})</span>
-                : <span className={cn('ml-2 shrink-0', tokens.colors.muted)}>{award.awardTime}</span>
+                ? <span className={cn('ml-1', tokens.colors.muted)}>({award.date})</span>
+                : <span className={cn('ml-2 shrink-0', tokens.colors.muted)}>{award.date}</span>
             )}
           </div>
         ))}

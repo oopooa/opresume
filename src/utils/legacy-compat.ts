@@ -1,8 +1,8 @@
 /**
- * 老格式兼容层 - 仅用于数据迁移
+ * 老格式兼容层 - 仅用于导入旧格式数据
  */
 
-import type { ResumeConfig } from '@/types';
+import type { ResumeConfig } from '@/types/resume';
 import type { ExtendedJSONResume } from '@/types/extended-json-resume';
 import { migrateMarkdownFields } from './migrate-markdown';
 
@@ -17,20 +17,10 @@ function parseHtmlToList(html?: string): string[] {
   return matches?.map(m => m.replace(/<\/?li>/g, '').trim()) || [];
 }
 
-function listToHtml(list?: string[]): string {
-  if (!list?.length) return '';
-  return `<ul>${list.map(item => `<li>${item}</li>`).join('')}</ul>`;
-}
-
 function formatDate(date?: string): string {
   if (!date) return '';
-  if (date === '至今') return '';
+  if (date === '至今' || date.toLowerCase() === 'present') return 'present';
   return date.replace('.', '-');
-}
-
-function parseDate(date?: string): string {
-  if (!date) return '';
-  return date.replace('-', '.');
 }
 
 function convertSkillLevel(level?: number): string {
@@ -39,20 +29,6 @@ function convertSkillLevel(level?: number): string {
   if (level <= 60) return 'Intermediate';
   if (level <= 85) return 'Advanced';
   return 'Master';
-}
-
-function convertSkillLevelToNumber(level?: string): number {
-  const map: Record<string, number> = {
-    'Beginner': 30,
-    'Intermediate': 60,
-    'Advanced': 80,
-    'Master': 95,
-  };
-  return map[level || ''] || 60;
-}
-
-function generateId(): string {
-  return `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
 export function isLegacyFormat(data: unknown): data is ResumeConfig {
@@ -79,7 +55,6 @@ export function convertLegacyToNew(config: ResumeConfig): ExtendedJSONResume {
     },
     work: migrated.workExpList?.map(w => ({
       name: w.companyName,
-      position: migrated.profile?.positionTitle,
       startDate: formatDate(w.workTime?.[0]),
       endDate: formatDate(w.workTime?.[1]),
       summary: stripHtml(w.workDesc),
@@ -136,100 +111,13 @@ export function convertLegacyToNew(config: ResumeConfig): ExtendedJSONResume {
     'x-op-moduleLayout': migrated.moduleLayout,
     'x-op-moduleHidden': migrated.moduleHidden,
     'x-op-titleNameMap': migrated.titleNameMap,
-  };
-}
-
-export function convertNewToLegacy(resume: ExtendedJSONResume): ResumeConfig {
-  return {
-    avatar: resume['x-op-avatar'] || {
-      src: resume.basics?.image,
-      width: 90,
-      height: 90,
-      borderRadius: 8,
-    },
-    profile: {
-      name: resume.basics?.name || '',
-      email: resume.basics?.email,
-      mobile: resume.basics?.phone,
-      positionTitle: resume.basics?.label,
-      workPlace: resume.basics?.location?.city,
-      birthday: resume['x-op-birthday'],
-      ageHidden: resume['x-op-ageHidden'],
-      workExpYear: resume['x-op-workExpYear'],
-      customFields: resume['x-op-customFields'],
-    },
-    educationList: resume.education?.map(e => {
-      const ext = e as any;
-      return {
-        id: ext['x-op-id'] || generateId(),
-        school: e.institution || '',
-        major: e.area,
-        academicDegree: e.studyType,
-        eduTime: [parseDate(e.startDate), parseDate(e.endDate)],
-      };
-    }),
-    workExpList: resume.work?.map(w => {
-      const ext = w as any;
-      return {
-        id: ext['x-op-id'] || generateId(),
-        companyName: w.name || '',
-        departmentName: ext['x-op-departmentName'],
-        workTime: [parseDate(w.startDate), parseDate(w.endDate)],
-        workDesc: ext['x-op-workDescHtml'] || listToHtml(w.highlights),
-      };
-    }),
-    projectList: resume.projects
-      ?.filter(p => {
-        const ext = p as any;
-        return !ext['x-op-type'] || ext['x-op-type'] === 'project';
-      })
-      .map(p => {
-        const ext = p as any;
-        return {
-          id: ext['x-op-id'] || generateId(),
-          projectName: p.name || '',
-          projectDesc: p.description,
-          projectRole: p.roles?.[0],
-          projectTime: [parseDate(p.startDate), parseDate(p.endDate)],
-          projectContent: ext['x-op-projectContentHtml'] || listToHtml(p.highlights),
-        };
-      }),
-    workList: resume.projects
-      ?.filter(p => {
-        const ext = p as any;
-        return ext['x-op-type'] === 'portfolio';
-      })
-      .map(p => {
-        const ext = p as any;
-        return {
-          id: ext['x-op-id'] || generateId(),
-          workName: p.name,
-          workDesc: p.description,
-          visitLink: p.url,
-        };
-      }),
-    skillList: resume.skills?.map(s => {
-      const ext = s as any;
-      return {
-        id: ext['x-op-id'] || generateId(),
-        skillName: s.name,
-        skillLevel: ext['x-op-skillLevel'] ?? convertSkillLevelToNumber(s.level),
-        skillDesc: s.level,
-      };
-    }),
-    awardList: resume.awards?.map(a => {
-      const ext = a as any;
-      return {
-        id: ext['x-op-id'] || generateId(),
-        awardInfo: a.title || '',
-        awardTime: a.date,
-      };
-    }),
-    aboutme: {
-      aboutmeDesc: resume['x-op-aboutmeHtml'] || `<p>${resume.basics?.summary || ''}</p>`,
-    },
-    moduleLayout: resume['x-op-moduleLayout'],
-    moduleHidden: resume['x-op-moduleHidden'],
-    titleNameMap: resume['x-op-titleNameMap'],
+    'x-op-locales': migrated.locales
+      ? Object.fromEntries(
+          Object.entries(migrated.locales).map(([lang, partial]) => [
+            lang,
+            convertLegacyToNew({ ...config, ...partial }),
+          ]),
+        )
+      : undefined,
   };
 }

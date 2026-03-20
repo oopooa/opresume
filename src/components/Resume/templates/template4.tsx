@@ -47,9 +47,10 @@ const tokens: StyleTokens = {
 /* ---------- LayoutShell ---------- */
 
 function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps) {
-  const { profile, avatar } = config;
+  const basics = config.basics;
+  const avatar = config['x-op-avatar'];
   const { t } = useTranslation();
-  const age = calculateAge(profile?.birthday);
+  const age = calculateAge(config['x-op-birthday']);
   const customFieldIconMap = useCustomFieldIconMap();
   const profileIcon = useModuleIcon('profile');
   const mask = usePrivacyMask();
@@ -61,10 +62,10 @@ function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
           <>
             <EditableSection module="profile">
               <div className="mb-5 flex items-center gap-4 border-b-2 border-resume-primary pb-4">
-                <ResumeAvatar avatar={avatar} name={profile?.name} className="shrink-0" />
+                <ResumeAvatar avatar={avatar} name={basics?.name} className="shrink-0" />
                 <div>
-                  <h1 className="text-2xl font-bold text-resume-primary">{mask(profile?.name, 'name')}</h1>
-                  {profile?.positionTitle && <p className="mt-0.5 text-sm text-gray-600">{profile.positionTitle}</p>}
+                  <h1 className="text-2xl font-bold text-resume-primary">{mask(basics?.name, 'name')}</h1>
+                  {basics?.label && <p className="mt-0.5 text-sm text-gray-600">{basics.label}</p>}
                 </div>
               </div>
             </EditableSection>
@@ -72,13 +73,13 @@ function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
               <div className="mb-5">
                 <SectionTitle title={getTitle(config, 'profile', t('module.profile'))} icon={profileIcon} />
                 <div className="grid grid-cols-3 gap-x-6 gap-y-1.5">
-                  <InfoItem icon={getProfileIcon('mobile')} label={t('field.mobile')} value={mask(profile?.mobile, 'mobile')} />
-                  <InfoItem icon={getProfileIcon('email')} label={t('field.email')} value={mask(profile?.email, 'email')} />
-                  <InfoItem icon={getProfileIcon('workPlace')} label={t('field.workPlace')} value={mask(profile?.workPlace, 'workPlace')} />
-                  {age !== null && !profile?.ageHidden && <InfoItem icon={getProfileIcon('age')} label={t('field.ageLabel')} value={t('field.age', { age })} />}
-                  <InfoItem icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')} value={profile?.workExpYear ? t('common.yearsExp', { years: profile.workExpYear }) : undefined} />
-                  {profile?.customFields?.filter((f) => f.key.trim() || f.value.trim()).map((field) => (
-                    <InfoItem key={field.key} icon={customFieldIconMap[field.key]} label={field.key} value={field.value} />
+                  <InfoItem icon={getProfileIcon('mobile')} label={t('field.mobile')} value={mask(basics?.phone, 'mobile')} />
+                  <InfoItem icon={getProfileIcon('email')} label={t('field.email')} value={mask(basics?.email, 'email')} />
+                  <InfoItem icon={getProfileIcon('workPlace')} label={t('field.workPlace')} value={mask(basics?.location?.city, 'workPlace')} />
+                  {age !== null && !config['x-op-ageHidden'] && <InfoItem icon={getProfileIcon('age')} label={t('field.ageLabel')} value={t('field.age', { age })} />}
+                  <InfoItem icon={getProfileIcon('workExpYear')} label={t('field.workExpYear')} value={config['x-op-workExpYear'] ? t('common.yearsExp', { years: config['x-op-workExpYear'] }) : undefined} />
+                  {config['x-op-customFields']?.filter((f) => f.key.trim() || f.value.trim()).map((field, i) => (
+                    <InfoItem key={`${field.key}-${i}`} icon={customFieldIconMap[field.key]} label={field.key} value={field.value} />
                   ))}
                 </div>
               </div>

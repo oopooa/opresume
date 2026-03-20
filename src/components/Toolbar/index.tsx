@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
 import { exportResume, importResume } from '@/services/resume';
-import { convertLegacyToNew, convertNewToLegacy } from '@/utils/legacy-compat';
 import {
   Tooltip,
   TooltipContent,
@@ -62,11 +61,10 @@ export function Toolbar() {
 
   const handleExport = () => {
     if (!config) return;
-    const name = config.profile?.name || '';
-    const title = config.profile?.positionTitle || '';
+    const name = config.basics?.name || '';
+    const title = config.basics?.label || '';
     const filename = [name, title].filter(Boolean).join('-') || 'resume';
-    const extended = convertLegacyToNew(config);
-    exportResume(extended, `${filename}.json`);
+    exportResume(config, `${filename}.json`);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,8 +89,7 @@ export function Toolbar() {
     if (!pendingFile) return;
     try {
       const extended = await importResume(pendingFile);
-      const imported = convertNewToLegacy(extended);
-      update(imported);
+      update(extended);
       await save();
       toast.success(t('toolbar.importSuccess'));
     } catch {

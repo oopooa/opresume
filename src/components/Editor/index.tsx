@@ -25,7 +25,8 @@ import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
-import type { Avatar, ResumeConfig, ModuleLayout } from '@/types/resume';
+import type { Avatar, ModuleLayout } from '@/types/resume';
+import type { ExtendedJSONResume } from '@/types/extended-json-resume';
 import {
   Sheet,
   SheetContent,
@@ -54,6 +55,7 @@ import { IconPicker } from './IconPicker';
 import { DynamicIcon } from '@/components/DynamicIcon';
 
 const ALWAYS_VISIBLE = new Set(['profile']);
+const BASICS_KEYS = new Set(['name', 'label', 'phone', 'email']);
 
 /* 自定义碰撞检测：先用 closestCenter 匹配具体 item，匹配不到时用 pointerWithin 匹配容器 */
 const combinedCollision: CollisionDetection = (args) => {
@@ -210,39 +212,61 @@ function ProfileSection({
   update,
 }: {
   schema: ModuleSchema;
-  config: ResumeConfig;
-  update: (partial: Partial<ResumeConfig>) => void;
+  config: ExtendedJSONResume;
+  update: (partial: Partial<ExtendedJSONResume>) => void;
 }) {
   const { t } = useTranslation();
-  const data = (config.profile ?? {}) as Record<string, unknown>;
-  const age = calculateAge(config.profile?.birthday);
-  const ageHidden = config.profile?.ageHidden ?? false;
+
+  // 从 ExtendedJSONResume 构造虚拟 profile data 供 FormCreator 使用
+  const data: Record<string, unknown> = {
+    name: config.basics?.name ?? '',
+    birthday: config['x-op-birthday'] ?? '',
+    label: config.basics?.label ?? '',
+    phone: config.basics?.phone ?? '',
+    email: config.basics?.email ?? '',
+    workExpYear: config['x-op-workExpYear'] ?? '',
+    workPlace: config.basics?.location?.city ?? '',
+  };
+
+  const age = calculateAge(config['x-op-birthday']);
+  const ageHidden = config['x-op-ageHidden'] ?? false;
   const birthdayIdx = schema.fields.findIndex((f) => f.key === 'birthday');
   const beforeFields = schema.fields.slice(0, birthdayIdx + 1);
   const afterFields = schema.fields.slice(birthdayIdx + 1);
 
+  // 按 key 分发到 basics 或 x-op-* 字段
   const handleFieldChange = useCallback(
     (key: string, value: unknown) => {
-      update({ profile: { ...config.profile, name: config.profile?.name ?? '', [key]: value } });
+      if (BASICS_KEYS.has(key)) {
+        update({ basics: { ...config.basics, [key]: value } });
+      } else if (key === 'workPlace') {
+        update({ basics: { ...config.basics, location: { ...config.basics?.location, city: value as string } } });
+      } else if (key === 'birthday') {
+        update({ 'x-op-birthday': value as string });
+      } else if (key === 'ageHidden') {
+        update({ 'x-op-ageHidden': value as boolean });
+      } else if (key === 'workExpYear') {
+        update({ 'x-op-workExpYear': value as string });
+      }
     },
-    [config.profile, update],
+    [config.basics, update],
   );
 
   const handleAvatarChange = useCallback(
-    (avatar: Avatar) => update({ avatar }),
+    (avatar: Avatar) => update({ 'x-op-avatar': avatar }),
     [update],
   );
 
   const handleCustomFieldsChange = useCallback(
-    (customFields: NonNullable<typeof config.profile>['customFields']) => {
-      update({ profile: { ...config.profile, name: config.profile?.name ?? '', customFields } });
+    (customFields: NonNullable<ExtendedJSONResume['x-op-customFields']>) => {
+      update({ 'x-op-customFields': customFields });
     },
-    [config.profile, update],
+    [update],
   );
 
   return (
     <div className="space-y-3">
-      <AvatarEditor avatar={config.avatar} onChange={handleAvatarChange} />
+      <AvatarEditor avatar={config['x-op-avatar']} onChange={handleAvatarChange} />
       <FormCreator fields={beforeFields} data={data} onChange={handleFieldChange} />
       <div className="space-y-1">
         <div className="flex items-center justify-between">
@@ -269,7 +293,7 @@ function ProfileSection({
       <FormCreator fields={afterFields} data={data} onChange={handleFieldChange} />
 
       <CustomFieldsEditor
-        fields={config.profile?.customFields ?? []}
+        fields={config['x-op-customFields'] ?? []}
         onChange={handleCustomFieldsChange}
       />
     </div>
@@ -283,40 +307,82 @@ function ModuleContent({
   update,
 }: {
   schema: ModuleSchema;
-  config: ResumeConfig;
-  update: (partial: Partial<ResumeConfig>) => void;
+  config: ExtendedJSONResume;
+  update: (partial: Partial<ExtendedJSONResume>) => void;
 }) {
-  const data = (config as Record<string, unknown>)[schema.dataKey];
+  const rawData = (config as Record<string, unknown>)[schema.dataKey];
 
-  const handleFieldChange = useCallback(
-    (key: string, value: unknown) => {
-      const prev = (config as Record<string, unknown>)[schema.dataKey];
-      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), [key]: value } });
-    },
-    [schema.dataKey, config, update],
+  // 所有 hooks 必须在条件分支之前调用，确保调用顺序一致
+  const fullArray = useMemo(
+    () => (Array.isArray(rawData) ? rawData as Record<string, unknown>[] : []),
+    [rawData],
   );
 
-  const handleListChange = useCallback(
-    (items: Record<string, unknown>[]) => {
-      update({ [schema.dataKey]: items });
+  const handleScalarChange = useCallback(
+    (_key: string, value: unknown) => {
+      update({ [schema.dataKey]: value } as Partial<ExtendedJSONResume>);
     },
     [schema.dataKey, update],
   );
 
+  const handleFilteredListChange = useCallback(
+    (items: Record<string, unknown>[]) => {
+      const others = fullArray.filter((item) => !schema.filter!(item));
+      update({ [schema.dataKey]: [...others, ...items] } as Partial<ExtendedJSONResume>);
+    },
+    [schema.dataKey, schema.filter, fullArray, update],
+  );
+
+  const handleListChange = useCallback(
+    (items: Record<string, unknown>[]) => {
+      update({ [schema.dataKey]: items } as Partial<ExtendedJSONResume>);
+    },
+    [schema.dataKey, update],
+  );
+
+  const handleFieldChange = useCallback(
+    (key: string, value: unknown) => {
+      const prev = (config as Record<string, unknown>)[schema.dataKey];
+      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), [key]: value } } as Partial<ExtendedJSONResume>);
+    },
+    [schema.dataKey, config, update],
+  );
+
+  // isScalar 处理（aboutme）：将标量值包装为对象
+  if (schema.isScalar) {
+    const scalarData: Record<string, unknown> = {};
+    if (schema.fields.length > 0) {
+      scalarData[schema.fields[0].key] = rawData ?? '';
+    }
+    return (
+      <FormCreator fields={schema.fields} data={scalarData} onChange={handleScalarChange} />
+    );
+  }
+
+  // 列表且有 filter（projectList / workList 共享 projects 数组）
+  if (schema.isList && schema.filter) {
+    const filtered = fullArray.filter(schema.filter);
+    return (
+      <ListEditor schema={schema} items={filtered} onChange={handleFilteredListChange} />
+    );
+  }
+
+  // 普通列表
   if (schema.isList) {
     return (
       <ListEditor
         schema={schema}
-        items={(data as Record<string, unknown>[]) ?? []}
+        items={fullArray}
         onChange={handleListChange}
       />
     );
   }
 
+  // 普通对象
   return (
     <FormCreator
       fields={schema.fields}
-      data={(data as Record<string, unknown>) ?? {}}
+      data={(rawData as Record<string, unknown>) ?? {}}
       onChange={handleFieldChange}
     />
   );
@@ -345,10 +411,10 @@ function SortableColumn({
   columnId: string;
   modules: string[];
   expanded: string | null;
-  config: ResumeConfig;
+  config: ExtendedJSONResume;
   toggle: (module: string) => void;
   toggleModuleHidden: (module: string) => void;
-  update: (partial: Partial<ResumeConfig>) => void;
+  update: (partial: Partial<ExtendedJSONResume>) => void;
 }) {
   const { t } = useTranslation();
   const { setNodeRef, isOver } = useDroppable({ id: columnId });
@@ -361,15 +427,15 @@ function SortableColumn({
 
   const handleTitleChange = useCallback(
     (module: string, title: string) => {
-      const prev = config.titleNameMap ?? {};
+      const prev = config['x-op-titleNameMap'] ?? {};
       if (title) {
-        update({ titleNameMap: { ...prev, [module]: title } });
+        update({ 'x-op-titleNameMap': { ...prev, [module]: title } } as Partial<ExtendedJSONResume>);
       } else {
         const { [module]: _, ...rest } = prev;
-        update({ titleNameMap: rest });
+        update({ 'x-op-titleNameMap': rest } as Partial<ExtendedJSONResume>);
       }
     },
-    [config.titleNameMap, update],
+    [config['x-op-titleNameMap'], update],
   );
 
   const handleIconChange = useCallback(
@@ -398,9 +464,9 @@ function SortableColumn({
             const schema = schemaMap[module];
             if (!schema) return null;
             const isExpanded = expanded === module;
-            const hidden = config.moduleHidden?.[module] === true;
+            const hidden = config['x-op-moduleHidden']?.[module] === true;
             const canHide = !ALWAYS_VISIBLE.has(module);
-            const customTitle = config.titleNameMap?.[module];
+            const customTitle = config['x-op-titleNameMap']?.[module];
             const moduleIcon = moduleIconMap[module] ?? DEFAULT_MODULE_ICONS[module];
 
             return (
@@ -447,7 +513,7 @@ export function Editor() {
   const update = useResumeStore((s) => s.update);
 
   const twoColumn = isTwoColumnTemplate(template);
-  const layout = config ? getEffectiveLayout(template, config.moduleLayout) : { sidebar: [], main: [] };
+  const layout = config ? getEffectiveLayout(template, config['x-op-moduleLayout']) : { sidebar: [], main: [] };
 
   const [expanded, setExpanded] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -468,8 +534,8 @@ export function Editor() {
   const toggleModuleHidden = useCallback(
     (module: string) => {
       if (!config) return;
-      const prev = config.moduleHidden ?? {};
-      update({ moduleHidden: { ...prev, [module]: !prev[module] } });
+      const prev = config['x-op-moduleHidden'] ?? {};
+      update({ 'x-op-moduleHidden': { ...prev, [module]: !prev[module] } } as Partial<ExtendedJSONResume>);
     },
     [config, update],
   );
@@ -478,8 +544,8 @@ export function Editor() {
   const saveLayout = useCallback(
     (newLayout: ModuleLayout) => {
       if (!config) return;
-      const prev = config.moduleLayout ?? {};
-      update({ moduleLayout: { ...prev, [template]: newLayout } });
+      const prev = config['x-op-moduleLayout'] ?? {};
+      update({ 'x-op-moduleLayout': { ...prev, [template]: newLayout } } as Partial<ExtendedJSONResume>);
     },
     [config, template, update],
   );
@@ -669,7 +735,7 @@ export function Editor() {
               />
 
               <DragOverlay>
-                {activeId ? <DragOverlayContent module={activeId} customTitle={config.titleNameMap?.[activeId]} moduleIcon={editorModuleIconMap[activeId] ?? DEFAULT_MODULE_ICONS[activeId]} /> : null}
+                {activeId ? <DragOverlayContent module={activeId} customTitle={config['x-op-titleNameMap']?.[activeId]} moduleIcon={editorModuleIconMap[activeId] ?? DEFAULT_MODULE_ICONS[activeId]} /> : null}
               </DragOverlay>
             </DndContext>
           </div>

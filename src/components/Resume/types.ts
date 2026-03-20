@@ -1,5 +1,6 @@
 import type { ReactNode, ComponentType } from 'react';
-import type { ResumeConfig, ModuleLayout } from '@/types';
+import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { ModuleLayout } from '@/types/resume';
 
 /** 样式令牌 — 控制共享模块的视觉差异 */
 export interface StyleTokens {
@@ -33,7 +34,7 @@ export interface StyleTokens {
 
 /** 共享模块组件的 props */
 export interface ModuleProps {
-  config: ResumeConfig;
+  config: ExtendedJSONResume;
   tokens: StyleTokens;
   /** 列表型模块的条目渲染范围 [start, end)，默认渲染全部 */
   itemRange?: [number, number];
@@ -60,7 +61,7 @@ export interface TemplateDefinition {
 
 /** 布局壳 props */
 export interface LayoutShellProps {
-  config: ResumeConfig;
+  config: ExtendedJSONResume;
   sidebarContent: ReactNode;
   mainContent: ReactNode;
   /** 页码索引（0 = 首页含 Profile，1+ = 续页不含 Profile），默认 0 */

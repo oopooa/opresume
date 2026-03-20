@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import type { ResumeConfig } from '@/types';
+import type { ResumeConfig } from '@/types/resume';
 
 /**
  * 检测文本是否已经是 HTML 格式

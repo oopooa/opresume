@@ -7,13 +7,13 @@ export function AboutMeModule({ config, tokens, showTitle = true }: ModuleProps)
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('aboutme');
   const { SectionTitle } = tokens.components;
-  if (isHidden(config, 'aboutme') || !config.aboutme?.aboutmeDesc) return null;
+  if (isHidden(config, 'aboutme') || !config['x-op-aboutmeHtml']) return null;
 
   return (
     <EditableSection module="aboutme">
       <section className={tokens.spacing.module}>
         {showTitle && <SectionTitle title={getTitle(config, 'aboutme', t('module.aboutme'))} icon={moduleIcon} />}
-        <RichContent content={config.aboutme.aboutmeDesc} textSize={tokens.typography.contentSize} />
+        <RichContent content={config['x-op-aboutmeHtml']} textSize={tokens.typography.contentSize} />
       </section>
     </EditableSection>
   );

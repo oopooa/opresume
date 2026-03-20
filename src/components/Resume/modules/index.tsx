@@ -1,5 +1,5 @@
 import type { ReactNode, ComponentType } from 'react';
-import type { ResumeConfig } from '@/types';
+import type { ExtendedJSONResume } from '@/types/extended-json-resume';
 import type { TemplateDefinition, ModuleProps, StyleTokens } from '../types';
 import type { PageSlice } from '@/utils/pagination';
 import { getEffectiveLayout } from '@/config/layout';
@@ -28,9 +28,9 @@ export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
  */
 export function useTemplateModules(
   def: TemplateDefinition,
-  config: ResumeConfig,
+  config: ExtendedJSONResume,
 ): { sidebarContent: ReactNode; mainContent: ReactNode } {
-  const layout = getEffectiveLayout(def.id, config.moduleLayout);
+  const layout = getEffectiveLayout(def.id, config['x-op-moduleLayout']);
   const tokens = def.getTokens();
 
   function renderModule(key: string): ReactNode {
@@ -54,7 +54,7 @@ export function useTemplateModules(
  */
 export function renderPageSlices(
   slices: PageSlice[],
-  config: ResumeConfig,
+  config: ExtendedJSONResume,
   tokens: StyleTokens,
 ): ReactNode {
   return (

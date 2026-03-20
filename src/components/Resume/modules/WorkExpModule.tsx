@@ -1,4 +1,5 @@
 import type { ModuleProps } from '../types';
+import type { ExtendedWork } from '@/types/extended-json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
@@ -9,9 +10,10 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
   const moduleIcon = useModuleIcon('workExpList');
   const { SectionTitle } = tokens.components;
   const mask = usePrivacyMask();
-  if (isHidden(config, 'workExpList') || !config.workExpList?.length) return null;
+  if (isHidden(config, 'workExpList') || !config.work?.length) return null;
 
-  const list = itemRange ? config.workExpList.slice(itemRange[0], itemRange[1]) : config.workExpList;
+  const allWork = config.work as ExtendedWork[];
+  const list = itemRange ? allWork.slice(itemRange[0], itemRange[1]) : allWork;
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
@@ -19,23 +21,25 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
       <section className={tokens.spacing.module}>
         {showTitle && <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />}
         {list.map((work, i) => (
-          <div key={work.id} className={tokens.spacing.item} data-item-index={indexOffset + i}>
+          <div key={work['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
               <div>
                 <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>
-                  {mask(work.companyName, 'companyName')}
+                  {mask(work.name, 'companyName')}
                 </p>
-                {work.departmentName && (
+                {work['x-op-departmentName'] && (
                   <p className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
-                    {mask(work.departmentName, 'departmentName')}
+                    {mask(work['x-op-departmentName'], 'departmentName')}
                   </p>
                 )}
               </div>
-              <TimeRange time={work.workTime} />
+              <TimeRange startDate={work.startDate} endDate={work.endDate} />
             </div>
-            <div className="mt-1">
-              <RichContent content={work.workDesc} textSize={tokens.typography.contentSize} />
-            </div>
+            {work['x-op-workDescHtml'] && (
+              <div className="mt-1">
+                <RichContent content={work['x-op-workDescHtml']} textSize={tokens.typography.contentSize} />
+              </div>
+            )}
           </div>
         ))}
       </section>

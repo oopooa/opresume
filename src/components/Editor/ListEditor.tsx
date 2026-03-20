@@ -58,7 +58,7 @@ function SortableItem({
 }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
-  const id = item.id as string;
+  const id = item['x-op-id'] as string;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const style = {
@@ -156,8 +156,8 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
     (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-      const oldIndex = items.findIndex((i) => i.id === active.id);
-      const newIndex = items.findIndex((i) => i.id === over.id);
+      const oldIndex = items.findIndex((i) => i['x-op-id'] === active.id);
+      const newIndex = items.findIndex((i) => i['x-op-id'] === over.id);
       if (oldIndex !== -1 && newIndex !== -1) {
         onChange(arrayMove(items, oldIndex, newIndex));
       }
@@ -201,12 +201,12 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={items.map((i) => i.id as string)}
+          items={items.map((i) => i['x-op-id'] as string)}
           strategy={verticalListSortingStrategy}
         >
           {items.map((item, index) => (
             <SortableItem
-              key={item.id as string}
+              key={item['x-op-id'] as string}
               item={item}
               index={index}
               schema={schema}

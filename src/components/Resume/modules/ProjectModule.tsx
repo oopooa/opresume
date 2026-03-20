@@ -1,4 +1,5 @@
 import type { ModuleProps } from '../types';
+import type { ExtendedProject } from '@/types/extended-json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
@@ -8,10 +9,15 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('projectList');
   const { SectionTitle } = tokens.components;
-  if (isHidden(config, 'projectList') || !config.projectList?.length) return null;
+
+  const allProjects = (config.projects ?? []).filter(
+    (p) => !(p as ExtendedProject)['x-op-type'] || (p as ExtendedProject)['x-op-type'] === 'project',
+  ) as ExtendedProject[];
+
+  if (isHidden(config, 'projectList') || !allProjects.length) return null;
 
   const isDetailed = tokens.variants.project === 'detailed';
-  const list = itemRange ? config.projectList.slice(itemRange[0], itemRange[1]) : config.projectList;
+  const list = itemRange ? allProjects.slice(itemRange[0], itemRange[1]) : allProjects;
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
@@ -19,13 +25,13 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
       <section className={tokens.spacing.module}>
         {showTitle && <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />}
         {list.map((proj, i) => (
-          <div key={proj.id} className={tokens.spacing.item} data-item-index={indexOffset + i}>
+          <div key={proj['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
               <div className={cn(isDetailed ? 'flex items-baseline gap-2' : 'flex items-center gap-2')}>
                 <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>
-                  {proj.projectName}
+                  {proj.name}
                 </p>
-                {proj.projectRole && (
+                {proj.roles?.[0] && (
                   isDetailed ? (
                     <span
                       className={cn('rounded px-1.5 py-0.5', tokens.typography.contentSize)}
@@ -34,25 +40,25 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
                         color: 'var(--resume-tag)',
                       }}
                     >
-                      {proj.projectRole}
+                      {proj.roles[0]}
                     </span>
                   ) : (
                     <span className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
-                      / {proj.projectRole}
+                      / {proj.roles[0]}
                     </span>
                   )
                 )}
               </div>
-              <TimeRange time={proj.projectTime} />
+              <TimeRange startDate={proj.startDate} endDate={proj.endDate} />
             </div>
-            {proj.projectDesc && (
+            {proj.description && (
               <p className={cn('mt-1', tokens.typography.contentSize, tokens.colors.secondary)}>
-                {proj.projectDesc}
+                {proj.description}
               </p>
             )}
-            {proj.projectContent && (
+            {proj['x-op-projectContentHtml'] && (
               <div className="mt-1">
-                <RichContent content={proj.projectContent} textSize={tokens.typography.contentSize} />
+                <RichContent content={proj['x-op-projectContentHtml']} textSize={tokens.typography.contentSize} />
               </div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useCallback } from 'react';
-import type { ResumeConfig, Avatar } from '@/types/resume';
+import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
 import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -29,11 +30,9 @@ export function EditableSection({ module, children }: { module: string; children
   );
 }
 
-export function TimeRange({ time }: { time?: [string?, string?] }) {
+export function TimeRange({ startDate, endDate }: { startDate?: string; endDate?: string }) {
   const { t } = useTranslation();
-  if (!time) return null;
-  const [start, end] = time;
-  if (!start && !end) return null;
+  if (!startDate && !endDate) return null;
   const display = (v?: string) => {
     if (!v) return '';
     if (v === 'present' || v === '至今' || v === 'Present') return t('field.present');
@@ -41,17 +40,17 @@ export function TimeRange({ time }: { time?: [string?, string?] }) {
   };
   return (
     <span className="text-xs text-gray-500">
-      {display(start)}{start && end ? ' - ' : ''}{display(end)}
+      {display(startDate)}{startDate && endDate ? ' - ' : ''}{display(endDate)}
     </span>
   );
 }
 
-export function getTitle(config: ResumeConfig, key: string, fallback: string) {
-  return config.titleNameMap?.[key] ?? fallback;
+export function getTitle(config: ExtendedJSONResume, key: string, fallback: string) {
+  return config['x-op-titleNameMap']?.[key] ?? fallback;
 }
 
-export function isHidden(config: ResumeConfig, key: string) {
-  return config.moduleHidden?.[key] === true;
+export function isHidden(config: ExtendedJSONResume, key: string) {
+  return config['x-op-moduleHidden']?.[key] === true;
 }
 
 export function avatarStyle(a?: Avatar): React.CSSProperties {
@@ -127,7 +126,7 @@ export function ProfileField({
  * 隐私打码 hook
  *
  * 返回 mask 函数：隐私模式开启时对值打码，关闭时原样返回。
- * 用法：const mask = usePrivacyMask(); mask(profile?.name, 'name')
+ * 用法：const mask = usePrivacyMask(); mask(basics?.name, 'name')
  */
 export function usePrivacyMask() {
   const privacyMode = useUIStore((s) => s.privacyMode);

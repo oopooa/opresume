@@ -23,7 +23,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useResumeStore } from '@/store/resume';
 import { DynamicIcon } from '@/components/DynamicIcon';
-import type { WorkExp } from '@/types/resume';
+import type { ResumeWork } from '@/types/json-resume';
 import type { FieldDef } from './schemas';
 
 /** 从 "YYYY.MM" 或 "YYYY" 格式中提取年份 */
@@ -32,28 +32,29 @@ function parseYear(v: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
-/** 将 "YYYY.MM" 转为绝对月份数（year * 12 + month），用于区间计算 */
+/** 将 "YYYY.MM" 或 "YYYY-MM" 转为绝对月份数（year * 12 + month），用于区间计算 */
 function toAbsoluteMonth(v: string): number | null {
-  const m = v.match(/^(\d{4})\.(\d{2})$/);
+  const m = v.match(/^(\d{4})[.\-](\d{2})$/);
   if (!m) return null;
   return Number(m[1]) * 12 + Number(m[2]);
 }
 
 /** 根据工作经历列表计算总工作时长（合并重叠区间），返回 { years, months } */
-function calcWorkExp(list: WorkExp[]): { years: number; months: number } | null {
+function calcWorkExp(list: ResumeWork[]): { years: number; months: number } | null {
   const now = new Date();
   const nowAbs = now.getFullYear() * 12 + (now.getMonth() + 1);
 
   // 收集所有有效的 [start, end] 区间（绝对月份）
   const intervals: [number, number][] = [];
   for (const item of list) {
-    const [startStr, endStr] = item.workTime ?? [];
+    const startStr = item.startDate;
     if (!startStr) continue;
     const start = toAbsoluteMonth(startStr);
     if (start == null) continue;
 
+    const endStr = item.endDate;
     let end: number;
-    if (!endStr || endStr === 'present' || endStr === '至今') {
+    if (!endStr || endStr.toLowerCase() === 'present' || endStr === '至今') {
       end = nowAbs;
     } else {
       const parsed = toAbsoluteMonth(endStr);
@@ -160,7 +161,7 @@ function MonthPicker({ value, onChange, placeholder, minYear, minMonth, showPres
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const parsed = value.match(/^(\d{4})\.(\d{2})$/);
+  const parsed = value.match(/^(\d{4})[.\-](\d{2})$/);
   const selectedYear = parsed ? Number(parsed[1]) : null;
   const selectedMonth = parsed ? Number(parsed[2]) : null;
   const isPresent = value === 'present' || (!!value && !parsed);
@@ -219,7 +220,7 @@ function MonthPicker({ value, onChange, placeholder, minYear, minMonth, showPres
                 className={cn('text-xs', isSelected && 'pointer-events-none')}
                 disabled={isFuture || isBelowMin || isBeforeMin}
                 onClick={() => {
-                  onChange(`${viewYear}.${String(m).padStart(2, '0')}`);
+                  onChange(`${viewYear}-${String(m).padStart(2, '0')}`);
                   setOpen(false);
                 }}
               >
@@ -249,7 +250,7 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
   const { t } = useTranslation();
   const label = t(field.labelKey);
   const arr = (value as [string?, string?]) ?? ['', ''];
-  const birthday = useResumeStore((s) => s.config?.profile?.birthday);
+  const birthday = useResumeStore((s) => s.config?.['x-op-birthday']);
 
   // 起始年份下限：出生年 + 15
   let minYear: number | null = null;
@@ -260,7 +261,7 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
 
   // 结束时间下限：不早于开始时间
   const startYear = parseYear(arr[0] ?? '');
-  const startMonthMatch = (arr[0] ?? '').match(/^\d{4}\.(\d{2})$/);
+  const startMonthMatch = (arr[0] ?? '').match(/^\d{4}[.\-](\d{2})$/);
   const startMonth = startMonthMatch ? Number(startMonthMatch[1]) : null;
   const endMinYear = startYear ?? minYear;
   const endMinMonth = startYear ? startMonth : null;
@@ -297,17 +298,17 @@ function TimeRangeField({ field, value, onChange }: FormFieldProps) {
 function WorkExpYearField({ field, value, onChange }: FormFieldProps) {
   const { t } = useTranslation();
   const label = t(field.labelKey);
-  const workExpList = useResumeStore((s) => s.config?.workExpList);
+  const workList = useResumeStore((s) => s.config?.work);
 
   const placeholder = useMemo(() => {
-    if (!workExpList?.length) return undefined;
-    const result = calcWorkExp(workExpList);
+    if (!workList?.length) return undefined;
+    const result = calcWorkExp(workList);
     if (!result) return undefined;
     const { years, months } = result;
     if (years > 0 && months > 0) return t('common.workExpCalc', { years, months });
     if (years > 0) return t('common.workExpCalcYearOnly', { years });
     return t('common.workExpCalcMonthOnly');
-  }, [workExpList, t]);
+  }, [workList, t]);
 
   return (
     <div className="space-y-1">
@@ -349,7 +350,7 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
             value={(value as string) ?? ''}
             onChange={(e) => {
               const v = e.target.value.replace(/\D/g, '');
-              if (v.length <= 11) onChange(v);
+              if (v.length <= 15) onChange(v);
             }}
           />
         </div>
