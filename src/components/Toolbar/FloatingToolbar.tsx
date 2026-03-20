@@ -23,10 +23,6 @@ export function FloatingToolbar() {
   return (
     <TooltipProvider delayDuration={300}>
       <div className="fixed right-4 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-1 rounded-2xl border bg-white/90 p-1.5 shadow-lg backdrop-blur print:hidden">
-        <AppearanceDrawer />
-
-        <div className="mx-auto h-px w-5 bg-border" />
-
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -73,6 +69,10 @@ export function FloatingToolbar() {
           </TooltipTrigger>
           <TooltipContent side="left">{t('toolbar.print')}</TooltipContent>
         </Tooltip>
+
+        <div className="mx-auto h-px w-5 bg-border" />
+
+        <AppearanceDrawer />
 
         <div className="mx-auto h-px w-5 bg-border" />
 
