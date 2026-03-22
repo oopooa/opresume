@@ -8,7 +8,7 @@ import { DynamicIcon } from '@/components/DynamicIcon';
 
 function SectionTitle({ title, icon }: { title: string; icon?: string }) {
   return (
-    <h3 className="mb-2.5 flex items-center gap-1.5 border-l-[3px] border-resume-primary bg-gray-50 py-1.5 pl-2 pr-3 text-xs font-semibold text-resume-primary">
+    <h3 className="mb-2.5 flex items-center gap-1.5 border-l-[3px] border-resume-primary bg-gray-50 py-1.5 pl-2 pr-3 resume-title-text font-semibold text-resume-primary">
       <DynamicIcon name={icon} className="h-3.5 w-3.5" />
       {title}
     </h3>
@@ -19,7 +19,7 @@ function SectionTitle({ title, icon }: { title: string; icon?: string }) {
 
 const tokens: StyleTokens = {
   spacing: { module: 'mb-5', item: 'mb-2' },
-  typography: { titleWeight: 'font-semibold', titleSize: 'text-sm', contentSize: 'text-xs' },
+  typography: { titleWeight: 'font-semibold', titleSize: 'resume-title-text', contentSize: 'resume-body-text' },
   colors: { primary: 'text-gray-800', secondary: 'text-gray-500', muted: 'text-gray-400' },
   components: { SectionTitle },
   variants: { skill: 'tags', project: 'compact', education: 'inline' },

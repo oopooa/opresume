@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Palette, Check, ArrowRightLeft } from 'lucide-react';
+import { Palette, Check, ArrowRightLeft, Minus, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { sampleResume } from '@/config/sample-resume';
+import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -47,6 +48,40 @@ const SPACING_PRESETS: SpacingPreset[] = ['compact', 'standard', 'spacious'];
 
 const MAX_VISIBLE_TAGS = 4;
 
+function FontSizeStepper({ value, onChange, min, max, step = 1 }: {
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+}) {
+  return (
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        aria-label="decrease"
+        disabled={value <= min}
+        onClick={() => onChange(Math.max(min, value - step))}
+        className="flex h-7 w-7 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 disabled:opacity-30 disabled:hover:bg-transparent"
+      >
+        <Minus className="h-3.5 w-3.5" />
+      </button>
+      <span className="w-10 text-center text-sm font-medium tabular-nums text-muted-foreground">
+        {value}px
+      </span>
+      <button
+        type="button"
+        aria-label="increase"
+        disabled={value >= max}
+        onClick={() => onChange(Math.min(max, value + step))}
+        className="flex h-7 w-7 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 disabled:opacity-30 disabled:hover:bg-transparent"
+      >
+        <Plus className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
 function SpacingPresetGroup({ value, onChange, labels }: {
   value: SpacingPreset;
   onChange: (v: SpacingPreset) => void;
@@ -86,6 +121,8 @@ export function AppearanceDrawer() {
   const layout = useUIStore((s) => s.layout);
   const setPageMargin = useUIStore((s) => s.setPageMargin);
   const setModuleGap = useUIStore((s) => s.setModuleGap);
+  const setTitleFontSize = useUIStore((s) => s.setTitleFontSize);
+  const setBodyFontSize = useUIStore((s) => s.setBodyFontSize);
   const setLineHeight = useUIStore((s) => s.setLineHeight);
 
   // drawer 动画完成后才启用缩略图 hover 效果，避免鼠标滑过时误触
@@ -237,6 +274,22 @@ export function AppearanceDrawer() {
               <section>
                 <h3 className="mb-2.5 text-sm font-medium text-foreground">{t('toolbar.moduleGap')}</h3>
                 <SpacingPresetGroup value={layout.moduleGap} onChange={setModuleGap} labels={{ compact: t('toolbar.compact'), standard: t('toolbar.standard'), spacious: t('toolbar.spacious') }} />
+              </section>
+
+              {/* 标题字号 */}
+              <section>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-foreground">{t('toolbar.titleFontSize')}</h3>
+                  <FontSizeStepper value={layout.titleFontSize} onChange={setTitleFontSize} min={TITLE_FONT_SIZE_RANGE.min} max={TITLE_FONT_SIZE_RANGE.max} />
+                </div>
+              </section>
+
+              {/* 正文字号 */}
+              <section>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-foreground">{t('toolbar.bodyFontSize')}</h3>
+                  <FontSizeStepper value={layout.bodyFontSize} onChange={setBodyFontSize} min={BODY_FONT_SIZE_RANGE.min} max={BODY_FONT_SIZE_RANGE.max} />
+                </div>
               </section>
 
               {/* 行间距 */}

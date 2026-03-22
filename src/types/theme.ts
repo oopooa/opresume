@@ -18,6 +18,10 @@ export interface LayoutConfig {
   pageMargin: SpacingPreset;
   /** 模块间距预设 */
   moduleGap: SpacingPreset;
+  /** 标题字号（px） */
+  titleFontSize: number;
+  /** 正文字号（px） */
+  bodyFontSize: number;
   /** 行间距数值（1.2 – 2.0） */
   lineHeight: number;
 }

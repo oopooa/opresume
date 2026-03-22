@@ -9,7 +9,7 @@ function SectionTitle({ title, icon }: { title: string; icon?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
       <span
-        className="inline-flex items-center gap-1.5 rounded-sm px-3 py-1 text-xs font-bold text-white"
+        className="inline-flex items-center gap-1.5 rounded-sm px-3 py-1 resume-title-text font-bold text-white"
         style={{ backgroundColor: 'var(--resume-primary)' }}
       >
         <DynamicIcon name={icon} className="h-3.5 w-3.5" />
@@ -37,7 +37,7 @@ function InfoItem({ icon, label, value }: { icon?: string; label: string; value?
 
 const tokens: StyleTokens = {
   spacing: { module: 'mb-5', item: 'mb-3' },
-  typography: { titleWeight: 'font-bold', titleSize: 'text-sm', contentSize: 'text-xs' },
+  typography: { titleWeight: 'font-bold', titleSize: 'resume-title-text', contentSize: 'resume-body-text' },
   colors: { primary: 'text-gray-800', secondary: 'text-gray-500', muted: 'text-gray-400' },
   components: { SectionTitle },
   variants: { skill: 'list', project: 'detailed', education: 'inline' },

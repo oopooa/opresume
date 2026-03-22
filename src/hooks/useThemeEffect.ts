@@ -28,6 +28,8 @@ export function useThemeEffect() {
     root.style.setProperty('--resume-page-padding', `${margin.y} ${margin.x}`);
     root.style.setProperty('--resume-page-padding-x', margin.x);
     root.style.setProperty('--resume-module-gap', MODULE_GAP[layout.moduleGap]);
+    root.style.setProperty('--resume-title-size', `${layout.titleFontSize}px`);
+    root.style.setProperty('--resume-body-size', `${layout.bodyFontSize}px`);
     root.style.setProperty('--resume-line-height', String(layout.lineHeight));
-  }, [theme.color, theme.tagColor, layout.pageMargin, layout.moduleGap, layout.lineHeight]);
+  }, [theme.color, theme.tagColor, layout.pageMargin, layout.moduleGap, layout.titleFontSize, layout.bodyFontSize, layout.lineHeight]);
 }

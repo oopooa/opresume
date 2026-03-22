@@ -6,7 +6,7 @@ interface RichContentProps {
   textSize?: string;
 }
 
-export function RichContent({ content, className, textSize = 'text-sm' }: RichContentProps) {
+export function RichContent({ content, className, textSize = 'resume-body-text' }: RichContentProps) {
   if (!content) return null;
 
   return (

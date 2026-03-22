@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '@/i18n';
+import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
 import type { ThemeConfig, LayoutConfig, SpacingPreset } from '@/types';
 
 interface UIStore {
@@ -32,6 +33,8 @@ interface UIStore {
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
   setPageMargin: (preset: SpacingPreset) => void;
   setModuleGap: (preset: SpacingPreset) => void;
+  setTitleFontSize: (value: number) => void;
+  setBodyFontSize: (value: number) => void;
   setLineHeight: (value: number) => void;
 }
 
@@ -48,7 +51,7 @@ export const useUIStore = create<UIStore>()(
       customFieldIconMap: {},
       showIcons: true,
       privacyMode: false,
-      layout: { pageMargin: 'standard', moduleGap: 'standard', lineHeight: 1.5 },
+      layout: { pageMargin: 'standard', moduleGap: 'standard', titleFontSize: 16, bodyFontSize: 14, lineHeight: 1.5 },
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -97,6 +100,12 @@ export const useUIStore = create<UIStore>()(
       setModuleGap: (preset) =>
         set((s) => ({ layout: { ...s.layout, moduleGap: preset } })),
 
+      setTitleFontSize: (value) =>
+        set((s) => ({ layout: { ...s.layout, titleFontSize: value } })),
+
+      setBodyFontSize: (value) =>
+        set((s) => ({ layout: { ...s.layout, bodyFontSize: value } })),
+
       setLineHeight: (value) =>
         set((s) => ({ layout: { ...s.layout, lineHeight: value } })),
     }),
@@ -113,6 +122,20 @@ export const useUIStore = create<UIStore>()(
         privacyMode: state.privacyMode,
         layout: state.layout,
       }),
+      merge: (persisted, current) => {
+        const stored = persisted as Partial<UIStore>;
+        const mergedLayout = { ...current.layout, ...stored.layout };
+        // 修复旧数据中缺失、无效或越界的字号值
+        if (!Number.isFinite(mergedLayout.titleFontSize)) mergedLayout.titleFontSize = current.layout.titleFontSize;
+        else mergedLayout.titleFontSize = Math.max(TITLE_FONT_SIZE_RANGE.min, Math.min(TITLE_FONT_SIZE_RANGE.max, mergedLayout.titleFontSize));
+        if (!Number.isFinite(mergedLayout.bodyFontSize)) mergedLayout.bodyFontSize = current.layout.bodyFontSize;
+        else mergedLayout.bodyFontSize = Math.max(BODY_FONT_SIZE_RANGE.min, Math.min(BODY_FONT_SIZE_RANGE.max, mergedLayout.bodyFontSize));
+        return {
+          ...current,
+          ...stored,
+          layout: mergedLayout,
+        };
+      },
       onRehydrateStorage: () => (state) => {
         if (state?.lang) {
           i18n.changeLanguage(state.lang);

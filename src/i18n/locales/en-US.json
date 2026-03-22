@@ -50,6 +50,8 @@
     "pageMargin": "Page Margin",
     "moduleGap": "Module Spacing",
     "lineHeight": "Line Height",
+    "titleFontSize": "Title Font Size",
+    "bodyFontSize": "Body Font Size",
     "compact": "Compact",
     "standard": "Standard",
     "spacious": "Spacious",

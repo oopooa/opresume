@@ -50,6 +50,8 @@
     "pageMargin": "页边距",
     "moduleGap": "模块间距",
     "lineHeight": "行间距",
+    "titleFontSize": "标题字号",
+    "bodyFontSize": "正文字号",
     "compact": "紧凑",
     "standard": "标准",
     "spacious": "宽松",

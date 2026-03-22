@@ -19,7 +19,7 @@ function SectionTitle({ title, icon }: { title: string; icon?: string }) {
           <DynamicIcon name={icon} className="h-3 w-3 text-resume-primary" />
         </span>
       )}
-      <span className="text-base font-bold text-resume-primary">{title}</span>
+      <span className="resume-title-text font-bold text-resume-primary">{title}</span>
     </div>
   );
 }
@@ -28,7 +28,7 @@ function SectionTitle({ title, icon }: { title: string; icon?: string }) {
 
 const tokens: StyleTokens = {
   spacing: { module: 'mb-5', item: 'mb-3' },
-  typography: { titleWeight: 'font-semibold', titleSize: 'text-sm', contentSize: 'text-xs' },
+  typography: { titleWeight: 'font-semibold', titleSize: 'resume-title-text', contentSize: 'resume-body-text' },
   colors: { primary: 'text-gray-800', secondary: 'text-gray-500', muted: 'text-gray-400' },
   components: { SectionTitle },
   variants: { skill: 'tags', project: 'compact', education: 'inline' },

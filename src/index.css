@@ -35,6 +35,8 @@
     --resume-page-padding: 16mm 18mm;
     --resume-page-padding-x: 18mm;
     --resume-module-gap: 24px;
+    --resume-title-size: 16px;
+    --resume-body-size: 14px;
     --resume-line-height: 1.5;
 
     --resume-primary-light: color-mix(in srgb, var(--resume-primary) 12%, white);
@@ -181,6 +183,14 @@
   color: hsl(var(--primary));
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* 排版：标题/正文字号由 CSS 变量控制 */
+.resume-title-text {
+  font-size: var(--resume-title-size);
+}
+.resume-body-text {
+  font-size: var(--resume-body-size);
 }
 
 /* 排版：模块间距由 CSS 变量统一控制，穿透 EditableSection 包装层覆盖 Tailwind mb-X */

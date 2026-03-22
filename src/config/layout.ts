@@ -37,3 +37,9 @@ export const SORTABLE_MODULES = [
   'workList',
   'aboutme',
 ] as const;
+
+/** 标题字号范围（px） */
+export const TITLE_FONT_SIZE_RANGE = { min: 16, max: 24 } as const;
+
+/** 正文字号范围（px） */
+export const BODY_FONT_SIZE_RANGE = { min: 12, max: 16 } as const;
