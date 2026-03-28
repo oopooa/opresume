@@ -4,7 +4,7 @@ import { FormField } from './FormField';
 interface FormCreatorProps {
   fields: FieldDef[];
   data: Record<string, unknown>;
-  onChange: (key: string, value: unknown) => void;
+  onChange: (updates: Record<string, unknown>) => void;
 }
 
 export function FormCreator({ fields, data, onChange }: FormCreatorProps) {
@@ -24,17 +24,19 @@ export function FormCreator({ fields, data, onChange }: FormCreatorProps) {
         }
 
         const handleChange = (v: unknown) => {
-          // time-range + endKey：分解数组到两个独立字段
+          // time-range + endKey：一次性更新两个独立字段（避免状态覆盖）
           if (field.type === 'time-range' && field.endKey) {
             const arr = v as [string?, string?];
-            onChange(field.key, arr[0] ?? '');
-            onChange(field.endKey, arr[1] ?? '');
+            onChange({
+              [field.key]: arr[0] ?? '',
+              [field.endKey]: arr[1] ?? '',
+            });
             return;
           }
 
           // writeTransform：自定义写入转换（如 字符串 → roles 数组）
           const finalValue = field.writeTransform ? field.writeTransform(v) : v;
-          onChange(field.key, finalValue);
+          onChange({ [field.key]: finalValue });
         };
 
         return (

@@ -53,7 +53,7 @@ function SortableItem({
   item: Record<string, unknown>;
   index: number;
   schema: ModuleSchema;
-  onUpdate: (index: number, key: string, value: unknown) => void;
+  onUpdate: (index: number, updates: Record<string, unknown>) => void;
   onRequestDelete: (index: number, title: string) => void;
 }) {
   const { t } = useTranslation();
@@ -71,7 +71,7 @@ function SortableItem({
     : `#${index + 1}`;
 
   const handleChange = useCallback(
-    (key: string, value: unknown) => onUpdate(index, key, value),
+    (updates: Record<string, unknown>) => onUpdate(index, updates),
     [index, onUpdate],
   );
 
@@ -166,9 +166,9 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
   );
 
   const handleUpdate = useCallback(
-    (index: number, key: string, value: unknown) => {
+    (index: number, updates: Record<string, unknown>) => {
       const next = items.map((item, i) =>
-        i === index ? { ...item, [key]: value } : item,
+        i === index ? { ...item, ...updates } : item,
       );
       onChange(next);
     },

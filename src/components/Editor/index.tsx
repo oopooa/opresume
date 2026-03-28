@@ -234,19 +234,40 @@ function ProfileSection({
   const beforeFields = schema.fields.slice(0, birthdayIdx + 1);
   const afterFields = schema.fields.slice(birthdayIdx + 1);
 
-  // 按 key 分发到 basics 或 x-op-* 字段
+  // 按 key 分发到 basics 或 x-op-* 字段（合并为一次 update 调用，避免状态覆盖）
   const handleFieldChange = useCallback(
-    (key: string, value: unknown) => {
-      if (BASICS_KEYS.has(key)) {
-        update({ basics: { ...config.basics, [key]: value } });
-      } else if (key === 'workPlace') {
-        update({ basics: { ...config.basics, location: { ...config.basics?.location, city: value as string } } });
-      } else if (key === 'birthday') {
-        update({ 'x-op-birthday': value as string });
-      } else if (key === 'ageHidden') {
-        update({ 'x-op-ageHidden': value as boolean });
-      } else if (key === 'workExpYear') {
-        update({ 'x-op-workExpYear': value as string });
+    (updates: Record<string, unknown>) => {
+      const basicsUpdates: Record<string, unknown> = {};
+      let locationCity: string | undefined;
+      const result: Partial<ExtendedJSONResume> = {};
+
+      for (const [key, value] of Object.entries(updates)) {
+        if (BASICS_KEYS.has(key)) {
+          basicsUpdates[key] = value;
+        } else if (key === 'workPlace') {
+          locationCity = value as string;
+        } else if (key === 'birthday') {
+          result['x-op-birthday'] = value as string;
+        } else if (key === 'ageHidden') {
+          result['x-op-ageHidden'] = value as boolean;
+        } else if (key === 'workExpYear') {
+          result['x-op-workExpYear'] = value as string;
+        }
+      }
+
+      // 合并 basics 字段更新
+      if (Object.keys(basicsUpdates).length > 0 || locationCity !== undefined) {
+        result.basics = {
+          ...config.basics,
+          ...basicsUpdates,
+          ...(locationCity !== undefined && {
+            location: { ...config.basics?.location, city: locationCity },
+          }),
+        };
+      }
+
+      if (Object.keys(result).length > 0) {
+        update(result);
       }
     },
     [config.basics, update],
@@ -277,8 +298,8 @@ function ProfileSection({
               tabIndex={0}
               className="inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:bg-accent hover:text-gray-600"
               aria-label={t(ageHidden ? 'common.show' : 'common.hide')}
-              onClick={() => handleFieldChange('ageHidden', !ageHidden)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldChange('ageHidden', !ageHidden); }}
+              onClick={() => handleFieldChange({ ageHidden: !ageHidden })}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldChange({ ageHidden: !ageHidden }); }}
             >
               {ageHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
             </span>
@@ -319,7 +340,9 @@ function ModuleContent({
   );
 
   const handleScalarChange = useCallback(
-    (_key: string, value: unknown) => {
+    (updates: Record<string, unknown>) => {
+      // isScalar 模式下只有一个字段，取第一个 value
+      const value = Object.values(updates)[0];
       update({ [schema.dataKey]: value } as Partial<ExtendedJSONResume>);
     },
     [schema.dataKey, update],
@@ -341,9 +364,9 @@ function ModuleContent({
   );
 
   const handleFieldChange = useCallback(
-    (key: string, value: unknown) => {
+    (updates: Record<string, unknown>) => {
       const prev = (config as Record<string, unknown>)[schema.dataKey];
-      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), [key]: value } } as Partial<ExtendedJSONResume>);
+      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), ...updates } } as Partial<ExtendedJSONResume>);
     },
     [schema.dataKey, config, update],
   );
