@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '@/i18n';
+import { detectBrowserLanguage, getLanguageFromURL } from '@/i18n';
 import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
 import type { ThemeConfig, LayoutConfig, SpacingPreset } from '@/types';
 
@@ -43,7 +44,7 @@ export const useUIStore = create<UIStore>()(
     (set) => ({
       theme: { color: '#2C3E50', tagColor: '#5B8C5A' },
       template: 'template1',
-      lang: 'zh-CN',
+      lang: detectBrowserLanguage(),
       editorOpen: false,
       activeModule: null,
       avatarEditorOpen: false,
@@ -136,8 +137,14 @@ export const useUIStore = create<UIStore>()(
           layout: mergedLayout,
         };
       },
-      onRehydrateStorage: () => (state) => {
-        if (state?.lang) {
+      onRehydrateStorage: () => (state, error) => {
+        if (error) return;
+        // URL 参数优先级最高，覆盖 localStorage 中的语言设置
+        const urlLang = getLanguageFromURL();
+        if (urlLang && state) {
+          state.lang = urlLang;
+          i18n.changeLanguage(urlLang);
+        } else if (state?.lang) {
           i18n.changeLanguage(state.lang);
         }
       },

@@ -104,37 +104,37 @@
   "skills": [
     {
       "name": "React / Next.js",
-      "level": "Master",
+      "level": "精通",
       "x-op-id": "skill-1",
       "x-op-skillLevel": 95
     },
     {
       "name": "TypeScript",
-      "level": "Master",
+      "level": "精通",
       "x-op-id": "skill-2",
       "x-op-skillLevel": 90
     },
     {
       "name": "Vue / Nuxt",
-      "level": "Advanced",
+      "level": "熟练",
       "x-op-id": "skill-3",
       "x-op-skillLevel": 80
     },
     {
       "name": "Node.js / Nest.js",
-      "level": "Advanced",
+      "level": "熟练",
       "x-op-id": "skill-4",
       "x-op-skillLevel": 75
     },
     {
       "name": "Tailwind / CSS",
-      "level": "Master",
+      "level": "精通",
       "x-op-id": "skill-5",
       "x-op-skillLevel": 90
     },
     {
       "name": "Webpack / Vite",
-      "level": "Advanced",
+      "level": "熟练",
       "x-op-id": "skill-6",
       "x-op-skillLevel": 85
     }

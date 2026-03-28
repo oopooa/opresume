@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Palette, Check, ArrowRightLeft, Minus, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
-import { sampleResume } from '@/config/sample-resume';
+import { getSampleResume } from '@/config/sample-resume';
 import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -47,6 +47,12 @@ const PRESETS = [
 const SPACING_PRESETS: SpacingPreset[] = ['compact', 'standard', 'spacious'];
 
 const MAX_VISIBLE_TAGS = 4;
+
+/** 根据当前语言获取示例简历用于模板预览 */
+function usePreviewResume() {
+  const lang = useUIStore((s) => s.lang);
+  return useMemo(() => getSampleResume(lang), [lang]);
+}
 
 function FontSizeStepper({ value, onChange, min, max, step = 1 }: {
   value: number;
@@ -112,6 +118,7 @@ export function AppearanceDrawer() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const previewResume = usePreviewResume();
   const template = useUIStore((s) => s.template);
   const setTemplate = useUIStore((s) => s.setTemplate);
   const theme = useUIStore((s) => s.theme);
@@ -343,7 +350,7 @@ export function AppearanceDrawer() {
                     )}
                     <div className="relative h-72 w-full overflow-hidden">
                       <div className="pointer-events-none absolute left-0 top-0 w-[210mm] origin-top-left scale-[0.28]">
-                        <ResumeView config={sampleResume} templateId={key} disablePagination />
+                        <ResumeView config={previewResume} templateId={key} disablePagination />
                       </div>
                     </div>
                     <div className="border-t border-gray-100 px-3 py-2.5">

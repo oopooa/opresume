@@ -1,6 +1,7 @@
 import type { ExtendedJSONResume } from '@/types/extended-json-resume';
 import { isLegacyFormat, convertLegacyToNew } from '@/utils/legacy-compat';
-import { sampleResume } from '@/config/sample-resume';
+import { getSampleResume } from '@/config/sample-resume';
+import { detectBrowserLanguage, isDemoMode } from '@/i18n';
 
 const API_URL = '/api/resume';
 const LS_KEY = 'opresume-config';
@@ -9,10 +10,12 @@ function isDev(): boolean {
   return import.meta.env.DEV;
 }
 
-function getDefaultResume(): ExtendedJSONResume {
+function getDefaultResume(lang?: string): ExtendedJSONResume {
+  const detectedLang = lang || detectBrowserLanguage();
+  const sample = getSampleResume(detectedLang);
   return {
-    ...sampleResume,
-    'x-op-avatar': { ...(sampleResume['x-op-avatar'] || {}), hidden: false }
+    ...sample,
+    'x-op-avatar': { ...(sample['x-op-avatar'] || {}), hidden: false }
   };
 }
 
@@ -44,7 +47,12 @@ function isExtendedJSONResume(data: unknown): data is ExtendedJSONResume {
   return 'basics' in obj || 'work' in obj || 'education' in obj;
 }
 
-export async function loadResume(): Promise<ExtendedJSONResume> {
+export async function loadResume(lang?: string): Promise<ExtendedJSONResume> {
+  // Demo 模式：直接返回对应语言的示例数据，忽略所有其他数据源
+  if (isDemoMode()) {
+    return addCustomFieldIds(getDefaultResume(lang));
+  }
+
   let data: unknown;
 
   if (isDev()) {
@@ -83,7 +91,7 @@ export async function loadResume(): Promise<ExtendedJSONResume> {
 
   const res = await fetch('/data/resume.json');
   if (!res.ok) {
-    return addCustomFieldIds(getDefaultResume());
+    return addCustomFieldIds(getDefaultResume(lang));
   }
   data = await res.json();
   if (isExtendedJSONResume(data)) {
@@ -92,7 +100,7 @@ export async function loadResume(): Promise<ExtendedJSONResume> {
   if (isLegacyFormat(data)) {
     return addCustomFieldIds(convertLegacyToNew(data));
   }
-  return addCustomFieldIds(getDefaultResume());
+  return addCustomFieldIds(getDefaultResume(lang));
 }
 
 export async function saveResume(resume: ExtendedJSONResume): Promise<void> {

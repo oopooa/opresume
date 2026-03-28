@@ -1,0 +1,180 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Alex Johnson",
+    "label": "Senior Frontend Engineer",
+    "email": "alex.johnson@example.com",
+    "phone": "(415) 555-0123"
+  },
+  "work": [
+    {
+      "name": "Meta",
+      "position": "Senior Frontend Engineer",
+      "startDate": "2023-04",
+      "endDate": "",
+      "highlights": [],
+      "x-op-id": "work-1",
+      "x-op-departmentName": "Reality Labs",
+      "x-op-workDescHtml": "<ul>\n<li>Led the frontend architecture for Meta's VR collaboration platform, serving 10M+ daily active users</li>\n<li>Optimized React component rendering, reducing initial load time by 45% and improving Core Web Vitals scores</li>\n<li>Designed and implemented a micro-frontend architecture supporting 15+ independent feature teams</li>\n<li>Mentored 5 junior engineers and established frontend best practices documentation</li>\n</ul>"
+    },
+    {
+      "name": "Stripe",
+      "position": "Frontend Engineer",
+      "startDate": "2021-07",
+      "endDate": "2023-03",
+      "highlights": [],
+      "x-op-id": "work-2",
+      "x-op-departmentName": "Dashboard Team",
+      "x-op-workDescHtml": "<ul>\n<li>Built and maintained the merchant analytics dashboard used by 500K+ businesses worldwide</li>\n<li>Developed a real-time data visualization library with D3.js, handling 1M+ data points efficiently</li>\n<li>Led the migration from JavaScript to TypeScript, achieving 95% type coverage across the codebase</li>\n<li>Implemented accessibility improvements, achieving WCAG 2.1 AA compliance</li>\n</ul>"
+    },
+    {
+      "name": "Airbnb",
+      "position": "Frontend Engineer",
+      "startDate": "2020-03",
+      "endDate": "2021-06",
+      "highlights": [],
+      "x-op-id": "work-3",
+      "x-op-departmentName": "Host Experience",
+      "x-op-workDescHtml": "<ul>\n<li>Developed the host listing management interface, improving host onboarding completion rate by 30%</li>\n<li>Built a drag-and-drop photo editor with cropping, reordering, and AI-powered enhancement features</li>\n<li>Reduced bundle size by 40% through code splitting and lazy loading optimizations</li>\n</ul>"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "area": "Computer Science",
+      "studyType": "M.S.",
+      "startDate": "2018-09",
+      "endDate": "2020-06",
+      "x-op-id": "edu-2"
+    },
+    {
+      "institution": "UC Berkeley",
+      "area": "Computer Science",
+      "studyType": "B.S.",
+      "startDate": "2014-09",
+      "endDate": "2018-05",
+      "x-op-id": "edu-1"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Real-time Collaboration Platform",
+      "description": "A Google Docs-like collaborative editing system with real-time sync using CRDT algorithms",
+      "startDate": "2023-06",
+      "endDate": "",
+      "roles": [
+        "Tech Lead"
+      ],
+      "x-op-id": "proj-1",
+      "x-op-type": "project",
+      "x-op-projectContentHtml": "<ul><li><p>Architected a rich text editor using Slate.js with support for 30+ block types and 15+ inline styles</p></li><li><p>Implemented CRDT-based real-time collaboration engine using Yjs, supporting 50+ concurrent editors</p></li><li><p>Designed virtual scrolling system achieving 60fps performance on 10K+ line documents</p></li><li><p>Built extensible plugin architecture supporting comments, mentions, and task lists</p></li></ul>"
+    },
+    {
+      "name": "Low-Code Platform",
+      "description": "Visual page builder for internal teams to create web applications without coding",
+      "startDate": "2022-01",
+      "endDate": "2023-02",
+      "roles": [
+        "Frontend Lead"
+      ],
+      "x-op-id": "proj-2",
+      "x-op-type": "project",
+      "x-op-projectContentHtml": "<ul><li><p>Built drag-and-drop visual editor using @dnd-kit for component placement and nested layouts</p></li><li><p>Developed JSON Schema-driven property panel with 15+ form control types</p></li><li><p>Created code generation engine exporting to deployable React projects with 85+ code quality score</p></li><li><p>Established component marketplace with version control and sandboxed preview</p></li></ul>"
+    },
+    {
+      "name": "Marketing Asset Generator",
+      "description": "Canvas-based design tool for creating marketing materials with template support",
+      "startDate": "2020-06",
+      "endDate": "2021-03",
+      "roles": [
+        "Core Developer"
+      ],
+      "x-op-id": "proj-3",
+      "x-op-type": "project",
+      "x-op-projectContentHtml": "<ul><li><p>Built Canvas editing interface using Fabric.js with text, image, and shape manipulation</p></li><li><p>Implemented undo/redo, alignment guides, and smart snapping for intuitive editing experience</p></li><li><p>Developed template engine with variable substitution, generating 1000+ customized assets per batch</p></li></ul>"
+    },
+    {
+      "name": "GitHub Portfolio",
+      "description": "Open source projects and technical blog with 80+ articles, 5000+ monthly visitors",
+      "url": "https://github.com/alexjohnson",
+      "x-op-id": "portfolio-1",
+      "x-op-type": "portfolio"
+    }
+  ],
+  "skills": [
+    {
+      "name": "React / Next.js",
+      "level": "Master",
+      "x-op-id": "skill-1",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "TypeScript",
+      "level": "Master",
+      "x-op-id": "skill-2",
+      "x-op-skillLevel": 90
+    },
+    {
+      "name": "Vue / Nuxt",
+      "level": "Advanced",
+      "x-op-id": "skill-3",
+      "x-op-skillLevel": 80
+    },
+    {
+      "name": "Node.js / Express",
+      "level": "Advanced",
+      "x-op-id": "skill-4",
+      "x-op-skillLevel": 75
+    },
+    {
+      "name": "Tailwind / CSS",
+      "level": "Master",
+      "x-op-id": "skill-5",
+      "x-op-skillLevel": 90
+    },
+    {
+      "name": "Webpack / Vite",
+      "level": "Advanced",
+      "x-op-id": "skill-6",
+      "x-op-skillLevel": 85
+    }
+  ],
+  "awards": [
+    {
+      "title": "Meta Hackathon Winner",
+      "date": "2024.01",
+      "x-op-id": "award-1"
+    },
+    {
+      "title": "Stripe Engineering Excellence Award",
+      "date": "2022.08",
+      "x-op-id": "award-2"
+    },
+    {
+      "title": "Airbnb Rookie of the Year",
+      "date": "2020.12",
+      "x-op-id": "award-3"
+    },
+    {
+      "title": "ACM ICPC Regional Silver Medal",
+      "date": "2017.11",
+      "x-op-id": "award-4"
+    }
+  ],
+  "x-op-avatar": {
+    "width": 90,
+    "height": 126,
+    "borderRadius": 0,
+    "hidden": true
+  },
+  "x-op-birthday": "1996-03-15",
+  "x-op-ageHidden": true,
+  "x-op-workExpYear": "5",
+  "x-op-customFields": [
+    {
+      "key": "Location",
+      "value": "San Francisco, CA"
+    }
+  ],
+  "x-op-aboutmeHtml": "<p>Senior Frontend Engineer with 5+ years of experience specializing in React ecosystem and frontend architecture. Proven track record of building scalable web applications serving millions of users. Passionate about performance optimization, developer experience, and open source contribution. Strong advocate for code quality, testing, and mentoring junior engineers.</p>"
+}
