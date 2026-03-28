@@ -87,6 +87,25 @@ npm run preview
 
 ---
 
+## 🗺️ Roadmap
+
+- [x] Resume JSON import/export
+- [x] Rich text editor
+- [x] Drag & drop module sorting
+- [x] Two-column layout with section drag & drop
+- [x] Template switching
+- [x] Custom typography settings
+- [x] Smart pagination (single-column templates)
+- [x] Privacy redaction mode
+- [x] Internationalization (i18n) support
+- [ ] AI-powered resume import
+- [ ] AI resume scoring & analysis
+- [ ] Multiple resume management
+- [ ] Smart fit-to-page
+- [ ] More templates
+
+---
+
 ## 📁 Project Structure
 
 ```text
