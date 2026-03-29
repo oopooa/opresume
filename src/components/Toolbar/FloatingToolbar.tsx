@@ -4,6 +4,7 @@ import { useResumeStore } from '@/store/resume';
 import { useUIStore } from '@/store/ui';
 import { saveWithToast } from '@/hooks/useSaveShortcut';
 import { Button } from '@/components/ui/button';
+import { useCallback, useRef } from 'react';
 import {
   Tooltip,
   TooltipContent,
@@ -19,6 +20,19 @@ export function FloatingToolbar() {
   const { t } = useTranslation();
   const dirty = useResumeStore((s) => s.dirty);
   const openEditor = useUIStore((s) => s.openEditor);
+  const printingRef = useRef(false);
+
+  const handlePrint = useCallback(() => {
+    if (printingRef.current) return;
+    printingRef.current = true;
+    requestIdleCallback(
+      () => {
+        window.print();
+        printingRef.current = false;
+      },
+      { timeout: 100 }
+    );
+  }, []);
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -62,7 +76,7 @@ export function FloatingToolbar() {
             <Button
               size="icon"
               className="rounded-xl"
-              onClick={() => window.print()}
+              onClick={handlePrint}
             >
               <Download className="h-4 w-4" />
             </Button>
