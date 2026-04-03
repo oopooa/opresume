@@ -20,6 +20,7 @@ export function FloatingToolbar() {
   const { t } = useTranslation();
   const dirty = useResumeStore((s) => s.dirty);
   const openEditor = useUIStore((s) => s.openEditor);
+
   const printingRef = useRef(false);
 
   const handlePrint = useCallback(() => {

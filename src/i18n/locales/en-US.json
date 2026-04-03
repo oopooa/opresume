@@ -179,5 +179,38 @@
     "undo": "Undo",
     "redo": "Redo",
     "placeholder": "Start typing..."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure app settings",
+    "aiEngine": "AI Provider",
+    "currentEngine": "Active",
+    "configured": "Configured",
+    "notConfigured": "Not Configured",
+    "apiKey": "API Key",
+    "apiUrl": "API URL",
+    "getApiKey": "Get API Key",
+    "verify": "Test",
+    "verifySuccess": "Verification successful",
+    "verifyFailed": "Verification failed",
+    "verifyEmptyKey": "API key cannot be empty",
+    "verifyInvalidKey": "Invalid API key",
+    "verifyNetworkError": "Network request failed",
+    "verifyRequestFailed": "Request failed",
+    "verifyPassed": "Passed",
+    "selectModel": "Select Model",
+    "model": "Model",
+    "modelCount": "{{count}} models",
+    "refreshModels": "Refresh",
+    "loadingModels": "Loading models...",
+    "noModels": "Please verify API key first",
+    "save": "Save",
+    "tagFree": "Free",
+    "tagReasoning": "Reasoning",
+    "tagCode": "Code",
+    "tagChat": "Chat"
+  },
+  "provider": {
+    "siliconflow": "SiliconFlow"
   }
 }

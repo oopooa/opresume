@@ -179,5 +179,38 @@
     "undo": "撤销",
     "redo": "重做",
     "placeholder": "输入内容..."
+  },
+  "settings": {
+    "title": "设置",
+    "description": "配置应用设置",
+    "aiEngine": "AI 供应商",
+    "currentEngine": "当前供应商",
+    "configured": "已配置",
+    "notConfigured": "未配置",
+    "apiKey": "API 密钥",
+    "apiUrl": "API 地址",
+    "getApiKey": "获取 API 密钥",
+    "verify": "检测",
+    "verifySuccess": "验证成功",
+    "verifyFailed": "验证失败",
+    "verifyEmptyKey": "API 密钥不能为空",
+    "verifyInvalidKey": "API 密钥无效",
+    "verifyNetworkError": "网络请求失败",
+    "verifyRequestFailed": "请求失败",
+    "verifyPassed": "通过",
+    "selectModel": "选择模型",
+    "model": "模型",
+    "modelCount": "共 {{count}} 个模型",
+    "refreshModels": "刷新",
+    "loadingModels": "加载模型中...",
+    "noModels": "请先验证 API 密钥",
+    "save": "保存",
+    "tagFree": "免费",
+    "tagReasoning": "推理",
+    "tagCode": "代码",
+    "tagChat": "对话"
+  },
+  "provider": {
+    "siliconflow": "硅基流动"
   }
 }

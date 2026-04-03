@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import i18n from '@/i18n';
 import { detectBrowserLanguage, getLanguageFromURL } from '@/i18n';
 import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
-import type { ThemeConfig, LayoutConfig, SpacingPreset } from '@/types';
+import type { ThemeConfig, LayoutConfig, SpacingPreset, AIProviderId } from '@/types';
 
 interface UIStore {
   theme: ThemeConfig;
@@ -22,6 +22,10 @@ interface UIStore {
   privacyMode: boolean;
   /** 排版配置 */
   layout: LayoutConfig;
+  /** 设置面板开关状态 */
+  settingsPanelOpen: boolean;
+  /** 当前正在配置的供应商 ID（Dialog 打开时） */
+  editingProviderId: AIProviderId | null;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
@@ -37,6 +41,10 @@ interface UIStore {
   setTitleFontSize: (value: number) => void;
   setBodyFontSize: (value: number) => void;
   setLineHeight: (value: number) => void;
+  openSettingsPanel: () => void;
+  closeSettingsPanel: () => void;
+  openProviderConfig: (providerId: AIProviderId) => void;
+  closeProviderConfig: () => void;
 }
 
 export const useUIStore = create<UIStore>()(
@@ -53,6 +61,8 @@ export const useUIStore = create<UIStore>()(
       showIcons: true,
       privacyMode: false,
       layout: { pageMargin: 'standard', moduleGap: 'standard', titleFontSize: 16, bodyFontSize: 14, lineHeight: 1.5 },
+      settingsPanelOpen: false,
+      editingProviderId: null,
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),
@@ -109,6 +119,11 @@ export const useUIStore = create<UIStore>()(
 
       setLineHeight: (value) =>
         set((s) => ({ layout: { ...s.layout, lineHeight: value } })),
+
+      openSettingsPanel: () => set({ settingsPanelOpen: true }),
+      closeSettingsPanel: () => set({ settingsPanelOpen: false }),
+      openProviderConfig: (providerId) => set({ editingProviderId: providerId }),
+      closeProviderConfig: () => set({ editingProviderId: null }),
     }),
     {
       name: 'opresume_ui',
