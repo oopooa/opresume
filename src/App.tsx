@@ -21,6 +21,22 @@ const Editor = lazy(() =>
   import('@/components/Editor').then((m) => ({ default: m.Editor })),
 );
 
+const Agentation = lazy(() =>
+  import('agentation').then((m) => ({ default: m.Agentation })),
+);
+
+function DevAgentation() {
+  if (!import.meta.env.DEV) {
+    return null;
+  }
+
+  return (
+    <Suspense>
+      <Agentation />
+    </Suspense>
+  );
+}
+
 function App() {
   const { config, loading, error, load } = useResumeStore();
   const openSettingsPanel = useUIStore((s) => s.openSettingsPanel);
@@ -77,6 +93,7 @@ function App() {
           <Editor />
         </Suspense>
         <Toaster />
+        <DevAgentation />
       </div>
     </TooltipProvider>
   );
