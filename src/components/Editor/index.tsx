@@ -56,6 +56,12 @@ import { DynamicIcon } from '@/components/DynamicIcon';
 
 const ALWAYS_VISIBLE = new Set(['profile']);
 const BASICS_KEYS = new Set(['name', 'label', 'phone', 'email']);
+/** 模块头部容器通用样式 */
+const editorHeaderRootClass = 'relative flex min-w-0 items-center gap-1 overflow-hidden rounded-lg px-3 transition-colors';
+/** 模块标题按钮样式（可点击展开/折叠） */
+const editorHeaderTitleButtonClass = 'flex w-0 min-w-0 flex-1 items-center gap-1.5 overflow-hidden py-3 text-left text-[15px] font-medium text-gray-700';
+/** 模块标题文本样式（超长截断） */
+const editorHeaderTitleTextClass = 'min-w-0 flex-1 truncate';
 
 /* 自定义碰撞检测：先用 closestCenter 匹配具体 item，匹配不到时用 pointerWithin 匹配容器 */
 const combinedCollision: CollisionDetection = (args) => {
@@ -110,7 +116,7 @@ function SortableModuleHeader({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative overflow-hidden flex items-center gap-1 rounded-lg px-3 transition-colors',
+        editorHeaderRootClass,
         'bg-editor-module',
         expanded && 'bg-editor-module-active',
       )}
@@ -120,7 +126,7 @@ function SortableModuleHeader({
       <Button
         variant="ghost"
         size="icon"
-        className="h-6 w-6 cursor-grab text-gray-400 hover:text-gray-600"
+        className="h-6 w-6 shrink-0 cursor-grab text-gray-400 hover:text-gray-600"
         aria-label={t('common.dragSort')}
         {...attributes}
         {...listeners}
@@ -141,14 +147,16 @@ function SortableModuleHeader({
           />
         </button>
       </CollapsibleTrigger>
-      <IconPicker value={moduleIcon} onChange={onIconChange} />
+      <div className="shrink-0">
+        <IconPicker value={moduleIcon} onChange={onIconChange} />
+      </div>
       {editing ? (
-        <div className="flex flex-1 items-center py-1.5">
+        <div className="flex w-0 min-w-0 flex-1 items-center py-1.5">
           <Input
             ref={inputRef}
             value={editValue}
             placeholder={t(`module.${module}`)}
-            className="h-8 text-[15px]"
+            className="h-8 w-full min-w-0 text-[15px]"
             onChange={(e) => setEditValue(e.target.value)}
             onBlur={commitEdit}
             onKeyDown={(e) => {
@@ -161,9 +169,9 @@ function SortableModuleHeader({
           <CollapsibleTrigger asChild>
             <button
               type="button"
-              className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
+              className={editorHeaderTitleButtonClass}
             >
-              <span className={cn(hidden && 'text-gray-400 line-through')}>
+              <span className={cn(editorHeaderTitleTextClass, hidden && 'text-gray-400 line-through')}>
                 {customTitle || t(`module.${module}`)}
               </span>
               <span
@@ -670,13 +678,13 @@ export function Editor() {
 
   return (
     <Sheet open={editorOpen} onOpenChange={(isOpen) => { if (!isOpen) closeEditor(); }}>
-      <SheetContent side="right" className="flex w-[380px] flex-col p-0 print:hidden sm:max-w-[380px]">
+      <SheetContent side="right" className="flex w-[380px] flex-col overflow-x-hidden p-0 print:hidden sm:max-w-[380px]">
         <SheetHeader className="border-b px-4 py-3">
           <SheetTitle>{t('toolbar.editResume')}</SheetTitle>
           <SheetDescription className="sr-only">{t('toolbar.editResume')}</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 min-w-0 [&>div[data-radix-scroll-area-viewport]]:!overflow-x-hidden">
           <div className="space-y-2 px-4 py-2">
             {/* Profile 固定在最上方，不参与拖拽 */}
             {(() => {
@@ -687,7 +695,7 @@ export function Editor() {
                 <Collapsible open={isExpanded} onOpenChange={() => toggle('profile')}>
                   <div
                     className={cn(
-                      'relative overflow-hidden flex items-center gap-1 rounded-lg px-3 transition-colors',
+                      editorHeaderRootClass,
                       'bg-editor-module',
                       isExpanded && 'bg-editor-module-active',
                     )}
@@ -703,13 +711,13 @@ export function Editor() {
                         <ChevronDown className={cn('h-4 w-4', isExpanded && 'rotate-180')} />
                       </button>
                     </CollapsibleTrigger>
-                    <DynamicIcon name={DEFAULT_MODULE_ICONS['profile']} className="h-4 w-4 text-gray-500" forceShow />
+                    <DynamicIcon name={DEFAULT_MODULE_ICONS['profile']} className="h-4 w-4 shrink-0 text-gray-500" forceShow />
                     <CollapsibleTrigger asChild>
                       <button
                         type="button"
-                        className="flex flex-1 items-center gap-1.5 py-3 text-left text-[15px] font-medium text-gray-700"
+                        className={editorHeaderTitleButtonClass}
                       >
-                        <span>{t('module.profile')}</span>
+                        <span className={editorHeaderTitleTextClass}>{t('module.profile')}</span>
                       </button>
                     </CollapsibleTrigger>
                   </div>
