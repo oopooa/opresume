@@ -1,217 +1,177 @@
 {
-  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
   "basics": {
-    "name": "张三",
-    "label": "高级前端工程师",
-    "image": "/api/avatar?t=1773238453169",
-    "email": "zhangsan@example.com",
-    "phone": "13800000000",
-    "summary": "5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。"
+    "name": "潘翔宇",
+    "email": "ridiculousme@qq.com",
+    "phone": "13518144170",
+    "label": "Java开发工程师",
+    "summary": "4年Java开发经验，熟练掌握Java，熟悉MySQL数据库；熟练掌握Spring、SpringCloudAlibaba、MyBatis等框架。词汇量7000，具有良好的英语基础和读写能力。热爱编程，自学前端基础技术，独立开发完成1个Utools插件，并在组内推广，获得一致好评。在日常工作中，积极思考产品改进空间，提出创新或优化建议，有效促进产品功能迭代和提升用户体验。参与贡献过开源项目，善于思考和总结问题。对代码质量有着严格的标准，坚持深入理解和实践编程知识，具备独立从零开始开发到项目上线的全流程处理能力。",
+    "location": {
+      "city": "成都"
+    }
   },
   "work": [
     {
-      "name": "字节跳动",
-      "position": "高级前端工程师",
-      "startDate": "2023-04",
+      "name": "上海新榜信息技术股份有限公司成都分公司",
+      "position": "Java开发工程师",
+      "startDate": "2021-08",
       "endDate": "present",
-      "summary": "负责飞书文档协同编辑模块的前端架构设计与核心功能开发，服务千万级日活用户主导编辑器性能优化专项，大文档渲染耗时降低 60%，滚动帧率稳定 60fps设计并落地前端微模块架构方案，支撑 20+ 业务插件的独立开发与热插拔推动团队 TypeScript 严格模式迁移，代码类型覆盖率从 45% 提升至 95%",
-      "highlights": [
-        "<p>负责飞书文档协同编辑模块的前端架构设计与核心功能开发，服务千万级日活用户</p>",
-        "<p>主导编辑器性能优化专项，大文档渲染耗时降低 60%，滚动帧率稳定 60fps</p>",
-        "<p>设计并落地前端微模块架构方案，支撑 20+ 业务插件的独立开发与热插拔</p>",
-        "<p>推动团队 TypeScript 严格模式迁移，代码类型覆盖率从 45% 提升至 95%</p>"
-      ],
-      "x-op-id": "work-1",
-      "x-op-departmentName": "飞书前端团队",
-      "x-op-workDescHtml": "<ul><li><p>负责飞书文档协同编辑模块的前端架构设计与核心功能开发，服务千万级日活用户</p></li><li><p>主导编辑器性能优化专项，大文档渲染耗时降低 60%，滚动帧率稳定 60fps</p></li><li><p>设计并落地前端微模块架构方案，支撑 20+ 业务插件的独立开发与热插拔</p></li><li><p>推动团队 TypeScript 严格模式迁移，代码类型覆盖率从 45% 提升至 95%</p></li></ul><p></p>"
+      "summary": "",
+      "highlights": [],
+      "x-op-id": "f8fc0c0a-b7b6-4fb2-b757-95f4a27ef35c",
+      "x-op-workDescHtml": "<ul><li><p>根据产品需求进行设计并开发公司内部核心项目，提升开发效率和系统稳定性。</p></li><li><p>与项目经理团队紧密合作，精准理解产品需求，在保障定制项目质量的基础上，高效完成交付任务。</p></li></ul>"
     },
     {
-      "name": "蚂蚁集团",
-      "position": "高级前端工程师",
-      "startDate": "2021-07",
-      "endDate": "2023-03",
-      "summary": "参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+\n负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用\n主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座\n封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%",
-      "highlights": [
-        "参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+",
-        "负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用",
-        "主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座",
-        "封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%"
-      ],
-      "x-op-id": "work-2",
-      "x-op-departmentName": "体验技术部",
-      "x-op-workDescHtml": "<ul>\n<li>参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+</li>\n<li>负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用</li>\n<li>主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座</li>\n<li>封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%</li>\n</ul>"
-    },
-    {
-      "name": "美团",
-      "position": "高级前端工程师",
-      "startDate": "2020-03",
-      "endDate": "2021-06",
-      "summary": "负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理\n实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料\n优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s",
-      "highlights": [
-        "负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理",
-        "实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料",
-        "优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s"
-      ],
-      "x-op-id": "work-3",
-      "x-op-departmentName": "到店事业群前端组",
-      "x-op-workDescHtml": "<ul>\n<li>负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理</li>\n<li>实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料</li>\n<li>优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s</li>\n</ul>"
-    }
-  ],
-  "education": [
-    {
-      "institution": "清华大学",
-      "area": "软件工程",
-      "studyType": "硕士",
-      "startDate": "2018-09",
-      "endDate": "2021-06",
-      "x-op-id": "edu-2"
-    },
-    {
-      "institution": "北京大学",
-      "area": "计算机科学与技术",
-      "studyType": "本科",
-      "startDate": "2014-09",
-      "endDate": "2018-06",
-      "x-op-id": "edu-1"
+      "name": "成都新致云服信息技术有限公司",
+      "position": "Java开发工程师",
+      "startDate": "2020-06",
+      "endDate": "2021-08",
+      "summary": "",
+      "highlights": [],
+      "x-op-id": "2b2a87dc-cf4d-4131-aa72-900e9aae1eef",
+      "x-op-workDescHtml": "<ul><li><p>根据产品原型和相关产品文档完成项目的开发和部署。</p></li><li><p>编写完善开发各阶段项目文档，提升团队协作效率。</p></li></ul>"
     }
   ],
   "projects": [
     {
-      "name": "飞书文档协同编辑器",
-      "description": "支持多人实时协同编辑的在线文档系统，基于 CRDT 算法实现冲突解决",
-      "highlights": [
-        "<p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p>",
-        "<p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p>",
-        "<p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p>",
-        "<p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p>"
-      ],
-      "startDate": "2023-06",
-      "endDate": "present",
+      "name": "Api服务网关",
+      "description": "基于Spring WebFlux的响应式网关项目",
+      "highlights": [],
       "roles": [
-        "前端架构师"
-      ],
-      "x-op-id": "proj-1",
-      "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p></li><li><p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p></li><li><p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p></li><li><p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p></li></ul>"
-    },
-    {
-      "name": "低代码搭建平台",
-      "description": "面向内部运营的可视化页面搭建平台，降低非技术人员页面开发门槛",
-      "highlights": [
-        "<p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p>",
-        "<p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p>",
-        "<p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p>",
-        "<p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p>"
-      ],
-      "startDate": "2022-01",
-      "endDate": "2023-02",
-      "roles": [
-        "前端负责人"
-      ],
-      "x-op-id": "proj-2",
-      "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p></li><li><p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p></li><li><p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p></li><li><p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p></li></ul>"
-    },
-    {
-      "name": "商家营销海报编辑器",
-      "description": "基于 Canvas 的在线海报设计工具，支持模板化批量生成营销物料",
-      "highlights": [
-        "<p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p>",
-        "<p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p>",
-        "<p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p>"
+        "项目负责人"
       ],
       "startDate": "2020-06",
-      "endDate": "2021-03",
-      "roles": [
-        "核心开发"
-      ],
-      "x-op-id": "proj-3",
+      "endDate": "2021-08",
+      "x-op-id": "b9e0dd83-e3e7-49e0-a766-be79cfd0d934",
       "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p></li><li><p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p></li><li><p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p></li></ul>"
+      "x-op-projectContentHtml": "<ul><li><p>基于Spring Cloud Gateway与WebFlux框架，定制开发了鉴权，限频，日志记录等核心功能，显著提高了网关的请求处理能力和安全性。</p></li><li><p>引入Redis缓存后台接口信息，大幅减少对数据库的直接访问，提升了系统的响应速度。</p></li><li><p>利用OpenFeign实现与API项目管理系统的通信，优化了服务间的协作流程。</p></li><li><p>实现网关日志全局过滤器，做到100%请求可溯源，并将日志上报到阿里云SLS服务，为故障排查和流量监控提供了有力支持。</p></li><li><p>通过阿里云的负载均衡服务实现网关无缝更新，确保了因网关更新导致的接口不可访问次数为0。</p></li><li><p>实施网关上线前的压力测试，使用阿里云PTS和ApacheBenchmark工具，实测单台2c4g配置的网关服务请求处理能力可达5000TPS。</p></li><li><p>作为团队及公司中首位尝试使用SpringWebFlux的开发者，在外部资源极其有限的情况下成功攻克技术难题，1个月实现从零到生产的转变，推动了团队技术能力的提升。</p></li><li><p>利用个人时间，编写详细的WebFlux技术文档（17000字），为团队小伙伴进行了持续1个月的WebFlux系列培训，总时长5小时，获得大家的一致好评。</p></li><li><p>基于网关构建核心API任务计费功能，易用性和效率大幅提升，开发维护成本降低40%。</p></li></ul>"
     },
     {
-      "name": "个人项目地址",
-      "description": "基于 Next.js + MDX 搭建，累计发表 80+ 篇技术文章，月访问量 5000+",
-      "url": "https://github.com/oopooa/opresume",
-      "x-op-id": "portfolio-1",
-      "x-op-type": "portfolio"
+      "name": "Api中台监控系统",
+      "description": "专注于任务和应用异常的监控系统",
+      "highlights": [],
+      "roles": [
+        "项目负责人"
+      ],
+      "startDate": "2021-08",
+      "endDate": "2022-01",
+      "x-op-id": "8859ad68-9858-4076-b4c5-3c892f7fb573",
+      "x-op-type": "project",
+      "x-op-projectContentHtml": "<ul><li><p>引入阿里云日志服务，结合监控系统配置的警报规则，降低了警报开发30%的时间成本，同时提升了告警的灵活性。</p></li><li><p>开发了基于标识、关系和阈值的告警规则，并通过企业微信机器人实现告警信息的即时推送，将问题响应速度提升了90%。</p></li><li><p>基于Logback自定义消息组件，实现对应用异常100%的可监测性，并保障应用告警触达延迟不超过5秒。</p></li><li><p>集成阿里云语音服务，针对长时间未响应的数据告警，进行电话通知，确保关键告警100%触达负责人。</p></li><li><p>开发了易于集成的应用日志starter组件，简化了业务方的接入流程。</p></li></ul>"
     }
   ],
   "skills": [
     {
-      "name": "React / Next.js",
-      "level": "Master",
-      "x-op-id": "skill-1",
+      "name": "Java",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "e5c64aee-0c69-4129-804f-c35bcaaf5a58",
       "x-op-skillLevel": 95
     },
     {
-      "name": "TypeScript",
-      "level": "Master",
-      "x-op-id": "skill-2",
-      "x-op-skillLevel": 90
+      "name": "Spring",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "d2f9a0ae-2901-42a1-9328-93734ab4a688",
+      "x-op-skillLevel": 95
     },
     {
-      "name": "Vue / Nuxt",
-      "level": "Advanced",
-      "x-op-id": "skill-3",
-      "x-op-skillLevel": 80
+      "name": "SpringBoot",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "077e6e2d-4b4a-48db-a2df-75299b45977f",
+      "x-op-skillLevel": 95
     },
     {
-      "name": "Node.js / Nest.js",
-      "level": "Advanced",
-      "x-op-id": "skill-4",
-      "x-op-skillLevel": 75
+      "name": "SpringCloudAlibaba",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "4c32e551-016b-48cc-b306-6cbbfb54a20d",
+      "x-op-skillLevel": 95
     },
     {
-      "name": "Tailwind / CSS",
-      "level": "Master",
-      "x-op-id": "skill-5",
-      "x-op-skillLevel": 90
+      "name": "MyBatis",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "312e3af9-0d1a-4f37-a518-f6dd570bfab4",
+      "x-op-skillLevel": 95
     },
     {
-      "name": "Webpack / Vite",
-      "level": "Advanced",
-      "x-op-id": "skill-6",
-      "x-op-skillLevel": 85
+      "name": "SpringWebFlux",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "ab16563c-29f4-4867-b42e-b23b1021c7ea",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "MySQL",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "14c95d6c-aa5e-40c8-a0cd-aed9fd3ad7b0",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "Redis",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "9fe47ba5-752b-4da4-b85b-a009dc7f6144",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "HTML",
+      "level": "了解",
+      "keywords": [],
+      "x-op-id": "54248db7-c8a0-4317-8050-2f08810d9837",
+      "x-op-skillLevel": 25
+    },
+    {
+      "name": "CSS",
+      "level": "了解",
+      "keywords": [],
+      "x-op-id": "4e0d0e89-a0c7-426c-8b1c-c01dd885e05a",
+      "x-op-skillLevel": 25
+    },
+    {
+      "name": "JS",
+      "level": "了解",
+      "keywords": [],
+      "x-op-id": "26c5abb0-0275-46bb-bd69-cf764d0343d4",
+      "x-op-skillLevel": 25
+    },
+    {
+      "name": "Maven",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "3f36c634-a050-4ece-bca4-433ef17d7c70",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "Git",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "b65d53ba-bae3-46fd-a855-273cfa4314a0",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "Linux",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "2c350e65-80ca-457b-bf18-32dd2cb4302f",
+      "x-op-skillLevel": 95
+    },
+    {
+      "name": "Docker",
+      "level": "精通",
+      "keywords": [],
+      "x-op-id": "4443a682-7073-438f-a02d-da3154cbb405",
+      "x-op-skillLevel": 95
     }
   ],
-  "awards": [
-    {
-      "title": "字节跳动 2024 年度技术突破奖",
-      "date": "2024-01",
-      "x-op-id": "award-1"
-    },
-    {
-      "title": "蚂蚁集团内部黑客马拉松一等奖",
-      "date": "2022-08",
-      "x-op-id": "award-2"
-    },
-    {
-      "title": "美团年度优秀新人",
-      "date": "2020-12",
-      "x-op-id": "award-3"
-    },
-    {
-      "title": "ACM 区域赛银牌",
-      "date": "2017-11",
-      "x-op-id": "award-4"
-    }
-  ],
-  "x-op-avatar": {
-    "width": 90,
-    "height": 126,
-    "borderRadius": 0,
-    "hidden": false,
-    "src": "/api/avatar?t=1773238453169"
-  },
-  "x-op-birthday": "1995-07-27",
-  "x-op-ageHidden": true,
-  "x-op-workExpYear": "5",
+  "x-op-aboutmeHtml": "<p>4年Java开发经验，熟练掌握Java，熟悉MySQL数据库；熟练掌握Spring、SpringCloudAlibaba、MyBatis等框架。词汇量7000，具有良好的英语基础和读写能力。热爱编程，自学前端基础技术，独立开发完成1个Utools插件，并在组内推广，获得一致好评。在日常工作中，积极思考产品改进空间，提出创新或优化建议，有效促进产品功能迭代和提升用户体验。参与贡献过开源项目，善于思考和总结问题。对代码质量有着严格的标准，坚持深入理解和实践编程知识，具备独立从零开始开发到项目上线的全流程处理能力。</p>",
+  "x-op-workExpYear": "4",
   "x-op-customFields": [
     {
-      "key": "工作地点",
-      "value": "成都"
+      "key": "GitHub",
+      "value": "https://github.com/oopooa"
     }
-  ],
-  "x-op-aboutmeHtml": "<p>5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。</p>"
+  ]
 }

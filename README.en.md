@@ -98,7 +98,7 @@ npm run preview
 - [x] Smart pagination (single-column templates)
 - [x] Privacy redaction mode
 - [x] Internationalization (i18n) support
-- [ ] AI-powered resume import
+- [x] AI-powered resume import
 - [ ] AI resume scoring & analysis
 - [ ] Multiple resume management
 - [ ] Smart fit-to-page
