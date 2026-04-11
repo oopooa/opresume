@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { ModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 
@@ -80,13 +81,13 @@ function SortableItem({
       <div
         ref={setNodeRef}
         style={style}
-        className="rounded-lg border border-gray-200 bg-white"
+        className="overflow-hidden rounded-lg border border-gray-200 bg-white"
       >
-        <div className="flex items-center gap-2 px-3 py-2.5">
+        <div className="flex min-w-0 items-center gap-2 overflow-hidden px-3 py-2.5">
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 cursor-grab text-gray-400 hover:text-gray-600"
+            className="h-6 w-6 shrink-0 cursor-grab text-gray-400 hover:text-gray-600"
             aria-label={t('common.dragSort')}
             {...attributes}
             {...listeners}
@@ -94,19 +95,28 @@ function SortableItem({
             <GripVertical className="h-4 w-4" />
           </Button>
 
-          <CollapsibleTrigger asChild>
-            <button
-              type="button"
-              className="flex-1 truncate text-left text-sm text-gray-700"
-            >
-              {title}
-            </button>
-          </CollapsibleTrigger>
+          <div className="w-0 min-w-0 flex-1 overflow-hidden">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <CollapsibleTrigger asChild>
+                  <button
+                    type="button"
+                    className="block w-full min-w-0 overflow-hidden text-left text-sm text-gray-700"
+                  >
+                    <span className="block truncate">{title}</span>
+                  </button>
+                </CollapsibleTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-80 break-words">
+                {title}
+              </TooltipContent>
+            </Tooltip>
+          </div>
 
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 text-destructive"
+            className="h-6 w-6 shrink-0 text-destructive"
             aria-label={t('common.delete')}
             onClick={() => onRequestDelete(index, title)}
           >
@@ -117,7 +127,7 @@ function SortableItem({
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 text-gray-400 hover:text-gray-600"
+              className="h-6 w-6 shrink-0 text-gray-400 hover:text-gray-600"
               aria-label={expanded ? t('common.collapse') : t('common.expand')}
             >
               <ChevronDown
@@ -194,61 +204,61 @@ export function ListEditor({ schema, items, onChange }: ListEditorProps) {
   };
 
   return (
-    <div className="space-y-2">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={items.map((i) => i['x-op-id'] as string)}
-          strategy={verticalListSortingStrategy}
+      <div className="space-y-2">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          {items.map((item, index) => (
-            <SortableItem
-              key={item['x-op-id'] as string}
-              item={item}
-              index={index}
-              schema={schema}
-              onUpdate={handleUpdate}
-              onRequestDelete={handleRequestDelete}
-            />
-          ))}
-        </SortableContext>
-      </DndContext>
-      {schema.defaultItem && (
-        <Button
-          variant="default"
-          className="w-full gap-1.5"
-          onClick={handleAdd}
-        >
-          <Plus className="h-3.5 w-3.5" />
-          {t('common.add')}
-        </Button>
-      )}
+          <SortableContext
+            items={items.map((i) => i['x-op-id'] as string)}
+            strategy={verticalListSortingStrategy}
+          >
+            {items.map((item, index) => (
+              <SortableItem
+                key={item['x-op-id'] as string}
+                item={item}
+                index={index}
+                schema={schema}
+                onUpdate={handleUpdate}
+                onRequestDelete={handleRequestDelete}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
+        {schema.defaultItem && (
+          <Button
+            variant="default"
+            className="w-full gap-1.5"
+            onClick={handleAdd}
+          >
+            <Plus className="h-3.5 w-3.5" />
+            {t('common.add')}
+          </Button>
+        )}
 
-      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <AlertDialogContent className="max-w-[320px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
-            <AlertDialogDescription asChild>
-              <p className="text-sm text-muted-foreground">
-                <Trans
-                  i18nKey="common.deleteHint"
-                  values={{ name: deleteConfirm?.title ?? '' }}
-                  components={{ bold: <span className="font-semibold text-foreground" /> }}
-                />
-              </p>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
-            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleConfirmDelete}>
-              {t('common.delete')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+        <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <AlertDialogContent className="max-w-[320px]">
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
+              <AlertDialogDescription asChild>
+                <p className="text-sm text-muted-foreground">
+                  <Trans
+                    i18nKey="common.deleteHint"
+                    values={{ name: deleteConfirm?.title ?? '' }}
+                    components={{ bold: <span className="font-semibold text-foreground" /> }}
+                  />
+                </p>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+              <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleConfirmDelete}>
+                {t('common.delete')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
   );
 }
