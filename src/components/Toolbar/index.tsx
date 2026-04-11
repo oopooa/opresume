@@ -30,6 +30,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { ImportPDFDialog } from '@/components/ImportPDFDialog';
 import { LangSwitcher } from './LangSwitcher';
 
 export { FloatingToolbar } from './FloatingToolbar';
@@ -48,6 +49,7 @@ export function Toolbar() {
   const [alertOpen, setAlertOpen] = useState(false);
   const [clearAlertOpen, setClearAlertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [importPDFOpen, setImportPDFOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openMenu = useCallback(() => {
@@ -157,6 +159,10 @@ export function Toolbar() {
                 onMouseEnter={openMenu}
                 onMouseLeave={scheduleClose}
               >
+                <DropdownMenuItem onClick={() => { setMenuOpen(false); setImportPDFOpen(true); }}>
+                  <FileUp className="h-4 w-4" />
+                  {t('importPDF.menuLabel')}
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
                   <FileUp className="h-4 w-4" />
                   {t('toolbar.importJSON')}
@@ -229,6 +235,8 @@ export function Toolbar() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ImportPDFDialog open={importPDFOpen} onOpenChange={setImportPDFOpen} />
     </>
   );
 }
