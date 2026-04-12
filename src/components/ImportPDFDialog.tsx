@@ -25,7 +25,7 @@ import { extractTextFromPDF } from '@/services/pdf-parser';
 import { generateText, extractJSON } from '@/services/ai-generate';
 import { mapAIJsonToResume, isValidAIResumeData } from '@/services/resume-mapper';
 import { SYSTEM_PROMPT, buildUserPrompt } from '@/utils/pdf-prompts';
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 import {
   Dialog,
   DialogContent,
@@ -55,7 +55,7 @@ type ImportStage =
   | { step: 'upload' }
   | { step: 'extracting' }
   | { step: 'calling-ai' }
-  | { step: 'preview'; data: ExtendedJSONResume }
+  | { step: 'preview'; data: JsonResume }
   | { step: 'error'; message: string; recoverable: boolean; failedStep?: string };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB

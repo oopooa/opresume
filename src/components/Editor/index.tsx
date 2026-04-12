@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
 import type { Avatar, ModuleLayout } from '@/types/resume';
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 import {
   Sheet,
   SheetContent,
@@ -220,12 +220,12 @@ function ProfileSection({
   update,
 }: {
   schema: ModuleSchema;
-  config: ExtendedJSONResume;
-  update: (partial: Partial<ExtendedJSONResume>) => void;
+  config: JsonResume;
+  update: (partial: Partial<JsonResume>) => void;
 }) {
   const { t } = useTranslation();
 
-  // 从 ExtendedJSONResume 构造虚拟 profile data 供 FormCreator 使用
+  // 从 JsonResume 构造虚拟 profile data 供 FormCreator 使用
   const data: Record<string, unknown> = {
     name: config.basics?.name ?? '',
     birthday: config['x-op-birthday'] ?? '',
@@ -247,7 +247,7 @@ function ProfileSection({
     (updates: Record<string, unknown>) => {
       const basicsUpdates: Record<string, unknown> = {};
       let locationCity: string | undefined;
-      const result: Partial<ExtendedJSONResume> = {};
+      const result: Partial<JsonResume> = {};
 
       for (const [key, value] of Object.entries(updates)) {
         if (BASICS_KEYS.has(key)) {
@@ -287,7 +287,7 @@ function ProfileSection({
   );
 
   const handleCustomFieldsChange = useCallback(
-    (customFields: NonNullable<ExtendedJSONResume['x-op-customFields']>) => {
+    (customFields: NonNullable<JsonResume['x-op-customFields']>) => {
       update({ 'x-op-customFields': customFields });
     },
     [update],
@@ -336,8 +336,8 @@ function ModuleContent({
   update,
 }: {
   schema: ModuleSchema;
-  config: ExtendedJSONResume;
-  update: (partial: Partial<ExtendedJSONResume>) => void;
+  config: JsonResume;
+  update: (partial: Partial<JsonResume>) => void;
 }) {
   const rawData = (config as Record<string, unknown>)[schema.dataKey];
 
@@ -351,7 +351,7 @@ function ModuleContent({
     (updates: Record<string, unknown>) => {
       // isScalar 模式下只有一个字段，取第一个 value
       const value = Object.values(updates)[0];
-      update({ [schema.dataKey]: value } as Partial<ExtendedJSONResume>);
+      update({ [schema.dataKey]: value } as Partial<JsonResume>);
     },
     [schema.dataKey, update],
   );
@@ -359,14 +359,14 @@ function ModuleContent({
   const handleFilteredListChange = useCallback(
     (items: Record<string, unknown>[]) => {
       const others = fullArray.filter((item) => !schema.filter!(item));
-      update({ [schema.dataKey]: [...others, ...items] } as Partial<ExtendedJSONResume>);
+      update({ [schema.dataKey]: [...others, ...items] } as Partial<JsonResume>);
     },
     [schema.dataKey, schema.filter, fullArray, update],
   );
 
   const handleListChange = useCallback(
     (items: Record<string, unknown>[]) => {
-      update({ [schema.dataKey]: items } as Partial<ExtendedJSONResume>);
+      update({ [schema.dataKey]: items } as Partial<JsonResume>);
     },
     [schema.dataKey, update],
   );
@@ -374,7 +374,7 @@ function ModuleContent({
   const handleFieldChange = useCallback(
     (updates: Record<string, unknown>) => {
       const prev = (config as Record<string, unknown>)[schema.dataKey];
-      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), ...updates } } as Partial<ExtendedJSONResume>);
+      update({ [schema.dataKey]: { ...(prev as Record<string, unknown>), ...updates } } as Partial<JsonResume>);
     },
     [schema.dataKey, config, update],
   );
@@ -442,10 +442,10 @@ function SortableColumn({
   columnId: string;
   modules: string[];
   expanded: string | null;
-  config: ExtendedJSONResume;
+  config: JsonResume;
   toggle: (module: string) => void;
   toggleModuleHidden: (module: string) => void;
-  update: (partial: Partial<ExtendedJSONResume>) => void;
+  update: (partial: Partial<JsonResume>) => void;
 }) {
   const { t } = useTranslation();
   const { setNodeRef, isOver } = useDroppable({ id: columnId });
@@ -460,10 +460,10 @@ function SortableColumn({
     (module: string, title: string) => {
       const prev = config['x-op-titleNameMap'] ?? {};
       if (title) {
-        update({ 'x-op-titleNameMap': { ...prev, [module]: title } } as Partial<ExtendedJSONResume>);
+        update({ 'x-op-titleNameMap': { ...prev, [module]: title } } as Partial<JsonResume>);
       } else {
         const { [module]: _, ...rest } = prev;
-        update({ 'x-op-titleNameMap': rest } as Partial<ExtendedJSONResume>);
+        update({ 'x-op-titleNameMap': rest } as Partial<JsonResume>);
       }
     },
     [config['x-op-titleNameMap'], update],
@@ -566,7 +566,7 @@ export function Editor() {
     (module: string) => {
       if (!config) return;
       const prev = config['x-op-moduleHidden'] ?? {};
-      update({ 'x-op-moduleHidden': { ...prev, [module]: !prev[module] } } as Partial<ExtendedJSONResume>);
+      update({ 'x-op-moduleHidden': { ...prev, [module]: !prev[module] } } as Partial<JsonResume>);
     },
     [config, update],
   );
@@ -576,7 +576,7 @@ export function Editor() {
     (newLayout: ModuleLayout) => {
       if (!config) return;
       const prev = config['x-op-moduleLayout'] ?? {};
-      update({ 'x-op-moduleLayout': { ...prev, [template]: newLayout } } as Partial<ExtendedJSONResume>);
+      update({ 'x-op-moduleLayout': { ...prev, [template]: newLayout } } as Partial<JsonResume>);
     },
     [config, template, update],
   );

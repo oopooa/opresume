@@ -1,5 +1,5 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedAward } from '@/types/extended-json-resume';
+import type { JsonAward } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
@@ -10,7 +10,7 @@ export function AwardModule({ config, tokens, itemRange, showTitle = true }: Mod
   const { SectionTitle } = tokens.components;
   if (isHidden(config, 'awardList') || !config.awards?.length) return null;
 
-  const allAwards = config.awards as ExtendedAward[];
+  const allAwards = config.awards as JsonAward[];
   const list = itemRange ? allAwards.slice(itemRange[0], itemRange[1]) : allAwards;
   const indexOffset = itemRange ? itemRange[0] : 0;
 

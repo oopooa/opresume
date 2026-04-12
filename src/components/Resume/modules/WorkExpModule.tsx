@@ -1,5 +1,5 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedWork } from '@/types/extended-json-resume';
+import type { JsonWork } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
@@ -12,7 +12,7 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
   const mask = usePrivacyMask();
   if (isHidden(config, 'workExpList') || !config.work?.length) return null;
 
-  const allWork = config.work as ExtendedWork[];
+  const allWork = config.work as JsonWork[];
   const list = itemRange ? allWork.slice(itemRange[0], itemRange[1]) : allWork;
   const indexOffset = itemRange ? itemRange[0] : 0;
 

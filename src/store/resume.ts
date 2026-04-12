@@ -1,20 +1,20 @@
 import { create } from 'zustand';
 import i18n from '@/i18n';
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 import { loadResume, saveResume } from '@/services/resume';
 
-function createEmptyResume(): ExtendedJSONResume {
+function createEmptyResume(): JsonResume {
   return { basics: { name: '' } };
 }
 
 interface ResumeStore {
-  config: ExtendedJSONResume | null;
+  config: JsonResume | null;
   loading: boolean;
   error: string | null;
   saveError: string | null;
   dirty: boolean;
   load: () => Promise<void>;
-  update: (partial: Partial<ExtendedJSONResume>) => void;
+  update: (partial: Partial<JsonResume>) => void;
   reset: () => void;
   save: () => Promise<void>;
   clearSaveError: () => void;

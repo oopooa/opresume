@@ -4,7 +4,14 @@ export type {
   ModuleLayout,
 } from './resume';
 
-export type { ExtendedJSONResume } from './extended-json-resume';
+export type {
+  JsonResume,
+  JsonWork,
+  JsonEducation,
+  JsonProject,
+  JsonSkill,
+  JsonAward,
+} from './json-resume';
 
 export type { ThemeConfig, PresetTheme, SpacingPreset, LayoutConfig } from './theme';
 

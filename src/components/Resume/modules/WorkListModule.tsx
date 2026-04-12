@@ -1,5 +1,5 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedProject } from '@/types/extended-json-resume';
+import type { JsonProject } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
@@ -10,8 +10,8 @@ export function WorkListModule({ config, tokens, itemRange, showTitle = true }: 
   const { SectionTitle } = tokens.components;
 
   const allPortfolios = (config.projects ?? []).filter(
-    (p) => (p as ExtendedProject)['x-op-type'] === 'portfolio',
-  ) as ExtendedProject[];
+    (p) => (p as JsonProject)['x-op-type'] === 'portfolio',
+  ) as JsonProject[];
 
   if (isHidden(config, 'workList') || !allPortfolios.length) return null;
 

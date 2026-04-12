@@ -1,5 +1,5 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedEducation } from '@/types/extended-json-resume';
+import type { JsonEducation } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
@@ -12,7 +12,7 @@ export function EducationModule({ config, tokens, itemRange, showTitle = true }:
   if (isHidden(config, 'educationList') || !config.education?.length) return null;
 
   const isInline = tokens.variants.education === 'inline';
-  const allEdu = config.education as ExtendedEducation[];
+  const allEdu = config.education as JsonEducation[];
   const list = itemRange ? allEdu.slice(itemRange[0], itemRange[1]) : allEdu;
   const indexOffset = itemRange ? itemRange[0] : 0;
 
