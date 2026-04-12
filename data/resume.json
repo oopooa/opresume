@@ -17,7 +17,7 @@
       "endDate": "present",
       "summary": "",
       "highlights": [],
-      "x-op-id": "f8fc0c0a-b7b6-4fb2-b757-95f4a27ef35c",
+      "x-op-id": "8e002017-5d35-42a1-9153-7b21a9061d8f",
       "x-op-workDescHtml": "<ul><li><p>根据产品需求进行设计并开发公司内部核心项目，提升开发效率和系统稳定性。</p></li><li><p>与项目经理团队紧密合作，精准理解产品需求，在保障定制项目质量的基础上，高效完成交付任务。</p></li></ul>"
     },
     {
@@ -27,7 +27,7 @@
       "endDate": "2021-08",
       "summary": "",
       "highlights": [],
-      "x-op-id": "2b2a87dc-cf4d-4131-aa72-900e9aae1eef",
+      "x-op-id": "8a70fae8-e2ba-4170-8f1e-96963e0c8737",
       "x-op-workDescHtml": "<ul><li><p>根据产品原型和相关产品文档完成项目的开发和部署。</p></li><li><p>编写完善开发各阶段项目文档，提升团队协作效率。</p></li></ul>"
     }
   ],
@@ -37,24 +37,24 @@
       "description": "基于Spring WebFlux的响应式网关项目",
       "highlights": [],
       "roles": [
-        "项目负责人"
+        "开发工程师"
       ],
-      "startDate": "2020-06",
-      "endDate": "2021-08",
-      "x-op-id": "b9e0dd83-e3e7-49e0-a766-be79cfd0d934",
+      "startDate": "2021-08",
+      "endDate": "present",
+      "x-op-id": "f5c78087-e5c1-4a55-aba4-916d1b22e546",
       "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于Spring Cloud Gateway与WebFlux框架，定制开发了鉴权，限频，日志记录等核心功能，显著提高了网关的请求处理能力和安全性。</p></li><li><p>引入Redis缓存后台接口信息，大幅减少对数据库的直接访问，提升了系统的响应速度。</p></li><li><p>利用OpenFeign实现与API项目管理系统的通信，优化了服务间的协作流程。</p></li><li><p>实现网关日志全局过滤器，做到100%请求可溯源，并将日志上报到阿里云SLS服务，为故障排查和流量监控提供了有力支持。</p></li><li><p>通过阿里云的负载均衡服务实现网关无缝更新，确保了因网关更新导致的接口不可访问次数为0。</p></li><li><p>实施网关上线前的压力测试，使用阿里云PTS和ApacheBenchmark工具，实测单台2c4g配置的网关服务请求处理能力可达5000TPS。</p></li><li><p>作为团队及公司中首位尝试使用SpringWebFlux的开发者，在外部资源极其有限的情况下成功攻克技术难题，1个月实现从零到生产的转变，推动了团队技术能力的提升。</p></li><li><p>利用个人时间，编写详细的WebFlux技术文档（17000字），为团队小伙伴进行了持续1个月的WebFlux系列培训，总时长5小时，获得大家的一致好评。</p></li><li><p>基于网关构建核心API任务计费功能，易用性和效率大幅提升，开发维护成本降低40%。</p></li></ul>"
+      "x-op-projectContentHtml": "<ul><li><p>基于Spring Cloud Gateway与WebFlux框架，定制开发了鉴权，限频，日志记录等核心功能，显著提高了网关的请求处理能力和安全性。</p></li><li><p>引入Redis缓存后台接口信息，大幅减少对数据库的直接访问，提升了系统的响应速度。</p></li><li><p>利用OpenFeign实现与API项目管理系统的通信，优化了服务间的协作流程。</p></li><li><p>实现了网关日志全局过滤器，做到100%请求可溯源，并将日志上报到阿里云SLS服务，为故障排查和流量监控提供了有力支持。</p></li><li><p>通过阿里云的负载均衡服务实现网关无缝更新，确保了因网关更新导致的接口不可访问次数为0。</p></li><li><p>实施网关上线前的压力测试，使用阿里云PTS和ApacheBenchmark工具，实测单台2c4g配置的网关服务请求处理能力可达5000TPS。</p></li><li><p>作为团队及公司中首位尝试使用SpringWebFlux的开发者，在外部资源极其有限的情况下成功攻克技术难题，1个月实现从零到生产的转变，推动了团队技术能力的提升。</p></li><li><p>利用个人时间，编写详细的WebFlux技术文档（17000字），为团队小伙伴进行了持续1个月的WebFlux系列培训，总时长5小时，获得大家的一致好评。</p></li><li><p>基于网关构建核心Api任务计费功能，易用性和效率大幅提升，开发维护成本降低40%。</p></li></ul>"
     },
     {
       "name": "Api中台监控系统",
       "description": "专注于任务和应用异常的监控系统",
       "highlights": [],
       "roles": [
-        "项目负责人"
+        "开发工程师"
       ],
-      "startDate": "2021-08",
-      "endDate": "2022-01",
-      "x-op-id": "8859ad68-9858-4076-b4c5-3c892f7fb573",
+      "startDate": "2022-01",
+      "endDate": "2023-06",
+      "x-op-id": "f4205e90-9c6b-43fa-9b6c-a545a9743fe0",
       "x-op-type": "project",
       "x-op-projectContentHtml": "<ul><li><p>引入阿里云日志服务，结合监控系统配置的警报规则，降低了警报开发30%的时间成本，同时提升了告警的灵活性。</p></li><li><p>开发了基于标识、关系和阈值的告警规则，并通过企业微信机器人实现告警信息的即时推送，将问题响应速度提升了90%。</p></li><li><p>基于Logback自定义消息组件，实现对应用异常100%的可监测性，并保障应用告警触达延迟不超过5秒。</p></li><li><p>集成阿里云语音服务，针对长时间未响应的数据告警，进行电话通知，确保关键告警100%触达负责人。</p></li><li><p>开发了易于集成的应用日志starter组件，简化了业务方的接入流程。</p></li></ul>"
     }
@@ -62,108 +62,108 @@
   "skills": [
     {
       "name": "Java",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "e5c64aee-0c69-4129-804f-c35bcaaf5a58",
-      "x-op-skillLevel": 95
+      "x-op-id": "37e09ed0-4d91-4f77-b90a-768c59fdbae4",
+      "x-op-skillLevel": 50
     },
     {
       "name": "Spring",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "d2f9a0ae-2901-42a1-9328-93734ab4a688",
-      "x-op-skillLevel": 95
-    },
-    {
-      "name": "SpringBoot",
-      "level": "精通",
-      "keywords": [],
-      "x-op-id": "077e6e2d-4b4a-48db-a2df-75299b45977f",
-      "x-op-skillLevel": 95
+      "x-op-id": "1136f1a7-803a-48df-a68a-2e87d99c19e0",
+      "x-op-skillLevel": 50
     },
     {
       "name": "SpringCloudAlibaba",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "4c32e551-016b-48cc-b306-6cbbfb54a20d",
-      "x-op-skillLevel": 95
+      "x-op-id": "85926c69-c1ee-4594-b004-eb339e1d56dc",
+      "x-op-skillLevel": 50
     },
     {
       "name": "MyBatis",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "312e3af9-0d1a-4f37-a518-f6dd570bfab4",
-      "x-op-skillLevel": 95
+      "x-op-id": "88f0e3ca-2ad2-4a43-bb74-a7b8a099dc91",
+      "x-op-skillLevel": 50
     },
     {
       "name": "SpringWebFlux",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "ab16563c-29f4-4867-b42e-b23b1021c7ea",
-      "x-op-skillLevel": 95
+      "x-op-id": "4ddee44f-54b5-443c-abb2-3c73eda3d121",
+      "x-op-skillLevel": 50
     },
     {
       "name": "MySQL",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "14c95d6c-aa5e-40c8-a0cd-aed9fd3ad7b0",
-      "x-op-skillLevel": 95
+      "x-op-id": "5d0bf8de-2637-4c66-8ff7-581447293136",
+      "x-op-skillLevel": 50
     },
     {
       "name": "Redis",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "9fe47ba5-752b-4da4-b85b-a009dc7f6144",
-      "x-op-skillLevel": 95
+      "x-op-id": "070bfb72-ecf0-4340-a5b4-2209aa932b4c",
+      "x-op-skillLevel": 50
+    },
+    {
+      "name": "SQL",
+      "level": "熟练",
+      "keywords": [],
+      "x-op-id": "13ac0571-0ab3-4332-b03b-0fed365fcb08",
+      "x-op-skillLevel": 50
     },
     {
       "name": "HTML",
       "level": "了解",
       "keywords": [],
-      "x-op-id": "54248db7-c8a0-4317-8050-2f08810d9837",
+      "x-op-id": "798fe171-6cce-4173-87e0-eafb875f039e",
       "x-op-skillLevel": 25
     },
     {
       "name": "CSS",
       "level": "了解",
       "keywords": [],
-      "x-op-id": "4e0d0e89-a0c7-426c-8b1c-c01dd885e05a",
+      "x-op-id": "0c5a6307-c85b-4ce8-abb8-f8421c1073d1",
       "x-op-skillLevel": 25
     },
     {
       "name": "JS",
       "level": "了解",
       "keywords": [],
-      "x-op-id": "26c5abb0-0275-46bb-bd69-cf764d0343d4",
+      "x-op-id": "64015e3b-26df-4a89-aa98-401ce1b08d92",
       "x-op-skillLevel": 25
     },
     {
       "name": "Maven",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "3f36c634-a050-4ece-bca4-433ef17d7c70",
-      "x-op-skillLevel": 95
+      "x-op-id": "1fbadddd-d376-43a0-8363-3f5f2c5e3e08",
+      "x-op-skillLevel": 50
     },
     {
       "name": "Git",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "b65d53ba-bae3-46fd-a855-273cfa4314a0",
-      "x-op-skillLevel": 95
+      "x-op-id": "ffb4403d-5862-4526-90b6-db8cf019523f",
+      "x-op-skillLevel": 50
     },
     {
       "name": "Linux",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "2c350e65-80ca-457b-bf18-32dd2cb4302f",
-      "x-op-skillLevel": 95
+      "x-op-id": "d2903516-1264-4389-bcfc-e28d484f5941",
+      "x-op-skillLevel": 50
     },
     {
       "name": "Docker",
-      "level": "精通",
+      "level": "熟练",
       "keywords": [],
-      "x-op-id": "4443a682-7073-438f-a02d-da3154cbb405",
-      "x-op-skillLevel": 95
+      "x-op-id": "1c6d755c-433e-4794-8687-046814988ef4",
+      "x-op-skillLevel": 50
     }
   ],
   "x-op-aboutmeHtml": "<p>4年Java开发经验，熟练掌握Java，熟悉MySQL数据库；熟练掌握Spring、SpringCloudAlibaba、MyBatis等框架。词汇量7000，具有良好的英语基础和读写能力。热爱编程，自学前端基础技术，独立开发完成1个Utools插件，并在组内推广，获得一致好评。在日常工作中，积极思考产品改进空间，提出创新或优化建议，有效促进产品功能迭代和提升用户体验。参与贡献过开源项目，善于思考和总结问题。对代码质量有着严格的标准，坚持深入理解和实践编程知识，具备独立从零开始开发到项目上线的全流程处理能力。</p>",

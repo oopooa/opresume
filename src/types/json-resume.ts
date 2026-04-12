@@ -1,7 +1,12 @@
 // JSON Resume Schema 标准类型定义
 // https://jsonresume.org/schema/
 
-export interface JSONResume {
+import type { Avatar, ModuleLayout } from './resume';
+import type { ThemeConfig, LayoutConfig } from './theme';
+
+// --- 标准 JSON Resume 基础类型 ---
+
+export interface JsonResumeBase {
   $schema?: string;
   basics?: ResumeBasics;
   work?: ResumeWork[];
@@ -135,4 +140,46 @@ export interface ResumeMeta {
   canonical?: string;
   version?: string;
   lastModified?: string;
+}
+
+// --- OpResume 扩展类型 ---
+
+export interface JsonResume extends JsonResumeBase {
+  'x-op-avatar'?: Avatar;
+  'x-op-birthday'?: string;
+  'x-op-ageHidden'?: boolean;
+  'x-op-workExpYear'?: string;
+  'x-op-customFields'?: Array<{ id?: string; key: string; value: string }>;
+  'x-op-aboutmeHtml'?: string;
+  'x-op-moduleLayout'?: Record<string, ModuleLayout>;
+  'x-op-moduleHidden'?: Record<string, boolean>;
+  'x-op-titleNameMap'?: Record<string, string>;
+  'x-op-theme'?: ThemeConfig;
+  'x-op-layout'?: LayoutConfig;
+  'x-op-locales'?: Record<string, Partial<JsonResume>>;
+}
+
+export interface JsonEducation extends ResumeEducation {
+  'x-op-id'?: string;
+}
+
+export interface JsonWork extends ResumeWork {
+  'x-op-id'?: string;
+  'x-op-departmentName'?: string;
+  'x-op-workDescHtml'?: string;
+}
+
+export interface JsonProject extends ResumeProject {
+  'x-op-id'?: string;
+  'x-op-type'?: 'project' | 'portfolio';
+  'x-op-projectContentHtml'?: string;
+}
+
+export interface JsonSkill extends ResumeSkill {
+  'x-op-id'?: string;
+  'x-op-skillLevel'?: number;
+}
+
+export interface JsonAward extends ResumeAward {
+  'x-op-id'?: string;
 }

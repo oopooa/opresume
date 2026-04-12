@@ -1,11 +1,11 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedSkill } from '@/types/extended-json-resume';
+import type { JsonSkill } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
 
 interface SkillListProps {
-  skills: ExtendedSkill[];
+  skills: JsonSkill[];
   tokens: ModuleProps['tokens'];
 }
 
@@ -66,7 +66,7 @@ function SkillTagList({ skills, tokens }: SkillListProps) {
 export function SkillModule({ config, tokens, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useModuleIcon('skillList');
-  const skillList = config.skills as ExtendedSkill[] | undefined;
+  const skillList = config.skills as JsonSkill[] | undefined;
   if (isHidden(config, 'skillList') || !skillList?.length) return null;
 
   const { SectionTitle } = tokens.components;

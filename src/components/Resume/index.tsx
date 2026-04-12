@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FileText } from 'lucide-react';
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 import type { TemplateDefinition } from './types';
 import { useUIStore } from '@/store/ui';
 import { useTemplateModules, renderPageSlices } from './modules';
@@ -11,7 +11,7 @@ import type { PageAllocation } from '@/utils/pagination';
 
 /* ---------- 原始单页渲染（用于测量和双栏模板） ---------- */
 
-function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: ExtendedJSONResume }) {
+function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: JsonResume }) {
   const { sidebarContent, mainContent } = useTemplateModules(def, config);
   const Shell = def.LayoutShell;
   return (
@@ -23,7 +23,7 @@ function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: Ex
 
 /* ---------- 判断模板是否支持分页 ---------- */
 
-function supportsPagination(def: TemplateDefinition, config: ExtendedJSONResume): boolean {
+function supportsPagination(def: TemplateDefinition, config: JsonResume): boolean {
   const layout = getEffectiveLayout(def.id, config['x-op-moduleLayout']);
   // 双栏模板（sidebar 有模块）不分页
   return layout.sidebar.length === 0;
@@ -42,7 +42,7 @@ function PageIndicator({ current, total }: { current: number; total: number }) {
 
 /* ---------- 分页渲染 ---------- */
 
-function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config: ExtendedJSONResume }) {
+function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config: JsonResume }) {
   const measureRef = useRef<HTMLDivElement>(null);
   const pagesRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<PageAllocation[] | null>(null);
@@ -150,7 +150,7 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
 
 /* ---------- 入口 ---------- */
 
-export function ResumeView({ config, templateId, disablePagination }: { config: ExtendedJSONResume; templateId?: string; disablePagination?: boolean }) {
+export function ResumeView({ config, templateId, disablePagination }: { config: JsonResume; templateId?: string; disablePagination?: boolean }) {
   const storeTemplate = useUIStore((s) => s.template);
   const def = definitions[templateId ?? storeTemplate] ?? defaultDefinition;
 

@@ -1,5 +1,5 @@
 import type { ModuleProps } from '../types';
-import type { ExtendedProject } from '@/types/extended-json-resume';
+import type { JsonProject } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
@@ -11,8 +11,8 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
   const { SectionTitle } = tokens.components;
 
   const allProjects = (config.projects ?? []).filter(
-    (p) => !(p as ExtendedProject)['x-op-type'] || (p as ExtendedProject)['x-op-type'] === 'project',
-  ) as ExtendedProject[];
+    (p) => !(p as JsonProject)['x-op-type'] || (p as JsonProject)['x-op-type'] === 'project',
+  ) as JsonProject[];
 
   if (isHidden(config, 'projectList') || !allProjects.length) return null;
 

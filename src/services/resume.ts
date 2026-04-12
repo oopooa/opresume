@@ -1,5 +1,4 @@
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
-import { isLegacyFormat, convertLegacyToNew } from '@/utils/legacy-compat';
+import type { JsonResume } from '@/types/json-resume';
 import { getSampleResume } from '@/config/sample-resume';
 import { detectBrowserLanguage, isDemoMode } from '@/i18n';
 
@@ -10,7 +9,7 @@ function isDev(): boolean {
   return import.meta.env.DEV;
 }
 
-function getDefaultResume(lang?: string): ExtendedJSONResume {
+function getDefaultResume(lang?: string): JsonResume {
   const detectedLang = lang || detectBrowserLanguage();
   const sample = getSampleResume(detectedLang);
   return {
@@ -19,7 +18,7 @@ function getDefaultResume(lang?: string): ExtendedJSONResume {
   };
 }
 
-function addCustomFieldIds(resume: ExtendedJSONResume): ExtendedJSONResume {
+function addCustomFieldIds(resume: JsonResume): JsonResume {
   if (!resume['x-op-customFields']) return resume;
   const timestamp = Date.now();
   return {
@@ -31,7 +30,7 @@ function addCustomFieldIds(resume: ExtendedJSONResume): ExtendedJSONResume {
   };
 }
 
-function removeCustomFieldIds(resume: ExtendedJSONResume): ExtendedJSONResume {
+function removeCustomFieldIds(resume: JsonResume): JsonResume {
   const cleaned = { ...resume };
   if (cleaned['x-op-customFields']) {
     cleaned['x-op-customFields'] = cleaned['x-op-customFields']
@@ -41,13 +40,13 @@ function removeCustomFieldIds(resume: ExtendedJSONResume): ExtendedJSONResume {
   return cleaned;
 }
 
-function isExtendedJSONResume(data: unknown): data is ExtendedJSONResume {
+function isJsonResume(data: unknown): data is JsonResume {
   if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
   const obj = data as Record<string, unknown>;
   return 'basics' in obj || 'work' in obj || 'education' in obj;
 }
 
-export async function loadResume(lang?: string): Promise<ExtendedJSONResume> {
+export async function loadResume(lang?: string): Promise<JsonResume> {
   // Demo 模式：直接返回对应语言的示例数据，忽略所有其他数据源
   if (isDemoMode()) {
     return addCustomFieldIds(getDefaultResume(lang));
@@ -59,13 +58,8 @@ export async function loadResume(lang?: string): Promise<ExtendedJSONResume> {
     const res = await fetch(API_URL);
     if (res.ok) {
       data = await res.json();
-      if (isExtendedJSONResume(data)) {
+      if (isJsonResume(data)) {
         return addCustomFieldIds(data);
-      }
-      if (isLegacyFormat(data)) {
-        const converted = convertLegacyToNew(data);
-        await saveResume(converted);
-        return addCustomFieldIds(converted);
       }
     }
     // 开发模式下 API 失败，继续尝试其他来源
@@ -75,13 +69,8 @@ export async function loadResume(lang?: string): Promise<ExtendedJSONResume> {
   if (cached) {
     try {
       const parsed = JSON.parse(cached);
-      if (isExtendedJSONResume(parsed)) {
+      if (isJsonResume(parsed)) {
         return addCustomFieldIds(parsed);
-      }
-      if (isLegacyFormat(parsed)) {
-        const converted = convertLegacyToNew(parsed);
-        localStorage.setItem(LS_KEY, JSON.stringify(removeCustomFieldIds(converted)));
-        return addCustomFieldIds(converted);
       }
       localStorage.removeItem(LS_KEY);
     } catch {
@@ -94,16 +83,13 @@ export async function loadResume(lang?: string): Promise<ExtendedJSONResume> {
     return addCustomFieldIds(getDefaultResume(lang));
   }
   data = await res.json();
-  if (isExtendedJSONResume(data)) {
+  if (isJsonResume(data)) {
     return addCustomFieldIds(data);
-  }
-  if (isLegacyFormat(data)) {
-    return addCustomFieldIds(convertLegacyToNew(data));
   }
   return addCustomFieldIds(getDefaultResume(lang));
 }
 
-export async function saveResume(resume: ExtendedJSONResume): Promise<void> {
+export async function saveResume(resume: JsonResume): Promise<void> {
   const cleaned = removeCustomFieldIds(resume);
 
   if (isDev()) {
@@ -120,7 +106,7 @@ export async function saveResume(resume: ExtendedJSONResume): Promise<void> {
   }
 }
 
-export function exportResume(resume: ExtendedJSONResume, filename?: string): void {
+export function exportResume(resume: JsonResume, filename?: string): void {
   const cleaned = removeCustomFieldIds(resume);
   const output = { ...cleaned, opresumeVersion: __APP_VERSION__ };
   const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
@@ -132,7 +118,7 @@ export function exportResume(resume: ExtendedJSONResume, filename?: string): voi
   URL.revokeObjectURL(url);
 }
 
-export function exportAsStandardJSONResume(resume: ExtendedJSONResume, filename?: string): void {
+export function exportAsStandardJSONResume(resume: JsonResume, filename?: string): void {
   const cleaned = removeCustomFieldIds(resume);
   const standardResume = Object.fromEntries(
     Object.entries(cleaned).filter(([key]) => !key.startsWith('x-op-'))
@@ -146,16 +132,14 @@ export function exportAsStandardJSONResume(resume: ExtendedJSONResume, filename?
   URL.revokeObjectURL(url);
 }
 
-export function importResume(file: File): Promise<ExtendedJSONResume> {
+export function importResume(file: File): Promise<JsonResume> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const { opresumeVersion: _, ...data } = JSON.parse(reader.result as string);
-        if (isExtendedJSONResume(data)) {
+        if (isJsonResume(data)) {
           resolve(addCustomFieldIds(data));
-        } else if (isLegacyFormat(data)) {
-          resolve(addCustomFieldIds(convertLegacyToNew(data)));
         } else {
           reject(new Error('不支持的数据格式'));
         }

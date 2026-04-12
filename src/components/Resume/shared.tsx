@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useCallback } from 'react';
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 import type { Avatar } from '@/types/resume';
 import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
@@ -45,11 +45,11 @@ export function TimeRange({ startDate, endDate }: { startDate?: string; endDate?
   );
 }
 
-export function getTitle(config: ExtendedJSONResume, key: string, fallback: string) {
+export function getTitle(config: JsonResume, key: string, fallback: string) {
   return config['x-op-titleNameMap']?.[key] ?? fallback;
 }
 
-export function isHidden(config: ExtendedJSONResume, key: string) {
+export function isHidden(config: JsonResume, key: string) {
   return config['x-op-moduleHidden']?.[key] === true;
 }
 

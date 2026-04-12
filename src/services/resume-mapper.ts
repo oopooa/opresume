@@ -1,18 +1,18 @@
 /**
- * AI 返回的 JSON 数据 → ExtendedJSONResume 格式映射
+ * AI 返回的 JSON 数据 → JsonResume 格式映射
  *
  * 采用宽松映射策略：缺失字段使用默认值，格式错误尝试修复，
  * 确保即使 AI 返回不完美的数据也能正常工作。
  */
 
-import type { ExtendedJSONResume } from '@/types/extended-json-resume';
+import type { JsonResume } from '@/types/json-resume';
 
 /**
- * 将 AI 返回的 JSON 映射为 ExtendedJSONResume 格式
+ * 将 AI 返回的 JSON 映射为 JsonResume 格式
  * @param aiJson AI 解析的简历数据（类型未知，需要容错处理）
  * @returns 标准化的简历数据
  */
-export function mapAIJsonToResume(aiJson: unknown): ExtendedJSONResume {
+export function mapAIJsonToResume(aiJson: unknown): JsonResume {
   if (!aiJson || typeof aiJson !== 'object' || Array.isArray(aiJson)) {
     throw new Error('无效的数据格式');
   }
@@ -26,7 +26,7 @@ export function mapAIJsonToResume(aiJson: unknown): ExtendedJSONResume {
   const skills = extractSkillList(data.skills);
   const awards = extractAwardList(data.awards);
 
-  const result: ExtendedJSONResume = {
+  const result: JsonResume = {
     basics,
   };
 
@@ -147,7 +147,7 @@ function toListHtml(val: unknown): string | undefined {
   return undefined;
 }
 
-function extractBasics(raw: unknown): NonNullable<ExtendedJSONResume['basics']> {
+function extractBasics(raw: unknown): NonNullable<JsonResume['basics']> {
   if (!raw || typeof raw !== 'object') {
     return { name: '' };
   }
@@ -173,7 +173,7 @@ function extractBasics(raw: unknown): NonNullable<ExtendedJSONResume['basics']> 
   };
 }
 
-function extractWorkList(raw: unknown): ExtendedJSONResume['work'] & object[] {
+function extractWorkList(raw: unknown): JsonResume['work'] & object[] {
   if (!Array.isArray(raw)) return [];
 
   return raw
@@ -200,7 +200,7 @@ function extractWorkList(raw: unknown): ExtendedJSONResume['work'] & object[] {
     });
 }
 
-function extractEducationList(raw: unknown): ExtendedJSONResume['education'] & object[] {
+function extractEducationList(raw: unknown): JsonResume['education'] & object[] {
   if (!Array.isArray(raw)) return [];
 
   return raw
@@ -220,7 +220,7 @@ function extractEducationList(raw: unknown): ExtendedJSONResume['education'] & o
     }));
 }
 
-function extractProjectList(raw: unknown): ExtendedJSONResume['projects'] & object[] {
+function extractProjectList(raw: unknown): JsonResume['projects'] & object[] {
   if (!Array.isArray(raw)) return [];
 
   return raw
@@ -246,7 +246,7 @@ function extractProjectList(raw: unknown): ExtendedJSONResume['projects'] & obje
     });
 }
 
-function extractSkillList(raw: unknown): ExtendedJSONResume['skills'] & object[] {
+function extractSkillList(raw: unknown): JsonResume['skills'] & object[] {
   if (!Array.isArray(raw)) return [];
 
   const items = raw.filter((item): item is Record<string, unknown> => !!item && typeof item === 'object');
@@ -280,7 +280,7 @@ function extractSkillList(raw: unknown): ExtendedJSONResume['skills'] & object[]
   });
 }
 
-function extractAwardList(raw: unknown): ExtendedJSONResume['awards'] & object[] {
+function extractAwardList(raw: unknown): JsonResume['awards'] & object[] {
   if (!Array.isArray(raw)) return [];
 
   return raw
