@@ -78,7 +78,9 @@
     "skillList": "专业技能",
     "awardList": "荣誉奖项",
     "workList": "个人作品",
-    "aboutme": "自我评价"
+    "aboutme": "自我评价",
+    "customModule": "自定义模块",
+    "addCustomModule": "添加自定义模块"
   },
   "field": {
     "name": "姓名",
@@ -130,6 +132,7 @@
     "workItemDesc": "作品描述",
     "visitLink": "访问链接",
     "aboutmeDesc": "自我评价",
+    "customModuleContent": "模块内容",
     "startTime": "开始时间",
     "endTime": "结束时间",
     "present": "至今",

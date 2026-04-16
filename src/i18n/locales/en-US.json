@@ -78,7 +78,9 @@
     "skillList": "Skills",
     "awardList": "Awards",
     "workList": "Portfolio",
-    "aboutme": "About Me"
+    "aboutme": "About Me",
+    "customModule": "Custom Module",
+    "addCustomModule": "Add Custom Module"
   },
   "field": {
     "name": "Name",
@@ -130,6 +132,7 @@
     "workItemDesc": "Description",
     "visitLink": "Link",
     "aboutmeDesc": "About Me",
+    "customModuleContent": "Content",
     "startTime": "Start",
     "endTime": "End",
     "present": "Present",

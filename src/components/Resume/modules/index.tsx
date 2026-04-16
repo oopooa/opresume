@@ -11,8 +11,9 @@ import { ProjectModule } from './ProjectModule';
 import { WorkListModule } from './WorkListModule';
 import { AboutMeModule } from './AboutMeModule';
 import { SkillModule } from './SkillModule';
+import { CustomModule } from './CustomModule';
 
-/** 模块组件映射表 */
+/** 内置模块组件映射表 */
 export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
   educationList: EducationModule,
   awardList: AwardModule,
@@ -22,6 +23,11 @@ export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
   aboutme: AboutMeModule,
   skillList: SkillModule,
 };
+
+/** 判断模块 ID 是否为自定义模块（以 custom- 开头） */
+export function isCustomModule(key: string): boolean {
+  return key.startsWith('custom-');
+}
 
 /**
  * 根据模板定义和布局配置，生成 sidebar 和 main 区域的已排序渲染节点。
@@ -34,6 +40,15 @@ export function useTemplateModules(
   const tokens = def.getTokens();
 
   function renderModule(key: string): ReactNode {
+    /* 自定义模块使用专用组件渲染 */
+    if (isCustomModule(key)) {
+      return (
+        <div key={key} className="resume-module" data-module-key={key}>
+          <CustomModule moduleId={key} config={config} tokens={tokens} />
+        </div>
+      );
+    }
+
     const Mod = MODULE_COMPONENTS[key];
     if (!Mod) return null;
     return (
@@ -60,9 +75,24 @@ export function renderPageSlices(
   return (
     <>
       {slices.map((slice) => {
+        const key = `${slice.moduleKey}-${slice.startItem}`;
+
+        /* 自定义模块使用专用组件渲染 */
+        if (isCustomModule(slice.moduleKey)) {
+          return (
+            <div key={key} className="resume-module" data-module-key={slice.moduleKey}>
+              <CustomModule
+                moduleId={slice.moduleKey}
+                config={config}
+                tokens={tokens}
+                showTitle={slice.showTitle}
+              />
+            </div>
+          );
+        }
+
         const Mod = MODULE_COMPONENTS[slice.moduleKey];
         if (!Mod) return null;
-        const key = `${slice.moduleKey}-${slice.startItem}`;
         const hasItems = slice.endItem > 0;
         return (
           <div key={key} className="resume-module" data-module-key={slice.moduleKey}>

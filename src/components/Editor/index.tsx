@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, ChevronDown, GripVertical, Pencil } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
+import { Eye, EyeOff, ChevronDown, GripVertical, Pencil, Plus, Trash2 } from 'lucide-react';
 import {
   DndContext,
   pointerWithin,
@@ -43,14 +43,25 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from '@/components/ui/collapsible';
-import { schemas, type ModuleSchema } from './schemas';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import { schemas, type ModuleSchema, getCustomModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
 import { AvatarEditor } from './AvatarEditor';
 import { CustomFieldsEditor } from './CustomFieldsEditor';
 import { calculateAge } from '@/components/Resume/shared';
 import { getEffectiveLayout, isTwoColumnTemplate } from '@/config/layout';
-import { DEFAULT_MODULE_ICONS } from '@/config/icons';
+import { DEFAULT_MODULE_ICONS, DEFAULT_CUSTOM_MODULE_ICON } from '@/config/icons';
+import { isCustomModule } from '@/components/Resume/modules';
 import { IconPicker } from './IconPicker';
 import { DynamicIcon } from '@/components/DynamicIcon';
 
@@ -81,6 +92,7 @@ function SortableModuleHeader({
   onToggleHidden,
   onTitleChange,
   onIconChange,
+  onDelete,
 }: {
   module: string;
   expanded: boolean;
@@ -91,6 +103,8 @@ function SortableModuleHeader({
   onToggleHidden: () => void;
   onTitleChange: (title: string) => void;
   onIconChange: (icon: string | undefined) => void;
+  /** 仅自定义模块有此回调，点击后触发删除确认 */
+  onDelete?: () => void;
 }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
@@ -155,7 +169,7 @@ function SortableModuleHeader({
           <Input
             ref={inputRef}
             value={editValue}
-            placeholder={t(`module.${module}`)}
+            placeholder={customTitle || t(`module.${module}`)}
             className="h-8 w-full min-w-0 text-[15px]"
             onChange={(e) => setEditValue(e.target.value)}
             onBlur={commitEdit}
@@ -195,6 +209,17 @@ function SortableModuleHeader({
           onClick={onToggleHidden}
         >
           {hidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+        </Button>
+      )}
+      {onDelete && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6 shrink-0 text-gray-400 hover:text-destructive"
+          aria-label={t('common.delete')}
+          onClick={onDelete}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
         </Button>
       )}
     </div>
@@ -429,23 +454,61 @@ function ColumnLabel({ label, id }: { label: string; id: string }) {
   );
 }
 
+/* ── 自定义模块编辑内容 ── */
+function CustomModuleContent({
+  moduleId,
+  config,
+  update,
+}: {
+  moduleId: string;
+  config: JsonResume;
+  update: (partial: Partial<JsonResume>) => void;
+}) {
+  const schema = useMemo(() => getCustomModuleSchema(moduleId), [moduleId]);
+  const customModule = config['x-op-customModules']?.find((m) => m.id === moduleId);
+  const scalarData: Record<string, unknown> = {
+    contentHtml: customModule?.contentHtml ?? '',
+  };
+
+  const handleChange = useCallback(
+    (updates: Record<string, unknown>) => {
+      const modules = config['x-op-customModules'] ?? [];
+      const updated = modules.map((m) =>
+        m.id === moduleId ? { ...m, ...updates } : m,
+      );
+      update({ 'x-op-customModules': updated });
+    },
+    [moduleId, config, update],
+  );
+
+  return (
+    <FormCreator fields={schema.fields} data={scalarData} onChange={handleChange} />
+  );
+}
+
 /* ── 可排序的模块列表（一个栏） ── */
 function SortableColumn({
   columnId,
   modules,
   expanded,
   config,
+  customModuleMap,
   toggle,
   toggleModuleHidden,
   update,
+  onRequestDeleteCustomModule,
 }: {
   columnId: string;
   modules: string[];
   expanded: string | null;
   config: JsonResume;
+  /** 自定义模块 ID → 数据的预建映射，避免重复 .find() */
+  customModuleMap: Map<string, import('@/types/json-resume').CustomModule>;
   toggle: (module: string) => void;
   toggleModuleHidden: (module: string) => void;
   update: (partial: Partial<JsonResume>) => void;
+  /** 请求删除自定义模块（由 Editor 统一管理弹框） */
+  onRequestDeleteCustomModule: (moduleId: string) => void;
 }) {
   const { t } = useTranslation();
   const { setNodeRef, isOver } = useDroppable({ id: columnId });
@@ -458,6 +521,15 @@ function SortableColumn({
 
   const handleTitleChange = useCallback(
     (module: string, title: string) => {
+      /* 自定义模块的标题同时更新 customModules 数组中的 title */
+      if (isCustomModule(module)) {
+        const modules = config['x-op-customModules'] ?? [];
+        const updated = modules.map((m) =>
+          m.id === module ? { ...m, title: title || t('module.customModule') } : m,
+        );
+        update({ 'x-op-customModules': updated });
+        return;
+      }
       const prev = config['x-op-titleNameMap'] ?? {};
       if (title) {
         update({ 'x-op-titleNameMap': { ...prev, [module]: title } } as Partial<JsonResume>);
@@ -466,7 +538,7 @@ function SortableColumn({
         update({ 'x-op-titleNameMap': rest } as Partial<JsonResume>);
       }
     },
-    [config['x-op-titleNameMap'], update],
+    [config, update, t],
   );
 
   const handleIconChange = useCallback(
@@ -492,13 +564,16 @@ function SortableColumn({
           </p>
         ) : (
           modules.map((module) => {
-            const schema = schemaMap[module];
+            const isCustom = isCustomModule(module);
+            const schema = isCustom ? getCustomModuleSchema(module) : schemaMap[module];
             if (!schema) return null;
             const isExpanded = expanded === module;
             const hidden = config['x-op-moduleHidden']?.[module] === true;
             const canHide = !ALWAYS_VISIBLE.has(module);
-            const customTitle = config['x-op-titleNameMap']?.[module];
-            const moduleIcon = moduleIconMap[module] ?? DEFAULT_MODULE_ICONS[module];
+            const customTitle = isCustom
+              ? (customModuleMap.get(module)?.title ?? t('module.customModule'))
+              : config['x-op-titleNameMap']?.[module];
+            const moduleIcon = moduleIconMap[module] ?? (isCustom ? DEFAULT_CUSTOM_MODULE_ICON : DEFAULT_MODULE_ICONS[module]);
 
             return (
               <Collapsible key={module} open={isExpanded} onOpenChange={() => toggle(module)}>
@@ -512,10 +587,13 @@ function SortableColumn({
                   onToggleHidden={() => toggleModuleHidden(module)}
                   onTitleChange={(title) => handleTitleChange(module, title)}
                   onIconChange={(icon) => handleIconChange(module, icon)}
+                  onDelete={isCustom ? () => onRequestDeleteCustomModule(module) : undefined}
                 />
                 <CollapsibleContent>
                   <div className="pt-3 pb-4">
-                    {module === 'profile' ? (
+                    {isCustom ? (
+                      <CustomModuleContent moduleId={module} config={config} update={update} />
+                    ) : module === 'profile' ? (
                       <ProfileSection schema={schema} config={config} update={update} />
                     ) : (
                       <ModuleContent schema={schema} config={config} update={update} />
@@ -662,6 +740,91 @@ export function Editor() {
     setTempLayout(null);
   }, []);
 
+  /* 添加自定义模块 */
+  const addCustomModule = useCallback(() => {
+    if (!config) return;
+    const id = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const newModule = { id, title: t('module.customModule'), contentHtml: '' };
+    const modules = config['x-op-customModules'] ?? [];
+
+    /* 将新模块追加到当前布局的 main 栏末尾 */
+    const prevLayoutMap = config['x-op-moduleLayout'] ?? {};
+    const curLayout = getEffectiveLayout(template, prevLayoutMap);
+    const newLayout: ModuleLayout = { sidebar: [...curLayout.sidebar], main: [...curLayout.main, id] };
+
+    /* 合并为一次 update 调用，避免浅合并覆盖 */
+    update({
+      'x-op-customModules': [...modules, newModule],
+      'x-op-moduleLayout': { ...prevLayoutMap, [template]: newLayout },
+    } as Partial<JsonResume>);
+
+    /* 自动展开新模块 */
+    setExpanded(id);
+  }, [config, template, update, t]);
+
+  /* 删除自定义模块 */
+  const deleteCustomModule = useCallback(
+    (moduleId: string) => {
+      if (!config) return;
+      /* 从 customModules 数组移除 */
+      const modules = (config['x-op-customModules'] ?? []).filter((m) => m.id !== moduleId);
+      /* 从所有模板的布局中移除 */
+      const layoutMap = config['x-op-moduleLayout'] ?? {};
+      const cleanedLayout: Record<string, ModuleLayout> = {};
+      for (const [tmpl, ly] of Object.entries(layoutMap)) {
+        cleanedLayout[tmpl] = {
+          sidebar: ly.sidebar.filter((m) => m !== moduleId),
+          main: ly.main.filter((m) => m !== moduleId),
+        };
+      }
+      /* 清理标题和隐藏状态 */
+      const titleMap = { ...config['x-op-titleNameMap'] };
+      delete titleMap[moduleId];
+      const hiddenMap = { ...config['x-op-moduleHidden'] };
+      delete hiddenMap[moduleId];
+
+      update({
+        'x-op-customModules': modules,
+        'x-op-moduleLayout': cleanedLayout,
+        'x-op-titleNameMap': titleMap,
+        'x-op-moduleHidden': hiddenMap,
+      });
+
+      if (expanded === moduleId) setExpanded(null);
+    },
+    [config, update, expanded],
+  );
+
+  /* 自定义模块 ID → 数据的预建映射，供子组件高效查找 */
+  const customModuleMap = useMemo(() => {
+    const map = new Map<string, import('@/types/json-resume').CustomModule>();
+    for (const m of config?.['x-op-customModules'] ?? []) {
+      map.set(m.id, m);
+    }
+    return map;
+  }, [config?.['x-op-customModules']]);
+
+  /* 删除确认弹框状态（提升到 Editor 层级，避免双栏重复实例） */
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+  const handleRequestDeleteCustomModule = useCallback((moduleId: string) => {
+    setPendingDeleteId(moduleId);
+    setDeleteDialogOpen(true);
+  }, []);
+
+  const handleConfirmDelete = useCallback(() => {
+    if (pendingDeleteId) {
+      deleteCustomModule(pendingDeleteId);
+    }
+    setDeleteDialogOpen(false);
+    setPendingDeleteId(null);
+  }, [pendingDeleteId, deleteCustomModule]);
+
+  const pendingDeleteTitle = pendingDeleteId
+    ? (customModuleMap.get(pendingDeleteId)?.title ?? t('module.customModule'))
+    : '';
+
   /* 点击简历区域时，展开对应模块并滚动到位 */
   useEffect(() => {
     if (!activeModule || !editorOpen) return;
@@ -747,9 +910,11 @@ export function Editor() {
                     modules={currentLayout.sidebar}
                     expanded={expanded}
                     config={config}
+                    customModuleMap={customModuleMap}
                     toggle={toggle}
                     toggleModuleHidden={toggleModuleHidden}
                     update={update}
+                    onRequestDeleteCustomModule={handleRequestDeleteCustomModule}
                   />
                 </>
               )}
@@ -760,17 +925,77 @@ export function Editor() {
                 modules={currentLayout.main}
                 expanded={expanded}
                 config={config}
+                customModuleMap={customModuleMap}
                 toggle={toggle}
                 toggleModuleHidden={toggleModuleHidden}
                 update={update}
+                onRequestDeleteCustomModule={handleRequestDeleteCustomModule}
               />
 
               <DragOverlay>
-                {activeId ? <DragOverlayContent module={activeId} customTitle={config['x-op-titleNameMap']?.[activeId]} moduleIcon={editorModuleIconMap[activeId] ?? DEFAULT_MODULE_ICONS[activeId]} /> : null}
+                {activeId ? (
+                  <DragOverlayContent
+                    module={activeId}
+                    customTitle={
+                      config['x-op-titleNameMap']?.[activeId]
+                      ?? customModuleMap.get(activeId)?.title
+                    }
+                    moduleIcon={
+                      editorModuleIconMap[activeId]
+                      ?? (isCustomModule(activeId) ? DEFAULT_CUSTOM_MODULE_ICON : DEFAULT_MODULE_ICONS[activeId])
+                    }
+                  />
+                ) : null}
               </DragOverlay>
             </DndContext>
+
+            {/* 添加自定义模块按钮 */}
+            <button
+              type="button"
+              className={cn(
+                editorHeaderRootClass,
+                'mt-1 w-full justify-center border border-dashed border-gray-300 text-gray-500 hover:border-resume-primary hover:text-resume-primary',
+              )}
+              onClick={addCustomModule}
+            >
+              <Plus className="h-4 w-4 shrink-0" />
+              <span className="py-3 text-[15px] font-medium">{t('module.addCustomModule')}</span>
+            </button>
           </div>
         </ScrollArea>
+
+        {/* 自定义模块删除确认弹框（统一在 Editor 层级管理，避免双栏重复实例） */}
+        <AlertDialog
+          open={deleteDialogOpen}
+          onOpenChange={(open) => {
+            setDeleteDialogOpen(open);
+            if (!open) setPendingDeleteId(null);
+          }}
+        >
+          <AlertDialogContent className="max-w-[320px]">
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('common.confirmDelete')}</AlertDialogTitle>
+              <AlertDialogDescription asChild>
+                <p className="text-sm text-muted-foreground">
+                  <Trans
+                    i18nKey="common.deleteHint"
+                    values={{ name: pendingDeleteTitle }}
+                    components={{ bold: <span className="font-semibold text-foreground" /> }}
+                  />
+                </p>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={handleConfirmDelete}
+              >
+                {t('common.delete')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </SheetContent>
     </Sheet>
   );

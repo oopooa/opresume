@@ -144,6 +144,16 @@ export interface ResumeMeta {
 
 // --- OpResume 扩展类型 ---
 
+/** 自定义模块数据 */
+export interface CustomModule {
+  /** 唯一标识，格式为 custom-{timestamp} */
+  id: string;
+  /** 模块标题 */
+  title: string;
+  /** 富文本 HTML 内容 */
+  contentHtml: string;
+}
+
 export interface JsonResume extends JsonResumeBase {
   'x-op-avatar'?: Avatar;
   'x-op-birthday'?: string;
@@ -151,6 +161,7 @@ export interface JsonResume extends JsonResumeBase {
   'x-op-workExpYear'?: string;
   'x-op-customFields'?: Array<{ id?: string; key: string; value: string }>;
   'x-op-aboutmeHtml'?: string;
+  'x-op-customModules'?: CustomModule[];
   'x-op-moduleLayout'?: Record<string, ModuleLayout>;
   'x-op-moduleHidden'?: Record<string, boolean>;
   'x-op-titleNameMap'?: Record<string, string>;

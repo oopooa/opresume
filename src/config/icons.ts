@@ -451,6 +451,9 @@ export const DEFAULT_MODULE_ICONS: Record<string, string> = {
   aboutme: 'User',
 };
 
+/** 自定义模块默认图标 */
+export const DEFAULT_CUSTOM_MODULE_ICON = 'Puzzle';
+
 /** Profile 字段默认图标 */
 export const DEFAULT_PROFILE_ICONS: Record<string, string> = {
   mobile: 'Phone',
