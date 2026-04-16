@@ -6,7 +6,7 @@ import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
 import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS } from '@/config/icons';
+import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS, DEFAULT_CUSTOM_MODULE_ICON } from '@/config/icons';
 import { DynamicIcon } from '@/components/DynamicIcon';
 import { maskField } from '@/utils/privacy';
 
@@ -84,10 +84,12 @@ export function calculateAge(birthday?: string): number | null {
   return age >= 0 ? age : null;
 }
 
-/** 响应式获取模块图标：用户覆盖（UIStore） → 默认图标 */
+/** 响应式获取模块图标：用户覆盖（UIStore） → 自定义模块默认 → 内置默认图标 */
 export function useModuleIcon(key: string): string | undefined {
   const icon = useUIStore((s) => s.moduleIconMap[key]);
-  return icon ?? DEFAULT_MODULE_ICONS[key];
+  if (icon) return icon;
+  if (key.startsWith('custom-')) return DEFAULT_CUSTOM_MODULE_ICON;
+  return DEFAULT_MODULE_ICONS[key];
 }
 
 /** 获取 Profile 字段默认图标 */

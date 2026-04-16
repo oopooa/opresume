@@ -149,3 +149,19 @@ export const schemas: ModuleSchema[] = [
 export function getSchema(module: string) {
   return schemas.find((s) => s.module === module);
 }
+
+/**
+ * 为自定义模块生成编辑器 schema。
+ * 自定义模块仅包含一个富文本字段，类似 aboutme 的 isScalar 模式。
+ */
+export function getCustomModuleSchema(moduleId: string): ModuleSchema {
+  return {
+    module: moduleId,
+    dataKey: moduleId,
+    isList: false,
+    isScalar: true,
+    fields: [
+      { key: 'contentHtml', labelKey: 'field.customModuleContent', type: 'markdown', hideLabel: true },
+    ],
+  };
+}
