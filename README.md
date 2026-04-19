@@ -126,6 +126,22 @@ src/
 
 ---
 
+## ⭐ Star 历史
+
+<div align="center">
+
+<a href="https://star-history.com/#oopooa/opresume&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=oopooa/opresume&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=oopooa/opresume&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=oopooa/opresume&type=Date" />
+  </picture>
+</a>
+
+</div>
+
+---
+
 ## 📄 许可证
 
 本项目基于 [MIT 协议](LICENSE) 开源。欢迎 Fork、提交 PR 或提 Issue 探讨！
