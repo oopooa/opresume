@@ -148,6 +148,13 @@ interface FormFieldProps {
   onChange: (value: unknown) => void;
 }
 
+function formatChineseMobileInput(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+}
+
 /** 年月选择器（Popover + 年份下拉 + 月份网格） */
 function MonthPicker({ value, onChange, placeholder, minYear, minMonth, showPresent }: {
   value: string;
@@ -323,7 +330,7 @@ function WorkExpYearField({ field, value, onChange }: FormFieldProps) {
 }
 
 export function FormField({ field, value, onChange }: FormFieldProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const label = t(field.labelKey);
 
   switch (field.type) {
@@ -341,20 +348,32 @@ export function FormField({ field, value, onChange }: FormFieldProps) {
         </div>
       );
 
-    case 'tel':
+    case 'tel': {
+      const phoneValue = (value as string) ?? '';
+      const shouldGroupPhone = i18n.language.startsWith('zh');
       return (
         <div className="space-y-1">
           <FieldLabel label={label} icon={field.icon} />
           <Input
             type="tel"
-            value={(value as string) ?? ''}
+            value={shouldGroupPhone ? formatChineseMobileInput(phoneValue) : phoneValue}
             onChange={(e) => {
               const v = e.target.value.replace(/\D/g, '');
               if (v.length <= 15) onChange(v);
             }}
+            onCopy={(e) => {
+              if (!shouldGroupPhone) return;
+              e.preventDefault();
+              const { selectionStart, selectionEnd, value: displayValue } = e.currentTarget;
+              const copiedText = selectionStart === null || selectionEnd === null
+                ? phoneValue
+                : displayValue.slice(selectionStart, selectionEnd).replace(/\s/g, '');
+              e.clipboardData.setData('text/plain', copiedText || phoneValue.replace(/\s/g, ''));
+            }}
           />
         </div>
       );
+    }
 
     case 'date':
       return <DatePickerField field={field} value={value} onChange={onChange} />;
