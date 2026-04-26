@@ -53,7 +53,7 @@ function Template3Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
             <div className="mb-5 border-b border-gray-200 pb-4">
               <div className="mb-3 flex flex-col items-center">
                 <ResumeAvatar avatar={avatar} name={basics?.name} />
-                <h1 className="mt-2 text-xl font-bold text-gray-900">{mask(basics?.name, 'name')}</h1>
+                <h1 className="resume-name-text mt-2 font-bold text-gray-900">{mask(basics?.name, 'name')}</h1>
                 {basics?.label && <p className="mt-0.5 text-sm text-gray-500">{basics.label}</p>}
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-600">

@@ -64,7 +64,7 @@ function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
               <div className="mb-5 flex items-center gap-4 border-b-2 border-resume-primary pb-4">
                 <ResumeAvatar avatar={avatar} name={basics?.name} className="shrink-0" />
                 <div>
-                  <h1 className="text-2xl font-bold text-resume-primary">{mask(basics?.name, 'name')}</h1>
+                  <h1 className="resume-name-text font-bold text-resume-primary">{mask(basics?.name, 'name')}</h1>
                   {basics?.label && <p className="mt-0.5 text-sm text-gray-600">{basics.label}</p>}
                 </div>
               </div>

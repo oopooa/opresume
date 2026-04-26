@@ -45,7 +45,7 @@ function Template2Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
               <ResumeAvatar avatar={avatar} name={basics?.name} className="shrink-0" />
               <div className="flex flex-1 flex-col justify-between">
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">{mask(basics?.name, 'name')}</h1>
+                  <h1 className="resume-name-text font-bold text-gray-900">{mask(basics?.name, 'name')}</h1>
                   {basics?.label && <p className="mt-0.5 text-sm text-gray-500">{basics.label}</p>}
                 </div>
                 <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-600">

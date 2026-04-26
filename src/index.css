@@ -189,6 +189,11 @@
 .resume-title-text {
   font-size: var(--resume-title-size);
 }
+
+/* 姓名字号为标题字号的1.5倍 */
+.resume-name-text {
+  font-size: calc(var(--resume-title-size) * 1.5);
+}
 .resume-body-text {
   font-size: var(--resume-body-size);
 }

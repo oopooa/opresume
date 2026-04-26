@@ -41,7 +41,7 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
         <EditableSection module="profile">
           <div className="mb-4 text-center">
             <ResumeAvatar avatar={avatar} name={basics?.name} className="mx-auto mb-2" />
-            <h1 className="text-xl font-bold text-resume-primary">{mask(basics?.name, 'name')}</h1>
+            <h1 className="resume-name-text font-bold text-resume-primary">{mask(basics?.name, 'name')}</h1>
             {basics?.label && (
               <p className="mt-0.5 text-xs text-gray-600">{basics.label}</p>
             )}
