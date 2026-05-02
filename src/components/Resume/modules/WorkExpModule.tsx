@@ -3,7 +3,7 @@ import type { JsonWork } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
+import { EditableSection, EditableSectionTitle, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
 
 export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
@@ -17,9 +17,13 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
-    <EditableSection module="workExpList">
+    <EditableSection module="workExpList" hoverScope="title">
       <section className={tokens.spacing.module}>
-        {showTitle && <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />}
+        {showTitle && (
+          <EditableSectionTitle>
+            <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />
+          </EditableSectionTitle>
+        )}
         {list.map((work, i) => (
           <div key={work['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
@@ -36,9 +40,9 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
               <TimeRange startDate={work.startDate} endDate={work.endDate} />
             </div>
             {work['x-op-workDescHtml'] && (
-              <div className="mt-1">
+              <PolishHost className="mt-1" itemIndex={indexOffset + i}>
                 <RichContent content={work['x-op-workDescHtml']} textSize={tokens.typography.contentSize} />
-              </div>
+              </PolishHost>
             )}
           </div>
         ))}

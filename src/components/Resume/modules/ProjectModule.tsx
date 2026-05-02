@@ -3,7 +3,7 @@ import type { JsonProject } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
+import { EditableSection, EditableSectionTitle, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function ProjectModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
@@ -21,9 +21,13 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
-    <EditableSection module="projectList">
+    <EditableSection module="projectList" hoverScope="title">
       <section className={tokens.spacing.module}>
-        {showTitle && <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />}
+        {showTitle && (
+          <EditableSectionTitle>
+            <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />
+          </EditableSectionTitle>
+        )}
         {list.map((proj, i) => (
           <div key={proj['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
@@ -57,9 +61,9 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
               </p>
             )}
             {proj['x-op-projectContentHtml'] && (
-              <div className="mt-1">
+              <PolishHost className="mt-1" itemIndex={indexOffset + i}>
                 <RichContent content={proj['x-op-projectContentHtml']} textSize={tokens.typography.contentSize} />
-              </div>
+              </PolishHost>
             )}
           </div>
         ))}

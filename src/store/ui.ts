@@ -26,6 +26,30 @@ interface UIStore {
   settingsPanelOpen: boolean;
   /** 当前正在配置的供应商 ID（Dialog 打开时） */
   editingProviderId: AIProviderId | null;
+  /** 页面级润色对话框状态 */
+  polishDialog: {
+    module: string;
+    itemIndex: number;
+    /** 框选部分（展示原文 + 传给 AI） */
+    originalHtml: string;
+    /** 完整段落（接受时替换回 store） */
+    fullHtml: string;
+    /** 选区相对 host 文本内容的起止偏移（用于精确定位替换位置） */
+    textStart: number;
+    textEnd: number;
+    /** 打开时自动执行的操作 */
+    initialOperation?: 'optimize' | 'condense';
+  } | null;
+  openPolishDialog: (entry: {
+    module: string;
+    itemIndex: number;
+    originalHtml: string;
+    fullHtml: string;
+    textStart: number;
+    textEnd: number;
+    initialOperation?: 'optimize' | 'condense';
+  }) => void;
+  closePolishDialog: () => void;
   updateTheme: (partial: Partial<ThemeConfig>) => void;
   setTemplate: (template: string) => void;
   setLang: (lang: string) => void;
@@ -63,6 +87,10 @@ export const useUIStore = create<UIStore>()(
       layout: { pageMargin: 'standard', moduleGap: 'standard', titleFontSize: 16, bodyFontSize: 14, lineHeight: 1.5 },
       settingsPanelOpen: false,
       editingProviderId: null,
+      polishDialog: null,
+
+      openPolishDialog: (entry) => set({ polishDialog: entry }),
+      closePolishDialog: () => set({ polishDialog: null }),
 
       updateTheme: (partial) =>
         set((s) => ({ theme: { ...s.theme, ...partial } })),

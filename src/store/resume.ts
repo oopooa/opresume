@@ -14,7 +14,15 @@ interface ResumeStore {
   saveError: string | null;
   dirty: boolean;
   load: () => Promise<void>;
-  update: (partial: Partial<JsonResume>) => void;
+  /**
+   * 写入 store。两种用法：
+   * - 传 Partial<JsonResume>：直接浅 merge 进当前 config（旧用法保持兼容）
+   * - 传 (prev) => Partial<JsonResume> | null：基于"取出 patch 那一刻的最新 config"计算
+   *   patch；返回 null 表示放弃此次写入。用于需要 read-modify-write 原子的场景（如 AI 润色）。
+   */
+  update: (
+    partial: Partial<JsonResume> | ((prev: JsonResume) => Partial<JsonResume> | null),
+  ) => void;
   reset: () => void;
   save: () => Promise<void>;
   clearSaveError: () => void;
@@ -41,7 +49,9 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
   update: (partial) => {
     const prev = get().config;
     if (!prev) return;
-    const next = { ...prev, ...partial };
+    const patch = typeof partial === 'function' ? partial(prev) : partial;
+    if (!patch) return;
+    const next = { ...prev, ...patch };
     set({ config: next, saveError: null, dirty: true });
   },
 

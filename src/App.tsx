@@ -8,6 +8,8 @@ import { Toolbar, FloatingToolbar } from '@/components/Toolbar';
 import { ResumeView } from '@/components/Resume';
 import { SettingsPanel } from '@/components/Settings';
 import { Toaster } from '@/components/ui/sonner';
+import { PolishSelectionOverlay } from '@/components/PolishSelectionOverlay';
+import { PolishDialog } from '@/components/PolishDialog';
 import { Settings } from 'lucide-react';
 import {
   Tooltip,
@@ -92,6 +94,8 @@ function App() {
         <Suspense>
           <Editor />
         </Suspense>
+        <PolishSelectionOverlay />
+        <PolishDialog />
         <Toaster />
         <DevAgentation />
       </div>

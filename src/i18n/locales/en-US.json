@@ -7,6 +7,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "close": "Close",
     "delete": "Delete",
     "confirmDelete": "Confirm Delete",
     "deleteHint": "Are you sure you want to delete <bold>{{name}}</bold>?",
@@ -181,7 +182,47 @@
     "linkPlaceholder": "Enter URL...",
     "undo": "Undo",
     "redo": "Redo",
-    "placeholder": "Start typing..."
+    "placeholder": "Start typing...",
+    "polish": {
+      "optimize": "Optimize",
+      "customPlaceholder": "Custom instruction…",
+      "send": "Send",
+      "loading": "Polishing…",
+      "accept": "Replace",
+      "accepted": "Changes applied",
+      "discard": "Cancel",
+      "retry": "Retry",
+      "originalLabel": "Original",
+      "polishedLabel": "Result",
+      "bubbleButton": "AI Rewrite",
+      "dialogTitle": "AI Rewrite",
+      "idleHint": "Select an operation above to start",
+      "diffLabel": "Changes",
+      "noChanges": "The original is already polished. No changes needed.",
+      "viewDiff": "Diff",
+      "viewPreview": "Preview",
+      "loadingOp": {
+        "optimize": "AI polishing…",
+        "condense": "AI condensing…"
+      },
+      "op": {
+        "optimize": "Polish",
+        "condense": "Condense",
+        "aiOptimize": "Polish",
+        "aiCondense": "Condense"
+      },
+      "cancel": "Cancel",
+      "wordCount": "{{count}} words",
+      "wordDelta": "{{sign}}{{percent}}%",
+      "retryWithOp": "Re-{{op}}",
+      "tooltipNoAI": "AI provider not configured",
+      "errorNoAI": "AI provider is not set",
+      "errorFailed": "Polish failed, please retry",
+      "errorEmpty": "Nothing to polish",
+      "errorContentChanged": "Source changed — please reselect and retry",
+      "errorApplyFailed": "Could not locate the original selection — please reselect and retry",
+      "errorTargetMissing": "Target item was deleted or no longer exists; cannot apply the change"
+    }
   },
   "settings": {
     "title": "Settings",

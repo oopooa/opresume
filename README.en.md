@@ -99,6 +99,7 @@ npm run preview
 - [x] Privacy redaction mode
 - [x] Internationalization (i18n) support
 - [x] AI-powered resume import
+- [x] AI rewrite
 - [ ] AI resume scoring & analysis
 - [ ] Multiple resume management
 - [ ] Smart fit-to-page

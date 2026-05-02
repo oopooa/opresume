@@ -57,10 +57,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   return (
     <div className="rounded-md border border-input shadow-sm transition-colors focus-within:border-ring">
       <RichTextToolbar editor={editor} />
-      <div
-        className="px-3 py-2 cursor-text"
-        onClick={handleEditorClick}
-      >
+      <div className="px-3 py-2 cursor-text" onClick={handleEditorClick}>
         <EditorContent editor={editor} />
       </div>
     </div>

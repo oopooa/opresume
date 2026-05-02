@@ -86,6 +86,12 @@
     box-shadow: none;
   }
 
+  /* 确保按钮在非键盘导航时不显示焦点轮廓 */
+  button:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

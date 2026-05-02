@@ -1,7 +1,14 @@
 import type { JsonResume } from '@/types/json-resume';
 import type { StyleTokens } from '../types';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, getTitle, isHidden, useModuleIcon } from '../shared';
+import {
+  EditableSection,
+  EditableSectionTitle,
+  PolishHost,
+  getTitle,
+  isHidden,
+  useModuleIcon,
+} from '../shared';
 
 /**
  * 自定义模块渲染组件。
@@ -30,11 +37,17 @@ export function CustomModule({
   const title = getTitle(config, moduleId, customModule.title);
 
   return (
-    <EditableSection module={moduleId}>
+    <EditableSection module={moduleId} hoverScope="title">
       <section className={tokens.spacing.module}>
-        {showTitle && <SectionTitle title={title} icon={moduleIcon} />}
+        {showTitle && (
+          <EditableSectionTitle>
+            <SectionTitle title={title} icon={moduleIcon} />
+          </EditableSectionTitle>
+        )}
         {customModule.contentHtml && (
-          <RichContent content={customModule.contentHtml} textSize={tokens.typography.contentSize} />
+          <PolishHost>
+            <RichContent content={customModule.contentHtml} textSize={tokens.typography.contentSize} />
+          </PolishHost>
         )}
       </section>
     </EditableSection>

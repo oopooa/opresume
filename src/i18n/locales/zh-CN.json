@@ -7,6 +7,7 @@
     "save": "保存",
     "cancel": "取消",
     "confirm": "确认",
+    "close": "关闭",
     "delete": "删除",
     "confirmDelete": "确认删除",
     "deleteHint": "确定要删除 <bold>{{name}}</bold> 吗？",
@@ -181,7 +182,47 @@
     "linkPlaceholder": "输入链接地址...",
     "undo": "撤销",
     "redo": "重做",
-    "placeholder": "输入内容..."
+    "placeholder": "输入内容...",
+    "polish": {
+      "optimize": "优化表达",
+      "customPlaceholder": "输入自定义指令…",
+      "send": "发送",
+      "loading": "润色中…",
+      "accept": "替换",
+      "accepted": "已应用修改",
+      "discard": "取消",
+      "retry": "重试",
+      "originalLabel": "原文",
+      "polishedLabel": "结果",
+      "bubbleButton": "AI 改写",
+      "dialogTitle": "AI 改写",
+      "idleHint": "选择上方操作开始润色",
+      "diffLabel": "修改对比",
+      "noChanges": "原文表达已十分专业，无需修改",
+      "viewDiff": "对比",
+      "viewPreview": "预览",
+      "loadingOp": {
+        "optimize": "AI 润色中…",
+        "condense": "AI 精简中…"
+      },
+      "op": {
+        "optimize": "润色",
+        "condense": "简写",
+        "aiOptimize": "润色",
+        "aiCondense": "精简"
+      },
+      "cancel": "取消",
+      "wordCount": "{{count}} 字",
+      "wordDelta": "{{sign}}{{percent}}%",
+      "retryWithOp": "重新{{op}}",
+      "tooltipNoAI": "未配置 AI 供应商",
+      "errorNoAI": "未设置 AI 供应商",
+      "errorFailed": "润色失败，请重试",
+      "errorEmpty": "选区为空",
+      "errorContentChanged": "原文已被修改，请重新选择后再试",
+      "errorApplyFailed": "无法定位原选区，请重新选择后再试",
+      "errorTargetMissing": "原条目已被删除或不存在，无法应用修改"
+    }
   },
   "settings": {
     "title": "设置",
