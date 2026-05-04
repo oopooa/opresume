@@ -33,6 +33,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { ImportPDFDialog } from '@/components/ImportPDFDialog';
 import { LangSwitcher } from './LangSwitcher';
+import { BrandLogo } from '@/components/BrandLogo';
 
 export { FloatingToolbar } from './FloatingToolbar';
 
@@ -115,14 +116,10 @@ export function Toolbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
-        <div className="flex items-center select-none">
-          {/*
-            品牌名称：纯文字渲染，由 i18n 注入：
-            - 中文：优派简历
-            - 英文：OpResume
-          */}
-          <span className="text-base font-bold text-gray-800 tracking-tight">
+      <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b bg-white px-3.5 print:hidden">
+        <div className="flex items-center gap-1 select-none">
+          <BrandLogo className="h-5 w-5 text-[#1A1A1A]" />
+          <span className="brand-font text-lg font-bold text-[#1A1A1A] tracking-tight">
             {t('app.fullName')}
           </span>
           <Badge variant="secondary" className="ml-1.5 translate-y-px px-1.5 py-0 text-[10px] leading-4 font-medium text-muted-foreground">

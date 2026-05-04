@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 品牌字体注册：MiSans Bold（小米开源 OFL 协议字体，可商用）*/
+@font-face {
+  font-family: 'MiSans';
+  src: url('./assets/fonts/MiSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 品牌字体降级链：MiSans → 系统中英文字体 → 通用 sans-serif。*/
+.brand-font {
+  font-family: 'MiSans', system-ui, -apple-system, BlinkMacSystemFont,
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
