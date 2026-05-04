@@ -83,6 +83,7 @@ npm run preview
 | **State Management** | Zustand 5 |
 | **Rich Text Editing** | Tiptap 3 |
 | **Drag & Drop** | @dnd-kit |
+| **Animation** | Framer Motion 11 |
 | **Internationalization** | react-i18next |
 
 ---

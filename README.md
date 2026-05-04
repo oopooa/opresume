@@ -84,6 +84,7 @@ npm run preview
 | **状态管理** | Zustand 5 |
 | **富文本编辑** | Tiptap 3 |
 | **拖拽交互** | @dnd-kit |
+| **动画** | Framer Motion 11 |
 | **国际化** | react-i18next |
 
 ---
