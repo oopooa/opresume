@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { EyeOff, Eye, FileJson, FileUp, FileDown, Trash2, TriangleAlert } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
@@ -43,6 +44,8 @@ export function Toolbar() {
   const update = useResumeStore((s) => s.update);
   const reset = useResumeStore((s) => s.reset);
   const save = useResumeStore((s) => s.save);
+  // 隐私按钮 icon 切换的减动画分支
+  const reduceMotion = useReducedMotion();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -129,7 +132,38 @@ export function Toolbar() {
                       : 'border-transparent bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground',
                   )}
                 >
-                  {privacyMode ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                  {/*
+                    隐私模式 icon 切换：用 AnimatePresence + popLayout 让 Eye/EyeOff 真正"翻转"过去，
+                    而不是瞬时替换。relative 容器固定 14px 宽高，给 absolute 子元素提供锚点；
+                    新 icon 从下方/旋转进入，旧 icon 反向退出，制造一个"翻牌"的小细节。
+                    reduceMotion 用户：跳过旋转/位移，仅 opacity。
+                  */}
+                  <span className="relative inline-flex h-3.5 w-3.5 items-center justify-center">
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      <motion.span
+                        key={privacyMode ? 'on' : 'off'}
+                        className="absolute inset-0 inline-flex items-center justify-center"
+                        initial={
+                          reduceMotion
+                            ? { opacity: 0 }
+                            : { opacity: 0, rotate: -90, scale: 0.6 }
+                        }
+                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                        exit={
+                          reduceMotion
+                            ? { opacity: 0, transition: { duration: 0.1 } }
+                            : { opacity: 0, rotate: 90, scale: 0.6, transition: { duration: 0.15, ease: 'easeIn' } }
+                        }
+                        transition={
+                          reduceMotion
+                            ? { duration: 0.12 }
+                            : { type: 'spring', stiffness: 500, damping: 26, mass: 0.5 }
+                        }
+                      >
+                        {privacyMode ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
                   {t('toolbar.privacyMode')}
                 </button>
               </TooltipTrigger>

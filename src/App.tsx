@@ -73,7 +73,7 @@ function App() {
     <TooltipProvider delayDuration={300}>
       <div className="flex min-h-screen flex-col bg-gray-100">
         <Toolbar />
-        <main className="flex flex-1 justify-center overflow-auto py-8 print:overflow-visible print:py-0">
+        <main className="flex flex-1 justify-center overflow-auto py-8 [overflow-anchor:none] print:overflow-visible print:py-0">
           <ResumeView config={config} />
         </main>
         <FloatingToolbar />

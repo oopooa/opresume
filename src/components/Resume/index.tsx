@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FileText } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { JsonResume } from '@/types/json-resume';
 import type { TemplateDefinition } from './types';
 import { useUIStore } from '@/store/ui';
@@ -152,11 +153,67 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
 
 export function ResumeView({ config, templateId, disablePagination }: { config: JsonResume; templateId?: string; disablePagination?: boolean }) {
   const storeTemplate = useUIStore((s) => s.template);
-  const def = definitions[templateId ?? storeTemplate] ?? defaultDefinition;
+  const activeId = templateId ?? storeTemplate;
+  const def = definitions[activeId] ?? defaultDefinition;
+  const reduceMotion = useReducedMotion();
 
-  if (!disablePagination && supportsPagination(def, config)) {
-    return <PaginatedResumeView def={def} config={config} />;
-  }
+  const inner =
+    !disablePagination && supportsPagination(def, config) ? (
+      <PaginatedResumeView def={def} config={config} />
+    ) : (
+      <TemplateRenderer def={def} config={config} />
+    );
 
-  return <TemplateRenderer def={def} config={config} />;
+  // 简历"从下到上"淡入：duration 1.0s + ease-out quint，足够慢让用户看清整体浮入过程；
+  // y 80→0 让位移幅度大一点（之前 60 偏含蓄）；exit 留给模板切换用，淡出快一点不阻塞新模板。
+  //
+  // motion.div 主动接管布局：用 `flex w-full justify-center` 让它自己作为 flex container
+  // 强制内部 inner 水平居中。两次失败都源于把 motion.div 当默认块级 flex item：
+  //   1. 不指定 className 时 motion.div 的 flex item width 由内容决定（210mm），
+  //      理论上 main `justify-center` 应居中，但实测双栏模板会左对齐 —— 推测 transform
+  //      创建了新 stacking context 让 flex 算法对它的尺寸/位置推断不稳。
+  //   2. align-items:stretch 把 motion.div 高度撑到 main 内容区高度，内部 resume-page
+  //      297mm 远超 stretched 高度，向下 visible overflow 让 main 的 scrollHeight 计算
+  //      把顶部 padding 吞掉，简历贴 header。
+  // 现在让 motion.div w-full 明确撑满 main，自己作为 flex container 居中 inner，
+  // padding 仍由父 main 的 py-8 提供 —— 这样布局完全可预测。
+  //
+  // key={activeId} + mode="wait"：模板切换时旧模板退出完毕再播新模板，避免 PaginatedResumeView
+  // 的 useLayoutEffect 测量在两个模板间互相污染。
+  //
+  // onAnimationStart 中把父 main 强制滚到顶：
+  // 浏览器的 scroll-anchoring 默认会跟随 motion.div 的视觉位置（initial 时 translateY(80)）
+  // 自动滚动 main 来"保持视线"，导致动画结束 transform 归零后 main.scrollTop > 0，
+  // padding-top 被滚到视口外，用户感觉简历贴 header。手动把 scrollTop 拉回 0 即可。
+  const handleAnimationStart = () => {
+    // 找到承载滚动的 main（第一层 ancestor 即为 App.tsx 的 main）
+    const main = document.querySelector('main');
+    if (main) main.scrollTop = 0;
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activeId}
+        className="flex w-full justify-center"
+        initial={
+          reduceMotion ? { opacity: 0 } : { opacity: 0, y: 80 }
+        }
+        animate={{ opacity: 1, y: 0 }}
+        exit={
+          reduceMotion
+            ? { opacity: 0, transition: { duration: 0.18 } }
+            : { opacity: 0, y: -16, transition: { duration: 0.3, ease: 'easeIn' } }
+        }
+        transition={
+          reduceMotion
+            ? { duration: 0.25, ease: 'easeOut' }
+            : { duration: 1.15, ease: [0.16, 1, 0.3, 1] }
+        }
+        onAnimationStart={handleAnimationStart}
+      >
+        {inner}
+      </motion.div>
+    </AnimatePresence>
+  );
 }

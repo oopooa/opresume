@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Palette, Check, ArrowRightLeft, Minus, Plus } from 'lucide-react';
+import { LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { getSampleResume } from '@/config/sample-resume';
@@ -93,24 +94,56 @@ function SpacingPresetGroup({ value, onChange, labels }: {
   onChange: (v: SpacingPreset) => void;
   labels: Record<SpacingPreset, string>;
 }) {
+  const reduceMotion = useReducedMotion();
+  // useId 给 LayoutGroup 一个 SSR 安全的稳定 ID，确保多个 SpacingPresetGroup 同时挂载时
+  // (页边距 + 模块间距) layoutId="capsule-pill" 严格隔离在各自分组内。framer-motion 不传
+  // id 时会自动隔离命名空间，但显式传入更稳健，避免 React 严格模式或边缘场景下的命名空间漂移。
+  const groupId = useId();
   return (
-    <div className="grid grid-cols-3 rounded-full bg-gray-100 p-1">
-      {SPACING_PRESETS.map((preset) => (
-        <button
-          key={preset}
-          type="button"
-          onClick={() => onChange(preset)}
-          className={cn(
-            'rounded-full px-3 py-1.5 text-sm font-medium transition-all',
-            value === preset
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-500 hover:text-gray-700',
-          )}
-        >
-          {labels[preset]}
-        </button>
-      ))}
-    </div>
+    <LayoutGroup id={groupId}>
+      <div className="grid grid-cols-3 rounded-full bg-gray-100 p-1">
+        {SPACING_PRESETS.map((preset) => {
+          const isActive = value === preset;
+          return (
+            <button
+              key={preset}
+              type="button"
+              onClick={() => onChange(preset)}
+              className={cn(
+                // 容器加 relative 给 absolute 滑块提供锚点；transition-colors 与下方滑块时长对齐，
+                // 让"文字变深"和"白胶囊滑入"在同一时间窗口内完成，整体动作更同步丝滑。
+                'relative rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-[600ms]',
+                isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700',
+              )}
+            >
+              {/*
+                白色高亮胶囊：layoutId 让它从旧选中按钮"飞"到新选中按钮（条件渲染下，
+                framer-motion 通过共享 layoutId 自动追踪卸载/挂载并连贯过渡）。
+                tween 而非 spring：spring 的速率由弹性公式决定，远距离会"被弹得很快但停得也快"，
+                本质仍是变速且时长不固定；tween + 固定 duration 才能保证"无论从相邻还是从最左到最右
+                时长都一样，远的滑得更快"——正是需求要求的行为。
+                duration / ease 与 useThemeEffect 中 SPACING_TRANSITION 严格一致：切换 preset 时，
+                "胶囊滑动"和"简历预览页边距/模块间距 framer-motion 渐变"在同一时间窗口、同一曲线下
+                完成；时长 0.6s 偏缓让整个动作可清晰感知，不仓促。
+              */}
+              {isActive && (
+                <motion.span
+                  layoutId="capsule-pill"
+                  className="absolute inset-0 rounded-full bg-white shadow-sm"
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+                  }
+                />
+              )}
+              {/* 文字浮于滑块之上：relative + z-10，否则会被 absolute 滑块的 bg-white 遮住 */}
+              <span className="relative z-10">{labels[preset]}</span>
+            </button>
+          );
+        })}
+      </div>
+    </LayoutGroup>
   );
 }
 

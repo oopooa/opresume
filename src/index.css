@@ -32,7 +32,7 @@
 
     --resume-primary: #2f5785;
     --resume-tag: #8bc34a;
-    --resume-page-padding: 16mm 18mm;
+    --resume-page-padding-y: 16mm;
     --resume-page-padding-x: 18mm;
     --resume-module-gap: 24px;
     --resume-title-size: 16px;
@@ -204,7 +204,9 @@
   font-size: var(--resume-body-size);
 }
 
-/* 排版：模块间距由 CSS 变量统一控制，穿透 EditableSection 包装层覆盖 Tailwind mb-X */
+/* 排版：模块间距由 CSS 变量统一控制，穿透 EditableSection 包装层覆盖 Tailwind mb-X
+   切换 preset 时的平滑过渡由 useThemeEffect 中 framer-motion 的 animate() 驱动 CSS 变量数值，
+   这里不加 CSS transition（避免与 motion 双重动画冲突）。 */
 div.resume-module > div > section,
 div.resume-module > div > div {
   margin-bottom: var(--resume-module-gap);
@@ -214,7 +216,8 @@ div.resume-module:last-child > div > div {
   margin-bottom: 0;
 }
 
-/* 排版：行间距由 CSS 变量控制，覆盖 Tailwind text-xs/text-sm 等自带的 line-height */
+/* 排版：行间距由 CSS 变量控制，覆盖 Tailwind text-xs/text-sm 等自带的 line-height
+   行高由 Slider 连续拖动控制，不加过渡：连续触发会让目标值与显示值持续偏离，造成滞后感。 */
 div.resume-layout p,
 div.resume-layout li,
 div.resume-layout span,
@@ -228,9 +231,9 @@ div.resume-layout a {
   line-height: var(--resume-line-height);
 }
 
-/* 排版：页边距由 CSS 变量控制 */
+/* 排版：页边距由 CSS 变量控制（y/x 拆分以便 framer-motion 分别 animate 数值再拼回 mm） */
 .resume-padding {
-  padding: var(--resume-page-padding);
+  padding: var(--resume-page-padding-y) var(--resume-page-padding-x);
 }
 
 /* Template4 左侧额外缩进 */

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Scissors, Sparkles, AlertCircle } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { toast } from 'sonner';
 
 import { useAIStore } from '@/store/ai';
@@ -98,6 +99,9 @@ export function PolishSelectionOverlay() {
   const [overlay, setOverlay] = useState<OverlayState | null>(null);
   const editorOpen = useUIStore((s) => s.editorOpen);
   const openPolishDialog = useUIStore((s) => s.openPolishDialog);
+  // 系统/浏览器开启"减少动画"偏好时，退化为纯透明度切换，
+  // 避免对前庭功能敏感的用户造成不适。
+  const reduceMotion = useReducedMotion();
 
   // 拖选过程中暂时隐藏浮层，避免位置随手指抖动
   const draggingRef = useRef(false);
@@ -180,27 +184,36 @@ export function PolishSelectionOverlay() {
     };
   }, []);
 
-  if (!overlay || editorOpen) return null;
+  if (editorOpen) return null;
 
-  const rect = overlay.rect;
-  // 横向居中于选区，限制在视口安全内距内
-  const center = (rect.left + rect.right) / 2;
-  let left = center - ESTIMATED_ACTION_BAR_WIDTH / 2;
-  left = Math.max(SAFE_INSET, Math.min(window.innerWidth - ESTIMATED_ACTION_BAR_WIDTH - SAFE_INSET, left));
+  // 计算位置（仅在 overlay 存在时进行）；为 AnimatePresence 提供存在性切换。
+  let top = 0;
+  let left = 0;
+  // 浮层默认放选区上方时 origin 在底部中心；翻转到下方时 origin 在顶部中心。
+  // 这样 spring 弹出方向始终从选区方向"长"出来，视觉上贴合用户的注意力锚点。
+  let originY: 'bottom' | 'top' = 'bottom';
+  if (overlay) {
+    const rect = overlay.rect;
+    const center = (rect.left + rect.right) / 2;
+    left = center - ESTIMATED_ACTION_BAR_WIDTH / 2;
+    left = Math.max(SAFE_INSET, Math.min(window.innerWidth - ESTIMATED_ACTION_BAR_WIDTH - SAFE_INSET, left));
 
-  // 纵向：默认放选区上方；上方放不下时翻转到选区下方；都不行则贴顶
-  const aboveTop = rect.top - ESTIMATED_BAR_HEIGHT - GAP;
-  const belowTop = rect.bottom + GAP;
-  let top: number;
-  if (aboveTop >= SAFE_INSET) {
-    top = aboveTop;
-  } else if (belowTop + ESTIMATED_BAR_HEIGHT + SAFE_INSET <= window.innerHeight) {
-    top = belowTop;
-  } else {
-    top = SAFE_INSET;
+    const aboveTop = rect.top - ESTIMATED_BAR_HEIGHT - GAP;
+    const belowTop = rect.bottom + GAP;
+    if (aboveTop >= SAFE_INSET) {
+      top = aboveTop;
+      originY = 'bottom';
+    } else if (belowTop + ESTIMATED_BAR_HEIGHT + SAFE_INSET <= window.innerHeight) {
+      top = belowTop;
+      originY = 'top';
+    } else {
+      top = SAFE_INSET;
+      originY = 'top';
+    }
   }
 
   const handleChipClick = (op: 'optimize' | 'condense') => {
+    if (!overlay) return;
     if (!aiConfigured) {
       toast.error(t('editor.polish.errorNoAI'));
       return;
@@ -219,49 +232,79 @@ export function PolishSelectionOverlay() {
   };
 
   return (
-    <div
-      ref={overlayRef}
-      data-polish-overlay="true"
-      role="toolbar"
-      aria-label={t('editor.polish.bubbleButton')}
-      onMouseDown={(e) => e.preventDefault()}
-      className="fixed z-50 flex items-center gap-0.5 rounded-lg border border-border bg-popover px-1.5 py-1 shadow-md print:hidden animate-in fade-in zoom-in-95 duration-150"
-      style={{ top, left }}
-    >
-      {CHIPS.map(({ id, icon: Icon, labelKey }) => {
-        const label = t(labelKey);
-        const noAIMessage = t('editor.polish.tooltipNoAI');
-        const button = (
-          <button
-            type="button"
-            aria-label={aiConfigured ? label : `${label}: ${noAIMessage}`}
-            onClick={() => handleChipClick(id)}
-            className="flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-medium text-popover-foreground hover:bg-accent hover:text-accent-foreground"
-          >
-            {aiConfigured ? (
-              <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-            ) : (
-              <AlertCircle className="h-3.5 w-3.5 text-destructive" aria-hidden="true" />
-            )}
-            {label}
-          </button>
-        );
+    <AnimatePresence mode="popLayout">
+      {overlay && (
+        <motion.div
+          ref={overlayRef}
+          data-polish-overlay="true"
+          role="toolbar"
+          aria-label={t('editor.polish.bubbleButton')}
+          onMouseDown={(e) => e.preventDefault()}
+          className="fixed z-50 flex items-center gap-0.5 rounded-lg border border-border bg-popover px-1.5 py-1 shadow-md print:hidden"
+          style={{ top, left, transformOrigin: `center ${originY}` }}
+          // 弹出动画：从选区方向"长"出来 —— scale + 轻微位移 + 透明度。
+          // 用 spring 物理参数（stiffness 高、damping 偏低）制造细微的过冲，
+          // 让出现的感觉更"鲜活"，但不至于晃动到打扰阅读。
+          // reduceMotion 用户：退化为纯 fade（无 scale / 无位移 / 短时长），
+          // 满足无障碍偏好。
+          initial={
+            reduceMotion
+              ? { opacity: 0 }
+              : { opacity: 0, scale: 0.7, y: originY === 'bottom' ? 6 : -6 }
+          }
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={
+            reduceMotion
+              ? { opacity: 0, transition: { duration: 0.1, ease: 'easeOut' } }
+              : {
+                  opacity: 0,
+                  scale: 0.85,
+                  y: originY === 'bottom' ? 4 : -4,
+                  transition: { duration: 0.12, ease: 'easeOut' },
+                }
+          }
+          transition={
+            reduceMotion
+              ? { duration: 0.12, ease: 'easeOut' }
+              : { type: 'spring', stiffness: 520, damping: 22, mass: 0.6 }
+          }
+        >
+          {CHIPS.map(({ id, icon: Icon, labelKey }) => {
+            const label = t(labelKey);
+            const noAIMessage = t('editor.polish.tooltipNoAI');
+            const button = (
+              <button
+                type="button"
+                aria-label={aiConfigured ? label : `${label}: ${noAIMessage}`}
+                onClick={() => handleChipClick(id)}
+                className="flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-medium text-popover-foreground hover:bg-accent hover:text-accent-foreground"
+              >
+                {aiConfigured ? (
+                  <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                ) : (
+                  <AlertCircle className="h-3.5 w-3.5 text-destructive" aria-hidden="true" />
+                )}
+                {label}
+              </button>
+            );
 
-        if (aiConfigured) {
-          return <React.Fragment key={id}>{button}</React.Fragment>;
-        }
+            if (aiConfigured) {
+              return <React.Fragment key={id}>{button}</React.Fragment>;
+            }
 
-        return (
-          <Tooltip key={id}>
-            <TooltipTrigger asChild>
-              {button}
-            </TooltipTrigger>
-            <TooltipContent side="top" sideOffset={8}>
-              {noAIMessage}
-            </TooltipContent>
-          </Tooltip>
-        );
-      })}
-    </div>
+            return (
+              <Tooltip key={id}>
+                <TooltipTrigger asChild>
+                  {button}
+                </TooltipTrigger>
+                <TooltipContent side="top" sideOffset={8}>
+                  {noAIMessage}
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
