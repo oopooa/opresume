@@ -1,4 +1,8 @@
 {
+  "app": {
+    "name": "优派简历",
+    "fullName": "优派简历"
+  },
   "common": {
     "loading": "加载中...",
     "loadError": "加载简历数据失败",

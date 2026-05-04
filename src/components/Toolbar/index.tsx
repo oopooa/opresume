@@ -116,12 +116,14 @@ export function Toolbar() {
   return (
     <>
       <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b bg-white px-4 print:hidden">
-        <div className="flex items-center gap-0.5 select-none">
-          <span className="flex h-7 w-8 items-center justify-center rounded-md border border-black bg-[#2d3748] text-sm font-bold text-white">
-            Op
-          </span>
+        <div className="flex items-center select-none">
+          {/*
+            品牌名称：纯文字渲染，由 i18n 注入：
+            - 中文：优派简历
+            - 英文：OpResume
+          */}
           <span className="text-base font-bold text-gray-800 tracking-tight">
-            Resume
+            {t('app.fullName')}
           </span>
           <Badge variant="secondary" className="ml-1.5 translate-y-px px-1.5 py-0 text-[10px] leading-4 font-medium text-muted-foreground">
             v{__APP_VERSION__}

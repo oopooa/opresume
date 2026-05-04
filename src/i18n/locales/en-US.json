@@ -1,4 +1,8 @@
 {
+  "app": {
+    "name": "OpResume",
+    "fullName": "OpResume"
+  },
   "common": {
     "loading": "Loading...",
     "loadError": "Failed to load resume data",
