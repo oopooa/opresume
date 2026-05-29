@@ -29,7 +29,12 @@ export function AwardModule({ config, tokens, itemRange, showTitle = true }: Mod
               !tokens.layout.awardTimeInline && tokens.layout.flexAlign,
             )}
           >
-            <span>{award.title}</span>
+            <div>
+              <p className={cn(tokens.typography.titleWeight)}>{award.title}</p>
+              {award.awarder && (
+                <p className={cn(tokens.colors.secondary)}>{award.awarder}</p>
+              )}
+            </div>
             {award.date && (
               tokens.layout.awardTimeInline
                 ? <span className={cn('ml-1', tokens.colors.muted)}>({award.date})</span>

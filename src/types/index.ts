@@ -13,7 +13,7 @@ export type {
   JsonAward,
 } from './json-resume';
 
-export type { ThemeConfig, PresetTheme, SpacingPreset, LayoutConfig } from './theme';
+export type { ThemeConfig, PresetTheme, SpacingPreset, LayoutConfig, PageFormat } from './theme';
 
 export type {
   AIProviderId,

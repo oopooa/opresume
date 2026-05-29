@@ -2,8 +2,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '@/i18n';
 import { detectBrowserLanguage, getLanguageFromURL } from '@/i18n';
-import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
-import type { ThemeConfig, LayoutConfig, SpacingPreset, AIProviderId } from '@/types';
+import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE, LINE_HEIGHT_RANGE } from '@/config/layout';
+import type { ThemeConfig, LayoutConfig, SpacingPreset, PageFormat, AIProviderId } from '@/types';
+import type { Typography } from '@/types/theme';
 
 interface UIStore {
   theme: ThemeConfig;
@@ -18,10 +19,19 @@ interface UIStore {
   customFieldIconMap: Record<string, string>;
   /** 控制简历中所有图标的可见性 */
   showIcons: boolean;
+  /** 页脚（姓名 + 页码）的可见性，默认开启 */
+  showFootnote: boolean;
+  /** 纸张尺寸：美式信纸（默认）/ A4 */
+  pageFormat: PageFormat;
   /** 隐私模式：对敏感信息进行打码显示 */
   privacyMode: boolean;
-  /** 排版配置 */
+  /** 排版配置（页边距 / 模块间距等全局间距） */
   layout: LayoutConfig;
+  /**
+   * 字号 / 行高按模板存储的用户覆盖。键为模板 id（如 "template5"），
+   * 值为部分覆盖；未覆盖的字段回退到模板默认（见 getEffectiveTypography）。
+   */
+  typographyByTemplate: Record<string, Partial<Typography>>;
   /** 设置面板开关状态 */
   settingsPanelOpen: boolean;
   /** 当前正在配置的供应商 ID（Dialog 打开时） */
@@ -57,6 +67,8 @@ interface UIStore {
   closeEditor: () => void;
   clearActiveModule: () => void;
   toggleIcons: () => void;
+  toggleFootnote: () => void;
+  setPageFormat: (format: PageFormat) => void;
   togglePrivacy: () => void;
   updateModuleIcon: (module: string, icon: string | undefined) => void;
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
@@ -83,8 +95,11 @@ export const useUIStore = create<UIStore>()(
       moduleIconMap: {},
       customFieldIconMap: {},
       showIcons: true,
+      showFootnote: true,
+      pageFormat: 'letter',
       privacyMode: false,
       layout: { pageMargin: 'standard', moduleGap: 'standard', titleFontSize: 16, bodyFontSize: 14, lineHeight: 1.5 },
+      typographyByTemplate: {},
       settingsPanelOpen: false,
       editingProviderId: null,
       polishDialog: null,
@@ -111,6 +126,11 @@ export const useUIStore = create<UIStore>()(
 
       toggleIcons: () =>
         set((s) => ({ showIcons: !s.showIcons })),
+
+      toggleFootnote: () =>
+        set((s) => ({ showFootnote: !s.showFootnote })),
+
+      setPageFormat: (format) => set({ pageFormat: format }),
 
       togglePrivacy: () =>
         set((s) => ({ privacyMode: !s.privacyMode })),
@@ -139,14 +159,30 @@ export const useUIStore = create<UIStore>()(
       setModuleGap: (preset) =>
         set((s) => ({ layout: { ...s.layout, moduleGap: preset } })),
 
+      // 字号 / 行高按当前模板存储，互不干扰（见 getEffectiveTypography）
       setTitleFontSize: (value) =>
-        set((s) => ({ layout: { ...s.layout, titleFontSize: value } })),
+        set((s) => ({
+          typographyByTemplate: {
+            ...s.typographyByTemplate,
+            [s.template]: { ...s.typographyByTemplate[s.template], titleFontSize: value },
+          },
+        })),
 
       setBodyFontSize: (value) =>
-        set((s) => ({ layout: { ...s.layout, bodyFontSize: value } })),
+        set((s) => ({
+          typographyByTemplate: {
+            ...s.typographyByTemplate,
+            [s.template]: { ...s.typographyByTemplate[s.template], bodyFontSize: value },
+          },
+        })),
 
       setLineHeight: (value) =>
-        set((s) => ({ layout: { ...s.layout, lineHeight: value } })),
+        set((s) => ({
+          typographyByTemplate: {
+            ...s.typographyByTemplate,
+            [s.template]: { ...s.typographyByTemplate[s.template], lineHeight: value },
+          },
+        })),
 
       openSettingsPanel: () => set({ settingsPanelOpen: true }),
       closeSettingsPanel: () => set({ settingsPanelOpen: false }),
@@ -163,21 +199,42 @@ export const useUIStore = create<UIStore>()(
         moduleIconMap: state.moduleIconMap,
         customFieldIconMap: state.customFieldIconMap,
         showIcons: state.showIcons,
+        showFootnote: state.showFootnote,
+        pageFormat: state.pageFormat,
         privacyMode: state.privacyMode,
         layout: state.layout,
+        typographyByTemplate: state.typographyByTemplate,
       }),
       merge: (persisted, current) => {
         const stored = persisted as Partial<UIStore>;
         const mergedLayout = { ...current.layout, ...stored.layout };
-        // 修复旧数据中缺失、无效或越界的字号值
+        // 修复旧数据中缺失、无效或越界的字号值（layout 内字段已弃用，仅清理兼容）
         if (!Number.isFinite(mergedLayout.titleFontSize)) mergedLayout.titleFontSize = current.layout.titleFontSize;
         else mergedLayout.titleFontSize = Math.max(TITLE_FONT_SIZE_RANGE.min, Math.min(TITLE_FONT_SIZE_RANGE.max, mergedLayout.titleFontSize));
         if (!Number.isFinite(mergedLayout.bodyFontSize)) mergedLayout.bodyFontSize = current.layout.bodyFontSize;
         else mergedLayout.bodyFontSize = Math.max(BODY_FONT_SIZE_RANGE.min, Math.min(BODY_FONT_SIZE_RANGE.max, mergedLayout.bodyFontSize));
+
+        // 按模板字号覆盖：clamp 每个模板的 title / body 到合法范围，过滤无效值
+        const mergedTypography: Record<string, Partial<Typography>> = {};
+        for (const [tmpl, typo] of Object.entries(stored.typographyByTemplate ?? {})) {
+          const next: Partial<Typography> = { ...typo };
+          if (Number.isFinite(next.titleFontSize)) {
+            next.titleFontSize = Math.max(TITLE_FONT_SIZE_RANGE.min, Math.min(TITLE_FONT_SIZE_RANGE.max, next.titleFontSize!));
+          } else delete next.titleFontSize;
+          if (Number.isFinite(next.bodyFontSize)) {
+            next.bodyFontSize = Math.max(BODY_FONT_SIZE_RANGE.min, Math.min(BODY_FONT_SIZE_RANGE.max, next.bodyFontSize!));
+          } else delete next.bodyFontSize;
+          if (Number.isFinite(next.lineHeight)) {
+            next.lineHeight = Math.max(LINE_HEIGHT_RANGE.min, Math.min(LINE_HEIGHT_RANGE.max, next.lineHeight!));
+          } else delete next.lineHeight;
+          mergedTypography[tmpl] = next;
+        }
+
         return {
           ...current,
           ...stored,
           layout: mergedLayout,
+          typographyByTemplate: mergedTypography,
         };
       },
       onRehydrateStorage: () => (state, error) => {

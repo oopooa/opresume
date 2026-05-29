@@ -1,4 +1,5 @@
 import type { ModuleLayout } from '@/types/resume';
+import type { Typography } from '@/types/theme';
 import { definitions, defaultDefinition } from '@/components/Resume/templates';
 
 /**
@@ -39,7 +40,30 @@ export const SORTABLE_MODULES = [
 ] as const;
 
 /** 标题字号范围（px） */
-export const TITLE_FONT_SIZE_RANGE = { min: 16, max: 24 } as const;
+export const TITLE_FONT_SIZE_RANGE = { min: 12, max: 24 } as const;
 
 /** 正文字号范围（px） */
-export const BODY_FONT_SIZE_RANGE = { min: 12, max: 16 } as const;
+export const BODY_FONT_SIZE_RANGE = { min: 10, max: 16 } as const;
+
+/** 行间距范围（AppearanceDrawer 滑块与持久化 clamp 共用） */
+export const LINE_HEIGHT_RANGE = { min: 1.2, max: 1.8 } as const;
+
+/** 全局默认字号 / 行高（模板未声明 defaultTypography 时回退到此，适用于 template1–4） */
+export const GLOBAL_DEFAULT_TYPOGRAPHY: Typography = {
+  titleFontSize: 16,
+  bodyFontSize: 14,
+  lineHeight: 1.5,
+};
+
+/**
+ * 获取当前生效的字号 / 行高：用户按模板覆盖 > 模板默认 > 全局默认。
+ * 与 getEffectiveLayout 同构（用户覆盖优先于模板默认）。
+ */
+export function getEffectiveTypography(
+  template: string,
+  typographyByTemplate?: Record<string, Partial<Typography>>,
+): Typography {
+  const base = definitions[template]?.defaultTypography ?? GLOBAL_DEFAULT_TYPOGRAPHY;
+  const override = typographyByTemplate?.[template];
+  return { ...base, ...override };
+}

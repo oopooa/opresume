@@ -6,7 +6,13 @@
     "image": "/api/avatar?t=1773238453169",
     "email": "zhangsan@example.com",
     "phone": "13800000000",
-    "summary": "5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。"
+    "summary": "5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。",
+    "url": "https://zhangsan.dev",
+    "location": {
+      "city": "成都",
+      "region": "四川",
+      "countryCode": "CN"
+    }
   },
   "work": [
     {
@@ -64,7 +70,9 @@
       "studyType": "硕士",
       "startDate": "2018-09",
       "endDate": "2021-06",
-      "x-op-id": "edu-2"
+      "x-op-id": "edu-2",
+      "x-op-advisor": "导师：王建国 教授",
+      "score": "GPA 3.9 / 4.0"
     },
     {
       "institution": "北京大学",
@@ -72,69 +80,63 @@
       "studyType": "本科",
       "startDate": "2014-09",
       "endDate": "2018-06",
-      "x-op-id": "edu-1"
+      "x-op-id": "edu-1",
+      "x-op-advisor": "导师：李明 教授",
+      "score": "GPA 3.8 / 4.0"
     }
   ],
   "projects": [
     {
-      "name": "飞书文档协同编辑器",
-      "description": "支持多人实时协同编辑的在线文档系统，基于 CRDT 算法实现冲突解决",
-      "highlights": [
-        "<p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p>",
-        "<p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p>",
-        "<p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p>",
-        "<p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p>"
-      ],
-      "startDate": "2023-06",
+      "name": "react-flow-editor",
+      "description": "基于 React 的可视化流程图编辑器，支持自定义节点、连线与撤销/重做。",
+      "url": "github.com/zhangsan/react-flow-editor",
+      "startDate": "2023-01",
       "endDate": "present",
       "roles": [
-        "前端架构师"
+        "作者"
       ],
-      "x-op-id": "proj-1",
+      "x-op-id": "oss-1",
       "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p></li><li><p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p></li><li><p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p></li><li><p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p></li></ul>"
+      "x-op-projectContentHtml": "<ul><li>累计 3.2k Star、周下载量 12k+，被多个低代码平台集成。</li><li>提供插件化节点系统与完整 TypeScript 类型定义。</li></ul>"
     },
     {
-      "name": "低代码搭建平台",
-      "description": "面向内部运营的可视化页面搭建平台，降低非技术人员页面开发门槛",
-      "highlights": [
-        "<p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p>",
-        "<p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p>",
-        "<p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p>",
-        "<p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p>"
-      ],
-      "startDate": "2022-01",
-      "endDate": "2023-02",
+      "name": "vite-plugin-i18n-auto",
+      "description": "在构建期自动提取与回填 i18n 文案的 Vite 插件，支持中英多语言。",
+      "url": "github.com/zhangsan/vite-plugin-i18n-auto",
+      "startDate": "2022-06",
+      "endDate": "present",
       "roles": [
-        "前端负责人"
+        "作者"
       ],
-      "x-op-id": "proj-2",
+      "x-op-id": "oss-2",
       "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p></li><li><p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p></li><li><p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p></li><li><p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p></li></ul>"
+      "x-op-projectContentHtml": "<ul><li>1.1k Star；支持按需提取、机器翻译占位与 key 去重。</li></ul>"
     },
     {
-      "name": "商家营销海报编辑器",
-      "description": "基于 Canvas 的在线海报设计工具，支持模板化批量生成营销物料",
-      "highlights": [
-        "<p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p>",
-        "<p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p>",
-        "<p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p>"
-      ],
-      "startDate": "2020-06",
-      "endDate": "2021-03",
+      "name": "crdt-collab",
+      "description": "轻量级 CRDT 协同编辑引擎，约 8KB，框架无关。",
+      "url": "github.com/zhangsan/crdt-collab",
+      "startDate": "2021-09",
+      "endDate": "2023-05",
       "roles": [
-        "核心开发"
+        "核心维护者"
       ],
-      "x-op-id": "proj-3",
+      "x-op-id": "oss-3",
       "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p></li><li><p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p></li><li><p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p></li></ul>"
+      "x-op-projectContentHtml": "<ul><li>860 Star；提供 React / Vue 绑定与离线合并能力。</li></ul>"
     },
     {
-      "name": "个人项目地址",
-      "description": "基于 Next.js + MDX 搭建，累计发表 80+ 篇技术文章，月访问量 5000+",
-      "url": "https://github.com/oopooa/opresume",
-      "x-op-id": "portfolio-1",
-      "x-op-type": "portfolio"
+      "name": "tiny-virtual-list",
+      "description": "高性能虚拟滚动列表，支持动态行高与横向虚拟化。",
+      "url": "github.com/zhangsan/tiny-virtual-list",
+      "startDate": "2020-11",
+      "endDate": "2022-03",
+      "roles": [
+        "作者"
+      ],
+      "x-op-id": "oss-4",
+      "x-op-type": "project",
+      "x-op-projectContentHtml": "<ul><li>2.4k Star；万行列表滚动稳定 60fps，内存占用降低 70%。</li></ul>"
     }
   ],
   "skills": [
@@ -179,22 +181,26 @@
     {
       "title": "字节跳动 2024 年度技术突破奖",
       "date": "2024-01",
-      "x-op-id": "award-1"
+      "x-op-id": "award-1",
+      "awarder": "字节跳动"
     },
     {
       "title": "蚂蚁集团内部黑客马拉松一等奖",
       "date": "2022-08",
-      "x-op-id": "award-2"
+      "x-op-id": "award-2",
+      "awarder": "蚂蚁集团"
     },
     {
       "title": "美团年度优秀新人",
       "date": "2020-12",
-      "x-op-id": "award-3"
+      "x-op-id": "award-3",
+      "awarder": "美团"
     },
     {
       "title": "ACM 区域赛银牌",
       "date": "2017-11",
-      "x-op-id": "award-4"
+      "x-op-id": "award-4",
+      "awarder": "ACM"
     }
   ],
   "x-op-avatar": {
@@ -209,9 +215,128 @@
   "x-op-workExpYear": "5",
   "x-op-customFields": [
     {
-      "key": "工作地点",
-      "value": "成都"
+      "key": "Website",
+      "value": "zhangsan.dev",
+      "url": "https://zhangsan.dev"
+    },
+    {
+      "key": "GitHub",
+      "value": "github.com/zhangsan",
+      "url": "https://github.com/zhangsan"
+    },
+    {
+      "key": "LinkedIn",
+      "value": "linkedin.com/in/zhangsan",
+      "url": "https://linkedin.com/in/zhangsan"
+    },
+    {
+      "key": "知乎",
+      "value": "zhihu.com/people/zhangsan",
+      "url": "https://zhihu.com/people/zhangsan"
     }
   ],
-  "x-op-aboutmeHtml": "<p>5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。</p>"
+  "x-op-aboutmeHtml": "<p>5 年前端开发经验，专注于 React 技术栈和前端工程化方向。具备从 0 到 1 搭建中大型前端项目的能力，对富文本编辑器、可视化搭建、性能优化等领域有深入实践。注重代码质量和团队协作，热爱开源社区，持续学习和分享技术心得。</p>",
+  "x-op-grants": [
+    {
+      "x-op-id": "grant-1",
+      "title": "开源协同编辑引擎研发专项",
+      "grantId": "OSS-2024-018",
+      "agency": "中国开源软件推进联盟",
+      "role": "张三（负责人）",
+      "total": "¥150,000",
+      "startDate": "2024-03",
+      "endDate": "2025-12"
+    }
+  ],
+  "x-op-publications": [
+    {
+      "x-op-id": "pub-1",
+      "category": "first",
+      "authors": "张三, 李四, 王五",
+      "selfAuthor": "张三",
+      "title": "面向大规模文档的 CRDT 协同编辑一致性算法",
+      "venue": "中国计算机大会 (CNCC)",
+      "year": "2024",
+      "doi": "10.1145/3580000.3580123"
+    },
+    {
+      "x-op-id": "pub-2",
+      "category": "first",
+      "authors": "张三*, 赵六*, 王五#",
+      "selfAuthor": "张三",
+      "title": "Web 富文本编辑器的虚拟滚动渲染优化",
+      "venue": "ACM Web Conference (WWW)",
+      "year": "2023",
+      "url": "https://example.com/rich-text-virtual-scroll"
+    },
+    {
+      "x-op-id": "pub-3",
+      "category": "contributing",
+      "authors": "李四, 张三, 王五",
+      "selfAuthor": "张三",
+      "title": "低代码平台的可视化搭建引擎设计与实现",
+      "venue": "软件学报",
+      "year": "2022",
+      "note": "录用待刊"
+    }
+  ],
+  "x-op-posters": [
+    {
+      "x-op-id": "post-1",
+      "authors": "张三, 王五",
+      "selfAuthor": "张三",
+      "title": "微前端架构下的模块热插拔实践",
+      "venue": "GMTC 全球大前端技术大会",
+      "year": "2023"
+    },
+    {
+      "x-op-id": "post-2",
+      "authors": "张三",
+      "selfAuthor": "张三",
+      "title": "前端性能优化：从 LCP 3.8s 到 1.5s 的工程实践",
+      "venue": "VueConf China",
+      "year": "2021"
+    }
+  ],
+  "x-op-teaching": [
+    {
+      "x-op-id": "teach-1",
+      "name": "现代前端工程化实战 · 内部技术培训",
+      "x-op-departmentName": "讲师 · 字节跳动飞书前端团队",
+      "startDate": "2023",
+      "endDate": "present",
+      "x-op-workDescHtml": "<ul><li>面向新人讲授 React 技术栈、TypeScript 严格模式、Webpack / Vite 构建优化与微前端架构。</li><li>设计并维护团队前端工程化培训课程，累计培训 100+ 工程师。</li></ul>"
+    }
+  ],
+  "x-op-customModules": [
+    {
+      "id": "custom-peer-review",
+      "title": "同行评审",
+      "contentHtml": "<p><strong>审稿人：</strong></p><ul><li>中国计算机大会 (CNCC)</li><li>GMTC 全球大前端技术大会</li><li>ACM Web Conference (WWW)</li><li>《软件学报》</li><li>前端早早聊大会</li></ul>",
+      "titleLocales": {
+        "zh-CN": "同行评审",
+        "en-US": "Peer-Reviewing"
+      },
+      "contentHtmlLocales": {
+        "zh-CN": "<p><strong>审稿人：</strong></p><ul><li>中国计算机大会 (CNCC)</li><li>GMTC 全球大前端技术大会</li><li>ACM Web Conference (WWW)</li><li>《软件学报》</li><li>前端早早聊大会</li></ul>",
+        "en-US": "<p><strong>Reviewer:</strong></p><ul><li>China National Computer Congress (CNCC)</li><li>GMTC Global Front-End Technology Conference</li><li>ACM Web Conference (WWW)</li><li>Journal of Software</li><li>FED Talk Conference</li></ul>"
+      }
+    }
+  ],
+  "x-op-moduleLayout": {
+    "template5": {
+      "sidebar": [],
+      "main": [
+        "educationList",
+        "grantList",
+        "awardList",
+        "publicationList",
+        "posterList",
+        "projectList",
+        "teachingList",
+        "workExpList",
+        "custom-peer-review"
+      ]
+    }
+  }
 }

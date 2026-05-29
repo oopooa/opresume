@@ -22,9 +22,10 @@
 
 ### 🎨 Professional Typesetting Engine
 - **Multi-dimensional layout control**: Freely adjust margins, section spacing, and line height with sliders — no more Word formatting nightmares.
-- **Multiple classic templates**: 4+ carefully curated industry-standard templates (including ATS-friendly styles, single-column corporate layouts, etc.) with seamless one-click switching.
+- **Multiple classic templates**: 5 carefully curated industry-standard templates (including ATS-friendly styles, single-column corporate layouts, and a **single-column academic CV**) with seamless one-click switching.
 - **Theme color customization**: 8+ meticulously crafted preset color themes to match the visual tone of different industries.
-- **Smart auto-pagination**: Automatic visual page breaks when content exceeds A4 boundaries, with a modern floating page indicator.
+- **Smart auto-pagination**: Automatic visual page breaks when content exceeds the page, with **A4 / US Letter switching**, and a modern floating page indicator.
+- **Page footer & academic titles**: Optional running footer (name + page number, on by default, with an enforced bottom margin); the academic CV template ships bilingual section titles (e.g. Research Experience / 科研经历) that follow the language toggle.
 
 ### 🚀 Ultimate User Experience
 - **WYSIWYG editing**: Sidebar drawer-style form editing with real-time preview on the main canvas.
@@ -101,6 +102,8 @@ npm run preview
 - [x] Internationalization (i18n) support
 - [x] AI-powered resume import
 - [x] AI rewrite
+- [x] Academic CV template (publications / grants / posters / teaching / peer-reviewing)
+- [x] A4 / US Letter switching & optional page footer
 - [ ] AI resume scoring & analysis
 - [ ] Multiple resume management
 - [ ] Smart fit-to-page

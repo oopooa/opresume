@@ -1,4 +1,4 @@
-import type { SpacingPreset } from '@/types';
+import type { SpacingPreset, PageFormat } from '@/types';
 
 /* ------------------------------------------------------------------ */
 /*  类型定义                                                           */
@@ -25,6 +25,12 @@ export interface ModuleMeasure {
   items: ItemMeasure[];
   /** 标题高度：第一个条目顶边相对于模块顶边的距离（无条目时等于 totalHeight） */
   titleHeight: number;
+  /**
+   * 模块前的实际间距（px），从全量渲染测量得到：本模块顶边相对上一模块底边的距离。
+   * 首个模块为 0。包含常量 moduleGap 之外的因素（如模板标题的上外边距），
+   * 因此分页对每个模板都精确，不再依赖固定 moduleGap 假设。
+   */
+  gapBefore: number;
 }
 
 /** 整个简历的测量结果 */
@@ -70,8 +76,16 @@ const MODULE_GAP_PX: Record<SpacingPreset, number> = {
   spacious: 32,
 };
 
-/** A4 高度（mm） */
-const A4_HEIGHT_MM = 297;
+/** 底部安全余量（mm）：分页预算在「页高 - 2·marginY」内容区上再留出一点，
+ *  吸收测量与实际渲染的细微误差，让正文断行落在强制下边距之上——既不被 .resume-page
+ *  的裁剪切掉，也不会贴近 / 覆盖页脚。 */
+const BOTTOM_SAFETY_MM = 6;
+
+/** 各纸张尺寸的宽高（mm）。美式信纸 ≈ 215.9×279.4，取整 216×279。 */
+export const PAGE_FORMATS: Record<PageFormat, { w: number; h: number }> = {
+  letter: { w: 216, h: 279 },
+  A4: { w: 210, h: 297 },
+};
 
 /* ------------------------------------------------------------------ */
 /*  DOM 测量                                                           */
@@ -88,19 +102,21 @@ export function measureFromDOM(
   container: HTMLElement,
   pageMargin: SpacingPreset,
   moduleGap: SpacingPreset,
+  pageFormat: PageFormat,
 ): ResumeMeasurement | null {
-  // 找到简历的外层容器（w-[210mm] 的元素）
-  const resumeOuter = container.querySelector('[class*="w-[210mm]"]') as HTMLElement | null;
+  // 找到简历的外层纸张容器（.resume-sheet）
+  const resumeOuter = container.querySelector('.resume-sheet') as HTMLElement | null;
   if (!resumeOuter) return null;
 
   // 找到 .resume-padding 内容区
   const paddingDiv = resumeOuter.querySelector('.resume-padding') as HTMLElement | null;
   if (!paddingDiv) return null;
 
+  const { w: pageWidthMm, h: pageHeightMm } = PAGE_FORMATS[pageFormat];
   const outerRect = resumeOuter.getBoundingClientRect();
-  const mmToPx = outerRect.width / 210;
+  const mmToPx = outerRect.width / pageWidthMm;
   const marginY = PAGE_MARGIN_Y[pageMargin];
-  const pageContentHeight = (A4_HEIGHT_MM - marginY * 2) * mmToPx;
+  const pageContentHeight = (pageHeightMm - marginY * 2 - BOTTOM_SAFETY_MM) * mmToPx;
   const gap = MODULE_GAP_PX[moduleGap];
 
   // 内容区域的绝对起点（padding-top 之后）
@@ -111,6 +127,8 @@ export function measureFromDOM(
   const moduleEls = paddingDiv.querySelectorAll('[data-module-key]');
   const modules: ModuleMeasure[] = [];
   let profileHeight = 0;
+  // 上一模块底边（绝对视口坐标），用于测量模块间真实间距（含标题上外边距等）
+  let prevBottom: number | null = null;
 
   moduleEls.forEach((el, idx) => {
     const moduleEl = el as HTMLElement;
@@ -121,6 +139,10 @@ export function measureFromDOM(
     if (idx === 0) {
       profileHeight = moduleTop;
     }
+
+    // 模块前真实间距：首个模块无前驱记 0；其余 = 本模块顶边 − 上一模块底边。
+    const gapBefore = prevBottom === null ? 0 : moduleRect.top - prevBottom;
+    prevBottom = moduleRect.bottom;
 
     // 测量模块内的条目
     const itemEls = moduleEl.querySelectorAll('[data-item-index]');
@@ -148,6 +170,7 @@ export function measureFromDOM(
       totalHeight: moduleRect.height,
       items,
       titleHeight,
+      gapBefore,
     });
   });
 
@@ -175,7 +198,7 @@ const MIN_ORPHAN_HEIGHT = 30;
  * 3. 超长模块在条目边界处拆分
  */
 export function allocatePages(measurement: ResumeMeasurement): PageAllocation[] {
-  const { profileHeight, modules, moduleGap, pageContentHeight } = measurement;
+  const { profileHeight, modules, pageContentHeight } = measurement;
 
   if (modules.length === 0) {
     return [{ slices: [] }];
@@ -198,8 +221,8 @@ export function allocatePages(measurement: ResumeMeasurement): PageAllocation[] 
   }
 
   for (const mod of modules) {
-    // 模块前的间距（非页面首个模块时需要间距）
-    const gapBefore = isFirstModuleOnPage ? 0 : moduleGap;
+    // 模块前的间距（非页面首个模块时使用全量渲染中测得的真实间距）
+    const gapBefore = isFirstModuleOnPage ? 0 : mod.gapBefore;
     const availableForModule = remaining - gapBefore;
 
     if (mod.items.length === 0) {
@@ -245,7 +268,7 @@ export function allocatePages(measurement: ResumeMeasurement): PageAllocation[] 
     let showTitle = true;
 
     while (itemStart < mod.items.length) {
-      const gap = isFirstModuleOnPage ? 0 : moduleGap;
+      const gap = isFirstModuleOnPage ? 0 : mod.gapBefore;
       let space = remaining - gap;
 
       if (space <= 0) {

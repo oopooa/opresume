@@ -152,6 +152,10 @@ export interface CustomModule {
   title: string;
   /** 富文本 HTML 内容 */
   contentHtml: string;
+  /** 可选：按语言（语言码，如 'zh-CN' / 'en-US'）覆盖标题，实现中英切换。命中当前语言则优先于 title */
+  titleLocales?: Record<string, string>;
+  /** 可选：按语言覆盖正文 HTML，实现中英切换。命中当前语言则优先于 contentHtml */
+  contentHtmlLocales?: Record<string, string>;
 }
 
 export interface JsonResume extends JsonResumeBase {
@@ -159,7 +163,7 @@ export interface JsonResume extends JsonResumeBase {
   'x-op-birthday'?: string;
   'x-op-ageHidden'?: boolean;
   'x-op-workExpYear'?: string;
-  'x-op-customFields'?: Array<{ id?: string; key: string; value: string }>;
+  'x-op-customFields'?: Array<{ id?: string; key: string; value: string; url?: string }>;
   'x-op-aboutmeHtml'?: string;
   'x-op-customModules'?: CustomModule[];
   'x-op-moduleLayout'?: Record<string, ModuleLayout>;
@@ -168,16 +172,22 @@ export interface JsonResume extends JsonResumeBase {
   'x-op-theme'?: ThemeConfig;
   'x-op-layout'?: LayoutConfig;
   'x-op-locales'?: Record<string, Partial<JsonResume>>;
+  'x-op-publications'?: JsonPublication[];
+  'x-op-grants'?: JsonGrant[];
+  'x-op-posters'?: JsonPoster[];
+  'x-op-teaching'?: JsonTeaching[];
 }
 
 export interface JsonEducation extends ResumeEducation {
   'x-op-id'?: string;
+  'x-op-advisor'?: string;
 }
 
 export interface JsonWork extends ResumeWork {
   'x-op-id'?: string;
   'x-op-departmentName'?: string;
   'x-op-workDescHtml'?: string;
+  'x-op-advisor'?: string;
 }
 
 export interface JsonProject extends ResumeProject {
@@ -193,4 +203,48 @@ export interface JsonSkill extends ResumeSkill {
 
 export interface JsonAward extends ResumeAward {
   'x-op-id'?: string;
+}
+
+/** 教学经历条目（用于 teachingList 模块） */
+export interface JsonTeaching extends ResumeWork {
+  'x-op-id'?: string;
+  'x-op-departmentName'?: string;
+  'x-op-workDescHtml'?: string;
+  'x-op-advisor'?: string;
+}
+
+/** 学术出版物条目（用于 publicationList 模块） */
+export interface JsonPublication {
+  'x-op-id'?: string;
+  authors?: string;
+  selfAuthor?: string;
+  title?: string;
+  venue?: string;
+  year?: string;
+  doi?: string;
+  url?: string;
+  note?: string;
+  category?: 'first' | 'contributing';
+}
+
+/** 学术资助/经费条目（用于 grantList 模块） */
+export interface JsonGrant {
+  'x-op-id'?: string;
+  title?: string;
+  agency?: string;
+  grantId?: string;
+  role?: string;
+  total?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+/** 海报展示条目（用于 posterList 模块） */
+export interface JsonPoster {
+  'x-op-id'?: string;
+  authors?: string;
+  selfAuthor?: string;
+  title?: string;
+  venue?: string;
+  year?: string;
 }

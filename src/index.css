@@ -47,6 +47,8 @@
 
     --resume-primary: #2f5785;
     --resume-tag: #8bc34a;
+    --resume-page-width: 216mm;
+    --resume-page-height: 279mm;
     --resume-page-padding-y: 16mm;
     --resume-page-padding-x: 18mm;
     --resume-module-gap: 24px;
@@ -113,8 +115,9 @@
 }
 
 @media print {
+  /* 默认纸张尺寸（美式信纸）；运行时由 useThemeEffect 注入的 <style> 按所选格式覆盖 */
   @page {
-    size: A4;
+    size: 216mm 279mm;
     margin: 0;
   }
 
@@ -244,6 +247,31 @@ div.resume-layout td,
 div.resume-layout th,
 div.resume-layout a {
   line-height: var(--resume-line-height);
+}
+
+/* 纸张尺寸：宽度固定，最小高度（自适应单页 / 双栏模板），由 CSS 变量驱动 A4 / Letter 切换 */
+.resume-sheet {
+  width: var(--resume-page-width);
+  min-height: var(--resume-page-height);
+}
+
+/* 分页固定高度页：PaginatedResumeView 中每一物理页 */
+.resume-page-sheet {
+  width: var(--resume-page-width);
+  height: var(--resume-page-height);
+}
+
+/* 实时分页页强制下边距：把正文裁剪在内容区底边（距页底一个 marginY 处），
+   防止测量误差让正文溢出进下边距 / 覆盖页脚。
+   box-sizing: border-box（Tailwind preflight 默认）下：
+     height = 页高 - marginY、padding-top = marginY、padding-bottom = 0
+     → 内容盒高度 = 页高 - 2·marginY（与分页预算一致），overflow 在距页底 marginY 处裁剪。
+   仅作用于 .resume-page（实时分页页），不影响测量容器（需自然高度测量全部内容）
+   与非分页模板（template1 两栏，从不挂 .resume-page）。 */
+.resume-page .resume-padding {
+  height: calc(var(--resume-page-height) - var(--resume-page-padding-y));
+  padding-bottom: 0;
+  overflow: hidden;
 }
 
 /* 排版：页边距由 CSS 变量控制（y/x 拆分以便 framer-motion 分别 animate 数值再拼回 mm） */

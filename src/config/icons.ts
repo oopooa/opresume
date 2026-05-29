@@ -449,6 +449,10 @@ export const DEFAULT_MODULE_ICONS: Record<string, string> = {
   awardList: 'Trophy',
   workList: 'Palette',
   aboutme: 'User',
+  publicationList: 'BookText',
+  grantList: 'BadgeDollarSign',
+  posterList: 'Presentation',
+  teachingList: 'School',
 };
 
 /** 自定义模块默认图标 */
@@ -461,4 +465,59 @@ export const DEFAULT_PROFILE_ICONS: Record<string, string> = {
   workPlace: 'MapPin',
   age: 'Cake',
   workExpYear: 'Clock',
+};
+
+/**
+ * 自定义字段默认图标（按 key 名称智能匹配，大小写不敏感）。
+ * 用户在 UI 中显式设置的图标 (customFieldIconMap) 优先于此默认值。
+ */
+export const DEFAULT_CUSTOM_FIELD_ICONS: Record<string, string> = {
+  // LinkedIn
+  LinkedIn: 'Linkedin',
+  Linkedin: 'Linkedin',
+  linkedin: 'Linkedin',
+  // GitHub
+  GitHub: 'Github',
+  Github: 'Github',
+  github: 'Github',
+  // ORCID
+  ORCID: 'IdCard',
+  Orcid: 'IdCard',
+  orcid: 'IdCard',
+  // Google Scholar
+  Scholar: 'GraduationCap',
+  scholar: 'GraduationCap',
+  'Google Scholar': 'GraduationCap',
+  GoogleScholar: 'GraduationCap',
+  // Twitter / X
+  Twitter: 'Twitter',
+  twitter: 'Twitter',
+  X: 'Twitter',
+  // Personal website
+  Website: 'Globe',
+  website: 'Globe',
+  Web: 'Globe',
+  Site: 'Globe',
+  Homepage: 'Globe',
+  // YouTube
+  YouTube: 'Youtube',
+  Youtube: 'Youtube',
+  youtube: 'Youtube',
+  // Address / location
+  Address: 'MapPin',
+  address: 'MapPin',
+  Location: 'MapPin',
+  location: 'MapPin',
+  地址: 'MapPin',
+  位置: 'MapPin',
+  现居地: 'MapPin',
+  所在地: 'MapPin',
+  工作地点: 'MapPin',
+  // Common CN platforms
+  知乎: 'BookOpen',
+  掘金: 'Code',
+  微博: 'Share2',
+  博客: 'Rss',
+  Blog: 'Rss',
+  blog: 'Rss',
 };

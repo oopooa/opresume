@@ -1,52 +1,52 @@
 import type { ModuleProps } from '../types';
-import type { JsonWork } from '@/types/json-resume';
+import type { JsonTeaching } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
 import { EditableSection, EditableSectionTitle, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
 
-export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
+export function TeachingModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
-  const moduleIcon = useModuleIcon('workExpList');
+  const moduleIcon = useModuleIcon('teachingList');
   const { SectionTitle } = tokens.components;
   const mask = usePrivacyMask();
-  if (isHidden(config, 'workExpList') || !config.work?.length) return null;
+  if (isHidden(config, 'teachingList') || !config['x-op-teaching']?.length) return null;
 
-  const allWork = config.work as JsonWork[];
-  const list = itemRange ? allWork.slice(itemRange[0], itemRange[1]) : allWork;
+  const allTeaching = config['x-op-teaching'] as JsonTeaching[];
+  const list = itemRange ? allTeaching.slice(itemRange[0], itemRange[1]) : allTeaching;
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
-    <EditableSection module="workExpList" hoverScope="title">
+    <EditableSection module="teachingList" hoverScope="title">
       <section className={tokens.spacing.module}>
         {showTitle && (
           <EditableSectionTitle>
-            <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />
+            <SectionTitle title={getTitle(config, 'teachingList', t('module.teachingList'))} icon={moduleIcon} />
           </EditableSectionTitle>
         )}
-        {list.map((work, i) => (
-          <div key={work['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
+        {list.map((teaching, i) => (
+          <div key={teaching['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>
               <div>
                 <p className={cn(tokens.typography.titleSize, tokens.typography.titleWeight, tokens.colors.primary)}>
-                  {mask(work.name, 'companyName')}
+                  {mask(teaching.name, 'companyName')}
                 </p>
-                {work['x-op-departmentName'] && (
+                {teaching['x-op-departmentName'] && (
                   <p className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
-                    {mask(work['x-op-departmentName'], 'departmentName')}
+                    {mask(teaching['x-op-departmentName'], 'departmentName')}
                   </p>
                 )}
-                {work['x-op-advisor'] && (
+                {teaching['x-op-advisor'] && (
                   <p className={cn('italic', tokens.typography.contentSize, tokens.colors.secondary)}>
-                    {work['x-op-advisor']}
+                    {teaching['x-op-advisor']}
                   </p>
                 )}
               </div>
-              <TimeRange startDate={work.startDate} endDate={work.endDate} />
+              <TimeRange startDate={teaching.startDate} endDate={teaching.endDate} />
             </div>
-            {work['x-op-workDescHtml'] && (
+            {teaching['x-op-workDescHtml'] && (
               <PolishHost className="mt-1" itemIndex={indexOffset + i}>
-                <RichContent content={work['x-op-workDescHtml']} textSize={tokens.typography.contentSize} />
+                <RichContent content={teaching['x-op-workDescHtml']} textSize={tokens.typography.contentSize} />
               </PolishHost>
             )}
           </div>

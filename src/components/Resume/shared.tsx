@@ -6,7 +6,7 @@ import { useUIStore } from '@/store/ui';
 import { useTranslation } from 'react-i18next';
 import { Avatar as AvatarUI, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS, DEFAULT_CUSTOM_MODULE_ICON } from '@/config/icons';
+import { DEFAULT_MODULE_ICONS, DEFAULT_PROFILE_ICONS, DEFAULT_CUSTOM_MODULE_ICON, DEFAULT_CUSTOM_FIELD_ICONS } from '@/config/icons';
 import { DynamicIcon } from '@/components/DynamicIcon';
 import { maskField } from '@/utils/privacy';
 
@@ -286,9 +286,58 @@ export function getProfileIcon(key: string): string | undefined {
   return DEFAULT_PROFILE_ICONS[key];
 }
 
-/** 响应式获取自定义字段图标映射 */
+/**
+ * 响应式获取自定义字段图标映射。
+ * 用户在 UI 中显式设置的图标优先；未设置时回退到 DEFAULT_CUSTOM_FIELD_ICONS
+ * 中按常见名称（LinkedIn / GitHub / ORCID / Scholar / Twitter / Website 等）匹配的默认图标。
+ */
 export function useCustomFieldIconMap(): Record<string, string> {
-  return useUIStore((s) => s.customFieldIconMap);
+  const userMap = useUIStore((s) => s.customFieldIconMap);
+  return { ...DEFAULT_CUSTOM_FIELD_ICONS, ...userMap };
+}
+
+function profileHref(raw: string): string | null {
+  const v = raw.trim();
+  if (!v) return null;
+  // email
+  if (/^[\w.+-]+@[\w-]+(\.[\w-]+)+$/.test(v)) return `mailto:${v}`;
+  // already a full URL
+  if (/^https?:\/\//i.test(v)) return v;
+  // ORCID id like 0000-0002-1825-0097
+  if (/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/.test(v)) return `https://orcid.org/${v}`;
+  // URL-shaped: contains a dot, no whitespace, no commas/colons typical of plain text
+  if (!/\s/.test(v) && /[^.\s]+\.[^.\s]+/.test(v) && !/[,;]/.test(v)) {
+    return `https://${v}`;
+  }
+  return null;
+}
+
+function ProfileFieldValue({ children, hrefOverride }: { children: ReactNode; hrefOverride?: string }) {
+  if (hrefOverride) {
+    return (
+      <a
+        href={hrefOverride}
+        target={hrefOverride.startsWith('mailto:') ? undefined : '_blank'}
+        rel="noreferrer"
+        className="underline-offset-2 hover:underline"
+      >
+        {children}
+      </a>
+    );
+  }
+  if (typeof children !== 'string') return <span>{children}</span>;
+  const href = profileHref(children);
+  if (!href) return <span>{children}</span>;
+  return (
+    <a
+      href={href}
+      target={href.startsWith('mailto:') ? undefined : '_blank'}
+      rel="noreferrer"
+      className="underline-offset-2 hover:underline"
+    >
+      {children}
+    </a>
+  );
 }
 
 /** Profile 字段带图标渲染，图标隐藏时回退显示文字标签 */
@@ -296,11 +345,14 @@ export function ProfileField({
   icon,
   label,
   children,
+  href,
   className,
 }: {
   icon?: string;
   label?: string;
   children: ReactNode;
+  /** 显式链接覆盖：当提供时，使用此 URL 作为 href（与显示文本解耦） */
+  href?: string;
   className?: string;
 }) {
   const showIcons = useUIStore((s) => s.showIcons);
@@ -308,9 +360,91 @@ export function ProfileField({
     <p className={cn('flex items-center gap-1.5', className)}>
       <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
       {!showIcons && label && <span className="shrink-0 text-gray-400">{label}:</span>}
-      <span>{children}</span>
+      <ProfileFieldValue hrefOverride={href}>{children}</ProfileFieldValue>
     </p>
   );
+}
+
+/**
+ * Split a plain text fragment on bare `*` and `#` characters and render any
+ * markers as <sup> nodes.  Everything else is emitted as a plain string.
+ */
+function renderMarkers(text: string): ReactNode {
+  // Split on every * or # while keeping the delimiter
+  const pieces = text.split(/([\*#]+)/g);
+  if (pieces.length === 1) return text;
+  return (
+    <>
+      {pieces.map((piece, idx) =>
+        /^[\*#]+$/.test(piece) ? (
+          <sup key={idx} className="text-[0.7em] mx-0.5">{piece}</sup>
+        ) : (
+          piece
+        ),
+      )}
+    </>
+  );
+}
+
+/**
+ * Render an author string, bolding any substring that matches `selfAuthor`
+ * (which may be a comma-separated list of name variants starting with an
+ * uppercase letter), and converting bare `*` / `#` characters to <sup> nodes.
+ *
+ * Pure function — no hooks, no module-level side effects.
+ */
+export function renderAuthors(authors?: string, selfAuthor?: string): ReactNode {
+  if (!authors) return null;
+
+  // Helper: split a plain string segment on * / # markers
+  const withMarkers = (text: string): ReactNode => renderMarkers(text);
+
+  if (!selfAuthor?.trim()) return <>{withMarkers(authors)}</>;
+
+  const variants = selfAuthor
+    .split(/\s*,\s*(?=[A-Z])/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (variants.length === 0) return <>{withMarkers(authors)}</>;
+
+  // Escape each variant for use inside a RegExp, but keep * and # outside the
+  // escape so they are NOT treated as literal chars in the split pattern —
+  // they must survive into the parts array so renderMarkers can convert them.
+  const escapeForRegex = (s: string) => s.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+  // Note: intentionally does NOT escape * or # so they pass through.
+  const pattern = new RegExp(`(${variants.map(escapeForRegex).join('|')})`, 'g');
+  const parts = authors.split(pattern);
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        variants.includes(part) ? (
+          <strong key={i} className="font-bold underline underline-offset-2">
+            {withMarkers(part)}
+          </strong>
+        ) : (
+          <span key={i}>{withMarkers(part)}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+/**
+ * 页脚姓名格式化：把全名转为「姓, 名首字母.」（学术 CV 页脚惯例）。
+ * "JOHN SMITH" → "Smith, J."；"Mary Jane Watson" → "Watson, M. J."。
+ * 单 token / 中文名（无空格）无法拆分 → 原样返回去空格后的全名。
+ *
+ * Pure function — no hooks, no module-level side effects.
+ */
+export function formatFooterName(fullName?: string): string {
+  if (!fullName?.trim()) return '';
+  const tokens = fullName.trim().split(/\s+/);
+  if (tokens.length < 2) return fullName.trim();
+  const surname = tokens[tokens.length - 1];
+  const titled = surname.charAt(0).toUpperCase() + surname.slice(1).toLowerCase();
+  const initials = tokens.slice(0, -1).map((t) => `${t.charAt(0).toUpperCase()}.`).join(' ');
+  return `${titled}, ${initials}`;
 }
 
 /**

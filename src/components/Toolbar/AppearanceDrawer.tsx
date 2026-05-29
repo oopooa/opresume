@@ -5,7 +5,7 @@ import { LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { getSampleResume } from '@/config/sample-resume';
-import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
+import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE, LINE_HEIGHT_RANGE, getEffectiveTypography } from '@/config/layout';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -147,12 +147,19 @@ export function AppearanceDrawer() {
   const updateTheme = useUIStore((s) => s.updateTheme);
   const showIcons = useUIStore((s) => s.showIcons);
   const toggleIcons = useUIStore((s) => s.toggleIcons);
+  const showFootnote = useUIStore((s) => s.showFootnote);
+  const toggleFootnote = useUIStore((s) => s.toggleFootnote);
+  const pageFormat = useUIStore((s) => s.pageFormat);
+  const setPageFormat = useUIStore((s) => s.setPageFormat);
   const layout = useUIStore((s) => s.layout);
   const setPageMargin = useUIStore((s) => s.setPageMargin);
   const setModuleGap = useUIStore((s) => s.setModuleGap);
   const setTitleFontSize = useUIStore((s) => s.setTitleFontSize);
   const setBodyFontSize = useUIStore((s) => s.setBodyFontSize);
   const setLineHeight = useUIStore((s) => s.setLineHeight);
+  const typographyByTemplate = useUIStore((s) => s.typographyByTemplate);
+  // 当前模板生效的字号 / 行高（用户按模板覆盖 > 模板默认 > 全局默认）
+  const typography = getEffectiveTypography(template, typographyByTemplate);
 
   // drawer 动画完成后才启用缩略图 hover 效果，避免鼠标滑过时误触
   const [drawerReady, setDrawerReady] = useState(false);
@@ -293,6 +300,40 @@ export function AppearanceDrawer() {
                 </div>
               </section>
 
+              {/* 页脚（姓名 + 页码） */}
+              <section>
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-medium">{t('toolbar.showFootnote')}</Label>
+                  <Switch
+                    checked={showFootnote}
+                    onCheckedChange={toggleFootnote}
+                    aria-label={t('toolbar.showFootnote')}
+                  />
+                </div>
+              </section>
+
+              {/* 纸张尺寸 */}
+              <section>
+                <h3 className="mb-2.5 text-sm font-medium text-foreground">{t('toolbar.pageFormat')}</h3>
+                <div className="grid grid-cols-2 rounded-full bg-gray-100 p-1">
+                  {(['letter', 'A4'] as const).map((fmt) => (
+                    <button
+                      key={fmt}
+                      type="button"
+                      onClick={() => setPageFormat(fmt)}
+                      className={cn(
+                        'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                        pageFormat === fmt
+                          ? 'bg-white text-gray-900 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700',
+                      )}
+                    >
+                      {fmt === 'letter' ? t('toolbar.usLetter') : t('toolbar.a4')}
+                    </button>
+                  ))}
+                </div>
+              </section>
+
               {/* 页边距 */}
               <section>
                 <h3 className="mb-2.5 text-sm font-medium text-foreground">{t('toolbar.pageMargin')}</h3>
@@ -309,7 +350,7 @@ export function AppearanceDrawer() {
               <section>
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-foreground">{t('toolbar.titleFontSize')}</h3>
-                  <FontSizeStepper value={layout.titleFontSize} onChange={setTitleFontSize} min={TITLE_FONT_SIZE_RANGE.min} max={TITLE_FONT_SIZE_RANGE.max} />
+                  <FontSizeStepper value={typography.titleFontSize} onChange={setTitleFontSize} min={TITLE_FONT_SIZE_RANGE.min} max={TITLE_FONT_SIZE_RANGE.max} />
                 </div>
               </section>
 
@@ -317,7 +358,7 @@ export function AppearanceDrawer() {
               <section>
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-foreground">{t('toolbar.bodyFontSize')}</h3>
-                  <FontSizeStepper value={layout.bodyFontSize} onChange={setBodyFontSize} min={BODY_FONT_SIZE_RANGE.min} max={BODY_FONT_SIZE_RANGE.max} />
+                  <FontSizeStepper value={typography.bodyFontSize} onChange={setBodyFontSize} min={BODY_FONT_SIZE_RANGE.min} max={BODY_FONT_SIZE_RANGE.max} />
                 </div>
               </section>
 
@@ -325,12 +366,12 @@ export function AppearanceDrawer() {
               <section>
                 <div className="mb-2.5 flex items-center justify-between">
                   <h3 className="text-sm font-medium text-foreground">{t('toolbar.lineHeight')}</h3>
-                  <span className="text-sm font-medium tabular-nums text-muted-foreground">{layout.lineHeight.toFixed(1)}</span>
+                  <span className="text-sm font-medium tabular-nums text-muted-foreground">{typography.lineHeight.toFixed(1)}</span>
                 </div>
                 <Slider
-                  value={[layout.lineHeight]}
-                  min={1.2}
-                  max={1.8}
+                  value={[typography.lineHeight]}
+                  min={LINE_HEIGHT_RANGE.min}
+                  max={LINE_HEIGHT_RANGE.max}
                   step={0.1}
                   onValueChange={([v]) => setLineHeight(v)}
                 />

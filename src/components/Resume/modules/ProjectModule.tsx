@@ -60,6 +60,16 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
                 {proj.description}
               </p>
             )}
+            {proj.url && (
+              <a
+                href={proj.url.startsWith('http') ? proj.url : `https://${proj.url}`}
+                className={cn('mt-0.5 inline-block underline', tokens.typography.contentSize, tokens.colors.secondary)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {proj.url}
+              </a>
+            )}
             {proj['x-op-projectContentHtml'] && (
               <PolishHost className="mt-1" itemIndex={indexOffset + i}>
                 <RichContent content={proj['x-op-projectContentHtml']} textSize={tokens.typography.contentSize} />

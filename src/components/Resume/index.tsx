@@ -1,13 +1,15 @@
-import { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FileText } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { JsonResume } from '@/types/json-resume';
 import type { TemplateDefinition } from './types';
 import { useUIStore } from '@/store/ui';
 import { useTemplateModules, renderPageSlices } from './modules';
+import { formatFooterName } from './shared';
 import { definitions, defaultDefinition } from './templates';
-import { getEffectiveLayout } from '@/config/layout';
-import { measureFromDOM, allocatePages } from '@/utils/pagination';
+import { getEffectiveLayout, getEffectiveTypography } from '@/config/layout';
+import { measureFromDOM, allocatePages, PAGE_FORMATS } from '@/utils/pagination';
 import type { PageAllocation } from '@/utils/pagination';
 
 /* ---------- 原始单页渲染（用于测量和双栏模板） ---------- */
@@ -41,6 +43,25 @@ function PageIndicator({ current, total }: { current: number; total: number }) {
   );
 }
 
+/* ---------- 页脚（姓名 + 页码） ---------- */
+// 绝对定位于每页底部边距带内（bottom 6mm，左右与页面 x 边距对齐），不占用正文高度，
+// 故无需调整分页算法。预览与打印均渲染（不加 print:hidden）。
+function PageFooter({ name, page, total }: { name: string; page: number; total: number }) {
+  return (
+    <div
+      className="absolute left-0 right-0 flex items-baseline justify-between text-[10px] text-gray-500"
+      style={{
+        bottom: '6mm',
+        paddingLeft: 'var(--resume-page-padding-x)',
+        paddingRight: 'var(--resume-page-padding-x)',
+      }}
+    >
+      <span>{name}</span>
+      <span>{page} / {total}</span>
+    </div>
+  );
+}
+
 /* ---------- 分页渲染 ---------- */
 
 function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config: JsonResume }) {
@@ -49,24 +70,42 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
   const [pages, setPages] = useState<PageAllocation[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const layout = useUIStore((s) => s.layout);
+  const pageFormat = useUIStore((s) => s.pageFormat);
+  const showFootnote = useUIStore((s) => s.showFootnote);
+  const typographyByTemplate = useUIStore((s) => s.typographyByTemplate);
   const tokens = def.getTokens();
   const Shell = def.LayoutShell;
+  const footerName = formatFooterName(config.basics?.name);
 
+  // 当前模板生效的字号 / 行高：任一变化都会改变渲染高度，需要重新测量分页。
+  const { titleFontSize, bodyFontSize, lineHeight } = getEffectiveTypography(def.id, typographyByTemplate);
+
+  // doMeasure 直接读取实时 DOM（此时已按最新 CSS 变量重新渲染），因此无需把字号 / 行高
+  // 列入它的依赖；重新测量由下方 useLayoutEffect 的字号 / 行高依赖触发。
   const doMeasure = useCallback(() => {
     const container = measureRef.current;
     if (!container) return;
 
-    const measurement = measureFromDOM(container, layout.pageMargin, layout.moduleGap);
+    // 同步写入纸张尺寸 CSS 变量，确保测量容器在本次（同步）测量前已是目标宽度。
+    // useThemeEffect 在父组件用 useEffect 写同一变量，晚于本 useLayoutEffect 一帧，
+    // 切换 A4/Letter 时若不在此处先写，会用旧宽度测量导致分页错位。
+    const { w: pageWidthMm, h: pageHeightMm } = PAGE_FORMATS[pageFormat];
+    const root = document.documentElement;
+    root.style.setProperty('--resume-page-width', `${pageWidthMm}mm`);
+    root.style.setProperty('--resume-page-height', `${pageHeightMm}mm`);
+
+    const measurement = measureFromDOM(container, layout.pageMargin, layout.moduleGap, pageFormat);
     if (!measurement) return;
 
     const result = allocatePages(measurement);
     setPages(result);
-  }, [layout.pageMargin, layout.moduleGap]);
+  }, [layout.pageMargin, layout.moduleGap, pageFormat]);
 
-  // 测量容器渲染后立即测量（同步，避免闪烁）
+  // 测量容器渲染后立即测量（同步，避免闪烁）。
+  // 依赖 config（内容）+ 字号 / 行高（影响高度）→ 任一变化都重新分页。
   useLayoutEffect(() => {
     doMeasure();
-  }, [doMeasure, config, layout.lineHeight]);
+  }, [doMeasure, config, lineHeight, titleFontSize, bodyFontSize]);
 
   // 通过 IntersectionObserver 追踪当前可见页
   useEffect(() => {
@@ -123,7 +162,7 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
           {pages.map((page, i) => {
             const mainContent = renderPageSlices(page.slices, config, tokens);
             return (
-              <div key={i} data-page-index={i} className="resume-page h-[297mm] w-[210mm] overflow-hidden">
+              <div key={i} data-page-index={i} className="resume-page resume-page-sheet relative overflow-hidden">
                 <div className="resume-layout">
                   <Shell
                     config={config}
@@ -132,6 +171,9 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
                     pageIndex={i}
                   />
                 </div>
+                {showFootnote && footerName && (
+                  <PageFooter name={footerName} page={i + 1} total={pages.length} />
+                )}
               </div>
             );
           })}
@@ -152,16 +194,34 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
 /* ---------- 入口 ---------- */
 
 export function ResumeView({ config, templateId, disablePagination }: { config: JsonResume; templateId?: string; disablePagination?: boolean }) {
+  const { t, i18n } = useTranslation();
   const storeTemplate = useUIStore((s) => s.template);
   const activeId = templateId ?? storeTemplate;
   const def = definitions[activeId] ?? defaultDefinition;
   const reduceMotion = useReducedMotion();
 
+  // 模板级默认栏目标题：学术模板 template5 自带「Education & Training / Research Experience…」等
+  // 学术化标题（中英双语，随语言切换）。这些只是默认值——简历若在 x-op-titleNameMap 中显式
+  // 设置了某栏标题，则用户设置优先（spread 在后覆盖）。无对应 templateTitle.<id> 配置的模板
+  // （template1–4）保持通用 module.* 标题，不受影响。
+  // useMemo 依赖语言，避免每次渲染新建 config 触发分页重测；语言切换时重算 → 标题随之更新。
+  const effectiveConfig = useMemo(() => {
+    const defaults = t(`templateTitle.${activeId}`, { returnObjects: true, defaultValue: null }) as
+      | Record<string, string>
+      | null;
+    if (!defaults || typeof defaults !== 'object') return config;
+    return {
+      ...config,
+      'x-op-titleNameMap': { ...defaults, ...(config['x-op-titleNameMap'] ?? {}) },
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- t 随 i18n.language 变化即可
+  }, [config, activeId, i18n.language]);
+
   const inner =
-    !disablePagination && supportsPagination(def, config) ? (
-      <PaginatedResumeView def={def} config={config} />
+    !disablePagination && supportsPagination(def, effectiveConfig) ? (
+      <PaginatedResumeView def={def} config={effectiveConfig} />
     ) : (
-      <TemplateRenderer def={def} config={config} />
+      <TemplateRenderer def={def} config={effectiveConfig} />
     );
 
   // 简历"从下到上"淡入：duration 1.0s + ease-out quint，足够慢让用户看清整体浮入过程；

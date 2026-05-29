@@ -12,6 +12,10 @@ import { WorkListModule } from './WorkListModule';
 import { AboutMeModule } from './AboutMeModule';
 import { SkillModule } from './SkillModule';
 import { CustomModule } from './CustomModule';
+import { PublicationModule } from './PublicationModule';
+import { GrantModule } from './GrantModule';
+import { PosterModule } from './PosterModule';
+import { TeachingModule } from './TeachingModule';
 
 /** 内置模块组件映射表 */
 export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
@@ -22,6 +26,10 @@ export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
   workList: WorkListModule,
   aboutme: AboutMeModule,
   skillList: SkillModule,
+  publicationList: PublicationModule,
+  grantList: GrantModule,
+  posterList: PosterModule,
+  teachingList: TeachingModule,
 };
 
 /** 判断模块 ID 是否为自定义模块（以 custom- 开头） */

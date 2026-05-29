@@ -56,7 +56,7 @@ function Template4Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
   const mask = usePrivacyMask();
 
   return (
-    <div className="relative min-h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
+    <div className="relative resume-sheet bg-white shadow-lg print:shadow-none">
       <div className="resume-padding resume-padding-offset-left">
         {pageIndex === 0 && (
           <>

@@ -1,6 +1,7 @@
 import type { ReactNode, ComponentType } from 'react';
 import type { JsonResume } from '@/types/json-resume';
 import type { ModuleLayout } from '@/types/resume';
+import type { Typography } from '@/types/theme';
 
 /** 样式令牌 — 控制共享模块的视觉差异 */
 export interface StyleTokens {
@@ -55,6 +56,12 @@ export interface TemplateDefinition {
   tags: string[];
   /** 默认模块布局：sidebar 和 main 各放哪些模块（不含 profile） */
   defaultLayout: ModuleLayout;
+  /**
+   * 模板默认字号 / 行高。未声明则回退到 GLOBAL_DEFAULT_TYPOGRAPHY（16/14/1.5）。
+   * 学术模板 template5 用它把正文锁到 12px 以匹配目标 PDF；用户仍可在 AppearanceDrawer
+   * 中调整（调整值按模板记忆，见 UIStore.typographyByTemplate / getEffectiveTypography）。
+   */
+  defaultTypography?: Typography;
   getTokens: () => StyleTokens;
   LayoutShell: ComponentType<LayoutShellProps>;
 }

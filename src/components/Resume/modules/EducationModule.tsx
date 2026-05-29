@@ -23,7 +23,7 @@ export function EducationModule({ config, tokens, itemRange, showTitle = true }:
         {list.map((edu, i) => (
           <div
             key={edu['x-op-id'] ?? i}
-            className={cn(tokens.spacing.item, isInline && 'flex items-baseline justify-between')}
+            className={cn(tokens.spacing.item, 'flex items-baseline justify-between')}
             data-item-index={indexOffset + i}
           >
             <div className={cn(isInline && 'flex items-baseline gap-2')}>
@@ -37,6 +37,11 @@ export function EducationModule({ config, tokens, itemRange, showTitle = true }:
               ) : (
                 <p className={cn(tokens.typography.contentSize, tokens.colors.secondary)}>
                   {edu.area}{edu.studyType && ` · ${edu.studyType}`}
+                </p>
+              )}
+              {!isInline && edu['x-op-advisor'] && (
+                <p className={cn('italic', tokens.typography.contentSize, tokens.colors.secondary)}>
+                  {edu['x-op-advisor']}
                 </p>
               )}
             </div>

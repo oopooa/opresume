@@ -52,6 +52,10 @@
     "privacyOn": "Sensitive info is masked",
     "privacyOff": "Show full info",
     "typography": "Typography",
+    "showFootnote": "Page Footer",
+    "pageFormat": "Page Format",
+    "a4": "A4",
+    "usLetter": "US Letter",
     "pageMargin": "Page Margin",
     "moduleGap": "Module Spacing",
     "lineHeight": "Line Height",
@@ -84,6 +88,13 @@
     "awardList": "Awards",
     "workList": "Portfolio",
     "aboutme": "About Me",
+    "publicationList": "Publications",
+    "publicationFirstAuthor": "First Author or Corresponding Author:",
+    "publicationContributing": "Contributing Author:",
+    "publicationLegendFirst": "* Co-First author; # Co-Corresponding author",
+    "grantList": "Grants",
+    "posterList": "Poster Sessions",
+    "teachingList": "Teaching",
     "customModule": "Custom Module",
     "addCustomModule": "Add Custom Module"
   },
@@ -141,19 +152,52 @@
     "startTime": "Start",
     "endTime": "End",
     "present": "Present",
-    "selectMonth": "Select month"
+    "selectMonth": "Select month",
+    "advisor": "Advisor",
+    "grantRole": "Role",
+    "grantTotal": "Total",
+    "grantAgency": "Agency",
+    "grantId": "Grant ID",
+    "grantTitle": "Grant Title",
+    "grantTime": "Duration",
+    "teachingName": "Course / Role",
+    "pubTitle": "Title",
+    "pubAuthors": "Authors",
+    "pubSelfAuthor": "Your Name(s) to Bold",
+    "pubVenue": "Venue",
+    "pubYear": "Year",
+    "pubCategory": "Category",
+    "pubCategoryFirst": "First / Corresponding Author",
+    "pubCategoryContributing": "Contributing Author",
+    "pubDoi": "DOI",
+    "pubUrl": "URL",
+    "pubNote": "Note"
   },
   "template": {
     "template1": "Classic",
     "template2": "Compact",
     "template3": "Centered",
-    "template4": "Formal"
+    "template4": "Formal",
+    "template5": "Academic"
+  },
+  "templateTitle": {
+    "template5": {
+      "educationList": "Education & Training",
+      "grantList": "Grants",
+      "awardList": "Fellowships",
+      "publicationList": "Publications",
+      "posterList": "Poster Sessions",
+      "projectList": "Open-Source Software",
+      "teachingList": "Teaching",
+      "workExpList": "Research Experience"
+    }
   },
   "templateTag": {
     "twoColumn": "Two-column",
     "singleColumn": "Single-column",
     "multiPage": "Multi-page",
-    "singlePage": "Single-page"
+    "singlePage": "Single-page",
+    "academic": "Academic"
   },
   "theme": {
     "onyxBlack": "Onyx Black",
@@ -296,6 +340,7 @@
     "cancelConfirmNo": "Keep waiting"
   },
   "provider": {
-    "siliconflow": "SiliconFlow"
+    "siliconflow": "SiliconFlow",
+    "opencodeZen": "Opencode Zen"
   }
 }

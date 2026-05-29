@@ -1,5 +1,6 @@
 import type { JsonResume } from '@/types/json-resume';
 import type { StyleTokens } from '../types';
+import { useTranslation } from 'react-i18next';
 import { RichContent } from '@/components/RichContent';
 import {
   EditableSection,
@@ -9,6 +10,12 @@ import {
   isHidden,
   useModuleIcon,
 } from '../shared';
+
+/** 按当前语言取本地化值：精确语言码 > 语言前缀（zh/en） > 基础值 */
+function pickLocale(base: string, locales: Record<string, string> | undefined, lang: string): string {
+  if (!locales) return base;
+  return locales[lang] ?? locales[lang.split('-')[0]] ?? base;
+}
 
 /**
  * 自定义模块渲染组件。
@@ -27,6 +34,7 @@ export function CustomModule({
   tokens: StyleTokens;
   showTitle?: boolean;
 }) {
+  const { i18n } = useTranslation();
   const moduleIcon = useModuleIcon(moduleId);
   const { SectionTitle } = tokens.components;
 
@@ -34,7 +42,10 @@ export function CustomModule({
   if (!customModule) return null;
   if (isHidden(config, moduleId)) return null;
 
-  const title = getTitle(config, moduleId, customModule.title);
+  // 标题 / 正文按当前语言解析（titleLocales / contentHtmlLocales）；用户在 titleNameMap 中的显式标题仍优先。
+  const localizedTitle = pickLocale(customModule.title, customModule.titleLocales, i18n.language);
+  const localizedContent = pickLocale(customModule.contentHtml, customModule.contentHtmlLocales, i18n.language);
+  const title = getTitle(config, moduleId, localizedTitle);
 
   return (
     <EditableSection module={moduleId} hoverScope="title">
@@ -44,9 +55,9 @@ export function CustomModule({
             <SectionTitle title={title} icon={moduleIcon} />
           </EditableSectionTitle>
         )}
-        {customModule.contentHtml && (
+        {localizedContent && (
           <PolishHost>
-            <RichContent content={customModule.contentHtml} textSize={tokens.typography.contentSize} />
+            <RichContent content={localizedContent} textSize={tokens.typography.contentSize} />
           </PolishHost>
         )}
       </section>

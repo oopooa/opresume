@@ -52,6 +52,10 @@
     "privacyOn": "敏感信息已打码",
     "privacyOff": "显示完整信息",
     "typography": "排版",
+    "showFootnote": "页脚",
+    "pageFormat": "纸张尺寸",
+    "a4": "A4",
+    "usLetter": "美式信纸",
     "pageMargin": "页边距",
     "moduleGap": "模块间距",
     "lineHeight": "行间距",
@@ -84,6 +88,13 @@
     "awardList": "荣誉奖项",
     "workList": "个人作品",
     "aboutme": "自我评价",
+    "publicationList": "学术发表",
+    "publicationFirstAuthor": "第一作者或通讯作者：",
+    "publicationContributing": "合作作者：",
+    "publicationLegendFirst": "* 共同第一作者；# 共同通讯作者",
+    "grantList": "科研项目",
+    "posterList": "海报展示",
+    "teachingList": "教学经历",
     "customModule": "自定义模块",
     "addCustomModule": "添加自定义模块"
   },
@@ -141,19 +152,52 @@
     "startTime": "开始时间",
     "endTime": "结束时间",
     "present": "至今",
-    "selectMonth": "选择年月"
+    "selectMonth": "选择年月",
+    "advisor": "导师",
+    "grantRole": "角色",
+    "grantTotal": "总金额",
+    "grantAgency": "资助机构",
+    "grantId": "项目编号",
+    "grantTitle": "项目名称",
+    "grantTime": "起止时间",
+    "teachingName": "课程 / 角色",
+    "pubTitle": "标题",
+    "pubAuthors": "作者",
+    "pubSelfAuthor": "需加粗的本人姓名",
+    "pubVenue": "期刊 / 会议",
+    "pubYear": "年份",
+    "pubCategory": "类别",
+    "pubCategoryFirst": "第一作者 / 通讯作者",
+    "pubCategoryContributing": "参与作者",
+    "pubDoi": "DOI",
+    "pubUrl": "链接",
+    "pubNote": "备注"
   },
   "template": {
     "template1": "经典双栏",
     "template2": "素简单栏",
     "template3": "清新居中",
-    "template4": "正式徽章"
+    "template4": "正式徽章",
+    "template5": "学术 CV"
+  },
+  "templateTitle": {
+    "template5": {
+      "educationList": "教育与培训",
+      "grantList": "科研项目",
+      "awardList": "奖学金",
+      "publicationList": "学术论文",
+      "posterList": "海报展示",
+      "projectList": "开源软件",
+      "teachingList": "教学经历",
+      "workExpList": "科研经历"
+    }
   },
   "templateTag": {
     "twoColumn": "双栏",
     "singleColumn": "单栏",
     "multiPage": "多页",
-    "singlePage": "单页"
+    "singlePage": "单页",
+    "academic": "学术"
   },
   "theme": {
     "onyxBlack": "曜石黑",
@@ -296,6 +340,7 @@
     "cancelConfirmNo": "继续等待"
   },
   "provider": {
-    "siliconflow": "硅基流动"
+    "siliconflow": "硅基流动",
+    "opencodeZen": "Opencode Zen"
   }
 }

@@ -36,7 +36,7 @@ function Template1Shell({ config, sidebarContent, mainContent }: LayoutShellProp
   const mask = usePrivacyMask();
 
   return (
-    <div className="resume-padding flex min-h-[297mm] w-[210mm] gap-5 bg-white text-gray-800 shadow-lg print:shadow-none">
+    <div className="resume-padding flex resume-sheet gap-5 bg-white text-gray-800 shadow-lg print:shadow-none">
       <aside className="w-[70mm] shrink-0 bg-gray-50 p-4 print:bg-gray-50">
         <EditableSection module="profile">
           <div className="mb-4 text-center">

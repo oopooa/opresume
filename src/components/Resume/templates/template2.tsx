@@ -37,7 +37,7 @@ function Template2Shell({ config, mainContent, pageIndex = 0 }: LayoutShellProps
   const mask = usePrivacyMask();
 
   return (
-    <div className="min-h-[297mm] w-[210mm] bg-white text-gray-800 shadow-lg print:shadow-none">
+    <div className="resume-sheet bg-white text-gray-800 shadow-lg print:shadow-none">
       <div className="resume-padding">
         {pageIndex === 0 && (
           <EditableSection module="profile">
