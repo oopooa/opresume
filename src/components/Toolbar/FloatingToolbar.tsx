@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Download, Github, Save, PenLine } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { toast } from 'sonner';
 import { useResumeStore } from '@/store/resume';
 import { useUIStore } from '@/store/ui';
 import { saveWithToast } from '@/hooks/useSaveShortcut';
@@ -21,6 +22,8 @@ export function FloatingToolbar() {
   const { t } = useTranslation();
   const dirty = useResumeStore((s) => s.dirty);
   const openEditor = useUIStore((s) => s.openEditor);
+  const printHintSeen = useUIStore((s) => s.printHintSeen);
+  const markPrintHintSeen = useUIStore((s) => s.markPrintHintSeen);
   // 减少动画偏好 → 退化为静态显示，避免对前庭敏感用户造成不适
   const reduceMotion = useReducedMotion();
 
@@ -29,6 +32,12 @@ export function FloatingToolbar() {
   const handlePrint = useCallback(() => {
     if (printingRef.current) return;
     printingRef.current = true;
+    // 首次导出时提示如何获得干净 PDF（关闭浏览器自带的页眉页脚）。
+    // 浏览器无法以代码强制关闭"页眉和页脚"，只能引导用户在打印对话框中设置。
+    if (!printHintSeen) {
+      toast.info(t('toolbar.printHint'), { duration: 8000 });
+      markPrintHintSeen();
+    }
     requestIdleCallback(
       () => {
         window.print();
@@ -36,7 +45,7 @@ export function FloatingToolbar() {
       },
       { timeout: 100 }
     );
-  }, []);
+  }, [printHintSeen, markPrintHintSeen, t]);
 
   return (
     <TooltipProvider delayDuration={300}>

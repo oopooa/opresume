@@ -156,6 +156,24 @@
   .resume-measure-container {
     display: none;
   }
+
+  /* 打印时隐藏 toast 通知（如"导出 PDF"提示），避免出现在 PDF 中 */
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+}
+
+/* 联系方式图标降低存在感：用"变浅的实色"，而非元素 opacity 或半透明描边。
+   - 元素 opacity<1：会让该 <svg> 进入合成组，Firefox 打印时把合成组拍平成低分辨率
+     位图再放大 → 图标马赛克。
+   - 半透明描边（mix 到 transparent）：lucide 图标由多个独立描边元素组成，重叠处 alpha
+     叠加会变深，导致观感不均（接头/重叠处偏黑）。
+   - 这里把 currentColor 与白色按 60/40 混成实色：数学上等价于 opacity:0.6 叠在白底上
+     （0.6·色 + 0.4·白），故与原 opacity:0.6 观感一致；又因是全不透明实色，既无合成组
+     （打印保持矢量清晰），也无 alpha 叠加（重叠处均匀不变深）。
+   简历各模板的联系方式区域均为白/浅底（如 template1 侧栏 bg-gray-50≈98% 白），混白即可。 */
+.resume-icon-muted {
+  color: color-mix(in srgb, currentColor 60%, white);
 }
 
 /* 富文本渲染样式（简历预览和打印） */

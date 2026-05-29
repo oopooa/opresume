@@ -21,6 +21,8 @@ interface UIStore {
   showIcons: boolean;
   /** 页脚（姓名 + 页码）的可见性，默认开启 */
   showFootnote: boolean;
+  /** 是否已展示过"导出 PDF"提示（指导关闭浏览器页眉页脚）。仅首次点击下载时弹出一次 */
+  printHintSeen: boolean;
   /** 纸张尺寸：美式信纸（默认）/ A4 */
   pageFormat: PageFormat;
   /** 隐私模式：对敏感信息进行打码显示 */
@@ -70,6 +72,7 @@ interface UIStore {
   toggleFootnote: () => void;
   setPageFormat: (format: PageFormat) => void;
   togglePrivacy: () => void;
+  markPrintHintSeen: () => void;
   updateModuleIcon: (module: string, icon: string | undefined) => void;
   updateCustomFieldIcon: (fieldKey: string, icon: string | undefined) => void;
   setPageMargin: (preset: SpacingPreset) => void;
@@ -96,6 +99,7 @@ export const useUIStore = create<UIStore>()(
       customFieldIconMap: {},
       showIcons: true,
       showFootnote: true,
+      printHintSeen: false,
       pageFormat: 'letter',
       privacyMode: false,
       layout: { pageMargin: 'standard', moduleGap: 'standard', titleFontSize: 16, bodyFontSize: 14, lineHeight: 1.5 },
@@ -134,6 +138,8 @@ export const useUIStore = create<UIStore>()(
 
       togglePrivacy: () =>
         set((s) => ({ privacyMode: !s.privacyMode })),
+
+      markPrintHintSeen: () => set({ printHintSeen: true }),
 
       updateModuleIcon: (module, icon) =>
         set((s) => {
@@ -200,6 +206,7 @@ export const useUIStore = create<UIStore>()(
         customFieldIconMap: state.customFieldIconMap,
         showIcons: state.showIcons,
         showFootnote: state.showFootnote,
+        printHintSeen: state.printHintSeen,
         pageFormat: state.pageFormat,
         privacyMode: state.privacyMode,
         layout: state.layout,

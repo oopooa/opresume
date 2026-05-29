@@ -37,6 +37,7 @@
 - **No login, zero upload**: All data is stored exclusively in the browser's `localStorage` — no backend, no database, your privacy is fully in your hands.
 - **JSON import/export**: One-click export of your complete resume configuration as a JSON file for backup, migration, or cross-device use; import existing configurations to restore instantly.
 - **Native PDF export**: Uses the browser's native `window.print()` for high-fidelity export, with selectable text and **ATS-friendly** output.
+  - 💡 **Printing tip**: In the print dialog, choose "Save as PDF", set **Margins to "None"**, and **uncheck "Headers and footers"** to remove the browser-added date and page title. Icons are vector-drawn, so they stay crisp in both Chrome and Firefox exports.
 
 ---
 

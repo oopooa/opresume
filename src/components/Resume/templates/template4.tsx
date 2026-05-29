@@ -26,7 +26,7 @@ function InfoItem({ icon, label, value }: { icon?: string; label: string; value?
   if (!value) return null;
   return (
     <div className="flex items-center gap-1 text-xs">
-      <DynamicIcon name={icon} className="h-3 w-3 shrink-0 opacity-60" />
+      <DynamicIcon name={icon} className="h-3 w-3 shrink-0 resume-icon-muted" />
       <span className="shrink-0 text-gray-500">{label}：</span>
       <span className="text-gray-800">{value}</span>
     </div>

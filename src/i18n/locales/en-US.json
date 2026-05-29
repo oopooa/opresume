@@ -35,6 +35,7 @@
     "exportJSON": "Export JSON",
     "importJSON": "Import JSON",
     "print": "Export PDF",
+    "printHint": "Tip: in the print dialog, choose \"Save as PDF\", set Margins to \"None\", and uncheck \"Headers and footers\" to remove the date and page title.",
     "save": "Save",
     "saved": "Saved",
     "unsaved": "Unsaved changes",
