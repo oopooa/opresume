@@ -40,21 +40,6 @@
       "x-op-id": "work-2",
       "x-op-departmentName": "体验技术部",
       "x-op-workDescHtml": "<ul>\n<li>参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+</li>\n<li>负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用</li>\n<li>主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座</li>\n<li>封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%</li>\n</ul>"
-    },
-    {
-      "name": "美团",
-      "position": "高级前端工程师",
-      "startDate": "2020-03",
-      "endDate": "2021-06",
-      "summary": "负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理\n实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料\n优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s",
-      "highlights": [
-        "负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理",
-        "实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料",
-        "优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s"
-      ],
-      "x-op-id": "work-3",
-      "x-op-departmentName": "到店事业群前端组",
-      "x-op-workDescHtml": "<ul>\n<li>负责商家端 SaaS 平台前端开发，支撑百万级商家日常运营管理</li>\n<li>实现基于 Canvas 的海报编辑器，支持模板化批量生成营销物料</li>\n<li>优化首屏加载性能，通过代码分割和资源预加载将 LCP 从 3.8s 降至 1.5s</li>\n</ul>"
     }
   ],
   "education": [

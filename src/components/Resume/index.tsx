@@ -27,7 +27,10 @@ function TemplateRenderer({ def, config }: { def: TemplateDefinition; config: Js
 function supportsPagination(def: TemplateDefinition, config: JsonResume): boolean {
   const layout = getEffectiveLayout(def.id, config['x-op-moduleLayout']);
   // 双栏模板（sidebar 有模块）不分页
-  return layout.sidebar.length === 0;
+  if (layout.sidebar.length > 0) return false;
+  // 显式标记为单页模板的（如校园应届生 A4 一页模板）也不分页
+  if (def.tags.includes('singlePage')) return false;
+  return true;
 }
 
 /* ---------- 页码指示器 ---------- */
@@ -121,7 +124,7 @@ function PaginatedResumeView({ def, config }: { def: TemplateDefinition; config:
       {pages && pages.length > 0 ? (
         <div ref={pagesRef} className="flex flex-col items-center gap-8 print:gap-0">
           {pages.map((page, i) => {
-            const mainContent = renderPageSlices(page.slices, config, tokens);
+            const mainContent = renderPageSlices(page.slices, config, tokens, def.id);
             return (
               <div key={i} data-page-index={i} className="resume-page h-[297mm] w-[210mm] overflow-hidden">
                 <div className="resume-layout">
