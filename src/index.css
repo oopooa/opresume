@@ -286,10 +286,10 @@ div.resume-layout a {
   --campus-primary: #a9021f;
   --campus-ink: #1b1c1e;
   /* 复刻原模板版式参数（仅作用于本模板子树） */
-  --resume-line-height: 1.25;
-  --resume-module-gap: 1.0mm;
+  --resume-line-height: 1.2;
+  --resume-module-gap: 0.8mm;
   color: var(--campus-ink);
-  font-size: 14px; /* 略微压缩以保一页 */
+  font-size: 13px; /* 参照 DHU 模板进一步压缩以保一页 */
 }
 
 /* 楷体标注（描述：/主要工作：/学历） */
@@ -398,26 +398,26 @@ div.resume-layout a {
 
 /* ---------- 头部：姓名 + 联系信息（居中） ---------- */
 .campus-header {
-  margin-top: 4mm; /* 压缩顶部空白以保一页 */
+  margin-top: 3mm; /* 压缩顶部空白以保一页 */
   text-align: center;
 }
 
 .campus-name {
-  font-size: 22px; /* ≈16.5pt，略压缩 */
+  font-size: 21px; /* ≈16pt，略压缩 */
   font-weight: 700;
   color: #000;
   letter-spacing: 0.04em;
-  line-height: 1.15;
-  margin-bottom: 0.3mm;
+  line-height: 1.1;
+  margin-bottom: 0.2mm;
 }
 
 .campus-contact {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.6mm 5mm;
-  margin-bottom: 0.3mm;
-  font-size: 14px;
+  gap: 0.4mm 4mm;
+  margin-bottom: 0.2mm;
+  font-size: 13px;
   color: #38393c;
 }
 
@@ -455,14 +455,14 @@ div.resume-layout a {
 
 /* ---------- 章节标题：主题色图标 + 加粗标题 + 主题色细线 ---------- */
 .campus-section-title {
-  margin-bottom: 0.5mm;
+  margin-bottom: 0.4mm;
 }
 
 .campus-section-title-row {
   display: flex;
   align-items: center;
-  gap: 2mm;
-  padding-bottom: 0.6mm;
+  gap: 1.5mm;
+  padding-bottom: 0.4mm;
   border-bottom: 0.5pt solid var(--campus-primary);
 }
 
@@ -472,7 +472,7 @@ div.resume-layout a {
 }
 
 .campus-section-title-text {
-  font-size: 16px; /* ≈12pt */
+  font-size: 15px; /* ≈11pt */
   font-weight: 700;
   color: #000;
   letter-spacing: 0.06em;
@@ -481,11 +481,11 @@ div.resume-layout a {
 
 /* ---------- 条目排版（紧凑） ---------- */
 .campus-item {
-  margin-bottom: 0.2mm;
+  margin-bottom: 0.15mm;
 }
 
 .campus-education.campus-item {
-  margin-bottom: 0.5mm;
+  margin-bottom: 0.4mm;
 }
 
 .campus-education.campus-item:last-child {
@@ -530,7 +530,7 @@ div.resume-layout a {
 
 .campus-item-sub {
   display: block;
-  margin-top: 0.15mm;
+  margin-top: 0.1mm;
   padding-left: 3.5mm; /* 与正文缩进一致 */
 }
 
@@ -540,8 +540,14 @@ div.resume-layout a {
   display: inline;
 }
 
+/* 项目经历「主要工作：」后保留一个空格 */
+.campus-project-works-sub > .campus-kai::after {
+  content: " ";
+  white-space: pre;
+}
+
 .campus-education .campus-item-sub {
-  margin-top: 0.2mm;
+  margin-top: 0.15mm;
   padding-left: 7mm; /* 教育经历第二行更深缩进（原模板 21.8pt） */
 }
 
@@ -553,9 +559,9 @@ div.resume-layout a {
 .campus-bullet {
   display: flex;
   align-items: baseline;
-  gap: 2mm;
-  margin-top: 0.15mm;
-  margin-bottom: 0.2mm;
+  gap: 1.5mm;
+  margin-top: 0.1mm;
+  margin-bottom: 0.15mm;
   padding-left: 0.8mm;
 }
 
@@ -675,7 +681,7 @@ div.resume-layout a {
 }
 
 .campus-resume .rich-content p {
-  margin: 0 0 0.2mm;
+  margin: 0 0 0.15mm;
 }
 
 .campus-resume .rich-content p:last-child {
@@ -684,7 +690,7 @@ div.resume-layout a {
 
 .campus-resume .rich-content ul li + li,
 .campus-resume .rich-content ol li + li {
-  margin-top: 0.1mm;
+  margin-top: 0.05mm;
 }
 
 /* 文本换行控制辅助类 */

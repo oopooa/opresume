@@ -205,7 +205,7 @@ function ProjectRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
                 </div>
               )}
               {items && (
-                <div className="campus-item-sub">
+                <div className="campus-item-sub campus-project-works-sub">
                   <KaiLabel>-主要工作：</KaiLabel>
                   <PolishHost className="campus-rich campus-project-works" itemIndex={offset + i}>
                     <RichContent content={items} />
