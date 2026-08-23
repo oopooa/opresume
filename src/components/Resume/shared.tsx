@@ -51,9 +51,11 @@ export function EditableSection({
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const target = e.target as Element | null;
-      if (target?.closest?.('[data-polish-host="true"]')) return;
+      const inPolishHost = !!target?.closest?.('[data-polish-host="true"]');
       const sel = typeof window !== 'undefined' ? window.getSelection() : null;
-      if (sel && !sel.isCollapsed && sel.toString().trim()) {
+      const hasSelection = !!(sel && !sel.isCollapsed && sel.toString().trim());
+      // 富文本区存在框选时让渡交互给 AI 润色气泡；无选区时点击即进入编辑
+      if (inPolishHost && hasSelection) {
         const anchor = sel.anchorNode;
         if (anchor && e.currentTarget.contains(anchor)) return;
       }

@@ -3,7 +3,7 @@ import type { JsonProject } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, EditableSectionTitle, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
+import { EditableSection, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon } from '../shared';
 
 export function ProjectModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
@@ -21,13 +21,9 @@ export function ProjectModule({ config, tokens, itemRange, showTitle = true }: M
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
-    <EditableSection module="projectList" hoverScope="title">
+    <EditableSection module="projectList">
       <section className={tokens.spacing.module}>
-        {showTitle && (
-          <EditableSectionTitle>
-            <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />
-          </EditableSectionTitle>
-        )}
+        {showTitle && <SectionTitle title={getTitle(config, 'projectList', t('module.projectList'))} icon={moduleIcon} />}
         {list.map((proj, i) => (
           <div key={proj['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>

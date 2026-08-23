@@ -80,63 +80,26 @@
       "x-op-id": "proj-2",
       "x-op-type": "project",
       "x-op-projectContentHtml": "<ul><li><p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p></li><li><p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p></li><li><p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p></li><li><p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p></li></ul>"
-    },
-    {
-      "name": "商家营销海报编辑器",
-      "description": "基于 Canvas 的在线海报设计工具，支持模板化批量生成营销物料",
-      "startDate": "2020-06",
-      "endDate": "2021-03",
-      "roles": [
-        "核心开发"
-      ],
-      "x-op-id": "proj-3",
-      "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Fabric.js 构建 Canvas 编辑画布，支持文字、图片、形状等元素的自由编辑</p></li><li><p>实现撤销/重做、对齐辅助线、智能吸附等编辑器核心交互体验</p></li><li><p>开发模板引擎，支持变量替换和批量渲染，单次可生成 1000+ 定制化海报</p></li></ul>"
-    },
-    {
-      "name": "个人项目地址",
-      "description": "基于 Next.js + MDX 搭建，累计发表 80+ 篇技术文章，月访问量 5000+",
-      "url": "https://github.com/oopooa/opresume",
-      "x-op-id": "portfolio-1",
-      "x-op-type": "portfolio"
     }
   ],
   "skills": [
     {
-      "name": "React / Next.js",
+      "name": "前端框架：React / Next.js、Vue / Nuxt",
       "level": "精通",
       "x-op-id": "skill-1",
-      "x-op-skillLevel": 95
+      "x-op-skillLevel": 90
     },
     {
-      "name": "TypeScript",
+      "name": "工程化与类型：TypeScript、Webpack / Vite",
       "level": "精通",
       "x-op-id": "skill-2",
       "x-op-skillLevel": 90
     },
     {
-      "name": "Vue / Nuxt",
+      "name": "服务端与样式：Node.js / Nest.js、Tailwind / CSS",
       "level": "熟练",
       "x-op-id": "skill-3",
       "x-op-skillLevel": 80
-    },
-    {
-      "name": "Node.js / Nest.js",
-      "level": "熟练",
-      "x-op-id": "skill-4",
-      "x-op-skillLevel": 75
-    },
-    {
-      "name": "Tailwind / CSS",
-      "level": "精通",
-      "x-op-id": "skill-5",
-      "x-op-skillLevel": 90
-    },
-    {
-      "name": "Webpack / Vite",
-      "level": "熟练",
-      "x-op-id": "skill-6",
-      "x-op-skillLevel": 85
     }
   ],
   "awards": [

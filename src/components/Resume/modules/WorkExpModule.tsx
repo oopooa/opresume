@@ -3,7 +3,7 @@ import type { JsonWork } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RichContent } from '@/components/RichContent';
-import { EditableSection, EditableSectionTitle, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
+import { EditableSection, PolishHost, TimeRange, getTitle, isHidden, useModuleIcon, usePrivacyMask } from '../shared';
 
 export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
@@ -17,13 +17,9 @@ export function WorkExpModule({ config, tokens, itemRange, showTitle = true }: M
   const indexOffset = itemRange ? itemRange[0] : 0;
 
   return (
-    <EditableSection module="workExpList" hoverScope="title">
+    <EditableSection module="workExpList">
       <section className={tokens.spacing.module}>
-        {showTitle && (
-          <EditableSectionTitle>
-            <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />
-          </EditableSectionTitle>
-        )}
+        {showTitle && <SectionTitle title={getTitle(config, 'workExpList', t('module.workExpList'))} icon={moduleIcon} />}
         {list.map((work, i) => (
           <div key={work['x-op-id'] ?? i} className={tokens.spacing.item} data-item-index={indexOffset + i}>
             <div className={cn('flex justify-between', tokens.layout.flexAlign)}>

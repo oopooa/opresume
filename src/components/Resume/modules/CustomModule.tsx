@@ -3,7 +3,6 @@ import type { StyleTokens } from '../types';
 import { RichContent } from '@/components/RichContent';
 import {
   EditableSection,
-  EditableSectionTitle,
   PolishHost,
   getTitle,
   isHidden,
@@ -37,13 +36,9 @@ export function CustomModule({
   const title = getTitle(config, moduleId, customModule.title);
 
   return (
-    <EditableSection module={moduleId} hoverScope="title">
+    <EditableSection module={moduleId}>
       <section className={tokens.spacing.module}>
-        {showTitle && (
-          <EditableSectionTitle>
-            <SectionTitle title={title} icon={moduleIcon} />
-          </EditableSectionTitle>
-        )}
+        {showTitle && <SectionTitle title={title} icon={moduleIcon} />}
         {customModule.contentHtml && (
           <PolishHost>
             <RichContent content={customModule.contentHtml} textSize={tokens.typography.contentSize} />
