@@ -201,10 +201,14 @@ function Header({ config }: { config: JsonResume }) {
   const region = basics?.location?.region || basics?.location?.city;
   const showAge = age !== null && !config['x-op-ageHidden'];
 
-  const contactItem = (icon: string, children: ReactNode) => (
+  const contactItem = (icon: string, children: ReactNode, href?: string) => (
     <span className="campus-contact-item">
       {showIcons && <i className={`fa-solid ${icon} campus-contact-icon`} aria-hidden="true" />}
-      <span>{children}</span>
+      {href ? (
+        <a className="campus-contact-link" href={href}>{children}</a>
+      ) : (
+        <span>{children}</span>
+      )}
     </span>
   );
 
@@ -212,12 +216,12 @@ function Header({ config }: { config: JsonResume }) {
     <div className="campus-header">
       <h1 className="campus-name">{mask(basics?.name, 'name') || ' '}</h1>
       <div className="campus-contact">
-        {showAge && contactItem('fa-mars', t('field.age', { age }))}
+        {showAge && contactItem('fa-user', t('field.age', { age }))}
         {region && contactItem('fa-location-dot', mask(region, 'workPlace'))}
       </div>
       <div className="campus-contact">
         {basics?.phone && contactItem('fa-phone', mask(basics.phone, 'mobile'))}
-        {basics?.email && contactItem('fa-envelope', mask(basics.email, 'email'))}
+        {basics?.email && contactItem('fa-envelope', mask(basics.email, 'email'), `mailto:${basics.email}`)}
         {config['x-op-customFields']?.filter((f) => f.key.trim() || f.value.trim()).map((f, i) => (
           <span key={`${f.key}-${i}`} className="campus-contact-item campus-contact-custom">
             <span>{f.key}:{f.value}</span>

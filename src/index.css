@@ -438,6 +438,15 @@ div.resume-layout a {
   text-align: center;
 }
 
+.campus-contact-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.campus-contact-link:hover {
+  text-decoration: underline;
+}
+
 /* 模块间距：共享模块与覆盖模块统一使用 --resume-module-gap */
 .campus-section,
 .campus-section-space {
@@ -634,6 +643,10 @@ div.resume-layout a {
 
 /* 项目经历「主要工作」：阿拉伯数字编号（1、2、3），行内自然段落，项间 1-2 空格 */
 .campus-resume .campus-project-works {
+  display: inline;
+}
+
+.campus-resume .campus-project-works .rich-content {
   display: inline;
 }
 
