@@ -21,4 +21,6 @@ export type {
   AIProviderPreset,
   AIProviderConfig,
   AISettings,
+  CustomProvider,
 } from './ai';
+export { customProviderToPreset } from './ai';

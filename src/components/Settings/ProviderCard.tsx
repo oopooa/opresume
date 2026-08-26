@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Settings2 } from 'lucide-react';
 import { useAIStore } from '@/store/ai';
-import { AI_PROVIDER_PRESETS } from '@/config/ai-providers';
+import { getProviderPreset } from '@/config/ai-providers';
 import type { AIProviderId } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -13,10 +13,16 @@ interface ProviderCardProps {
 export function ProviderCard({ providerId, onClick }: ProviderCardProps) {
   const { t } = useTranslation();
   const { activeProviderId } = useAIStore();
+  const customProviders = useAIStore((s) => s.customProviders);
 
-  const preset = AI_PROVIDER_PRESETS[providerId];
+  const preset = getProviderPreset(providerId, customProviders);
+  if (!preset) return null;
+
   const isActive = activeProviderId === providerId;
-  const name = t(preset.nameKey);
+  const customName = preset.custom
+    ? (customProviders.find((c) => c.id === providerId)?.name ?? providerId)
+    : '';
+  const name = preset.custom ? customName : t(preset.nameKey);
 
   return (
     <button
@@ -43,8 +49,13 @@ export function ProviderCard({ providerId, onClick }: ProviderCardProps) {
             </div>
           )}
         </div>
-        <div className="min-w-0">
-          <span className="text-sm font-medium">{name}</span>
+        <div className="flex min-w-0 items-center gap-1.5">
+          <span className="truncate text-sm font-medium">{name}</span>
+          {preset.custom && (
+            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              {t('settings.customProviderTag')}
+            </span>
+          )}
         </div>
       </div>
 

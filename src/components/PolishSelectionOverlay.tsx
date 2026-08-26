@@ -125,7 +125,8 @@ export function PolishSelectionOverlay() {
     if (forceNoAI) return false;
     if (!s.activeProviderId) return false;
     const cfg = s.getProviderConfig(s.activeProviderId);
-    return !!(cfg.apiKey && cfg.verified);
+    // 已保存配置即可触发润色；“verified”仅作状态徽标，不拦截使用
+    return !!cfg.apiKey;
   });
 
   useEffect(() => {

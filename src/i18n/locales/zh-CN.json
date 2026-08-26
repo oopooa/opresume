@@ -85,6 +85,7 @@
     "achievementList": "学术成果",
     "workList": "个人作品",
     "aboutme": "自我评价",
+    "campusCourses": "修读课程",
     "customModule": "自定义模块",
     "addCustomModule": "添加自定义模块"
   },
@@ -100,6 +101,7 @@
     "workExpYear": "工作经验",
     "workPlace": "工作地点",
     "positionTitle": "职位",
+    "position": "岗位",
     "customFields": "自定义字段",
     "customFieldKey": "字段名",
     "customFieldValue": "字段值",
@@ -111,9 +113,9 @@
     "removeAvatar": "删除头像",
     "changeAvatar": "更换头像",
     "aspectRatio": "比例",
-    "uploadHint": "拖拽或点击上传图片（不超过 500KB）",
-    "avatarFormatHint": "支持 JPG、PNG，不超过 500KB",
-    "fileTooLarge": "图片大小不能超过 500KB",
+    "uploadHint": "拖拽或点击上传图片（不超过 2MB）",
+    "avatarFormatHint": "支持 JPG、PNG，不超过 2MB",
+    "fileTooLarge": "图片大小不能超过 2MB",
     "uploadFailed": "上传失败",
     "invalidFileType": "请拖入图片文件",
     "school": "学校",
@@ -146,8 +148,19 @@
     "customModuleContent": "模块内容",
     "startTime": "开始时间",
     "endTime": "结束时间",
+    "courseItem": "课程科目",
     "present": "至今",
-    "selectMonth": "选择年月"
+    "selectMonth": "选择年月",
+    "schoolLogo": "校徽",
+    "uploadSchoolLogo": "上传校徽",
+    "changeSchoolLogo": "更换校徽",
+    "removeSchoolLogo": "移除校徽",
+    "schoolLogoExtractedColor": "已提取主色",
+    "schoolLogoExtracting": "正在识别主底色…",
+    "schoolLogoNoColor": "未能提取主色，简历色条将使用默认色",
+    "schoolLogoColorHint": "已应用到简历色条（页脚横条、章节图标）",
+    "schoolLogoHint": "支持 JPG、PNG，不超过 1MB；上传后自动识别主底色（排除空白背景）",
+    "schoolLogoTooLarge": "校徽图片大小不能超过 1MB"
   },
   "template": {
     "template1": "经典双栏",
@@ -155,7 +168,8 @@
     "template3": "清新居中",
     "template4": "正式徽章",
     "template5": "清朗经典",
-    "template6": "侧影典章"
+    "template6": "侧影典章",
+    "template7": "Campus Fresh Graduate"
   },
   "templateTag": {
     "twoColumn": "双栏",
@@ -264,7 +278,23 @@
     "tagFree": "免费",
     "tagReasoning": "推理",
     "tagCode": "代码",
-    "tagChat": "对话"
+    "tagChat": "对话",
+    "tagLocal": "本地",
+    "customProviderTag": "自定义",
+    "addCustomProvider": "添加自定义供应商",
+    "customProviderName": "供应商名称",
+    "customProviderBaseUrl": "Base URL",
+    "customProviderBaseUrlHint": "OpenAI 兼容端点地址，无需带 /v1",
+    "customProviderModel": "默认模型 ID",
+    "customProviderCreate": "保存并继续配置",
+    "customProviderRequired": "请填写名称、Base URL 与模型 ID",
+    "customModelInput": "手动输入模型 ID",
+    "localNoKey": "本地模型，无需 API Key，直接检测连通性",
+    "deleteCustomProvider": "删除该供应商",
+    "relayHint": "该平台不允许浏览器直连，将自动经中转代理（Vercel AI Gateway）转发；上方地址为上游供应商地址，可按需修改",
+    "apiUrlHint": "Base URL，无需带 /v1（如 https://api.deepseek.com）；粘贴的 /v1 结尾地址会自动去除",
+    "verifyCorsError": "无法连接该平台 API：可能是浏览器跨域（CORS）限制或网络问题。建议改用「自定义供应商」填入支持浏览器直连的中转地址，或检查网络/代理设置",
+    "savedUnverified": "配置已保存，但未通过连通性检测；AI 功能将在首次使用时再次尝试连接"
   },
   "importPDF": {
     "title": "AI 智能解析 PDF 简历",
@@ -286,7 +316,7 @@
     "retryStep": "重试",
     "success": "导入成功",
     "errorTitle": "解析失败",
-    "errorNoAI": "请先在设置中配置并验证 AI 服务",
+    "errorNoAI": "请先在设置中配置 AI 服务",
     "errorNotPDF": "请选择 PDF 格式文件",
     "errorTooLarge": "文件大小不能超过 10MB",
     "errorInsufficientText": "PDF 中未检测到足够的文本内容，请确认 PDF 为文本型（非扫描件）",
@@ -304,6 +334,12 @@
     "cancelConfirmNo": "继续等待"
   },
   "provider": {
-    "siliconflow": "硅基流动"
+    "siliconflow": "硅基流动",
+    "deepseek": "DeepSeek",
+    "mimo": "小米 MiMo",
+    "qwen": "通义千问",
+    "moonshot": "Kimi",
+    "minimax": "MiniMax",
+    "opencode": "OpenCode Go"
   }
 }

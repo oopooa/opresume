@@ -85,6 +85,7 @@
     "achievementList": "Achievements",
     "workList": "Portfolio",
     "aboutme": "About Me",
+    "campusCourses": "Courses",
     "customModule": "Custom Module",
     "addCustomModule": "Add Custom Module"
   },
@@ -100,6 +101,7 @@
     "workExpYear": "Experience",
     "workPlace": "Location",
     "positionTitle": "Position",
+    "position": "Job Title",
     "customFields": "Custom Fields",
     "customFieldKey": "Field Name",
     "customFieldValue": "Field Value",
@@ -111,9 +113,9 @@
     "removeAvatar": "Remove Avatar",
     "changeAvatar": "Change Avatar",
     "aspectRatio": "Ratio",
-    "uploadHint": "Drag or click to upload (max 500KB)",
-    "avatarFormatHint": "JPG, PNG supported, max 500KB",
-    "fileTooLarge": "Image must be under 500KB",
+    "uploadHint": "Drag or click to upload (max 2MB)",
+    "avatarFormatHint": "JPG, PNG supported, max 2MB",
+    "fileTooLarge": "Image must be under 2MB",
     "uploadFailed": "Upload failed",
     "invalidFileType": "Please drop an image file",
     "school": "School",
@@ -146,8 +148,19 @@
     "customModuleContent": "Content",
     "startTime": "Start",
     "endTime": "End",
+    "courseItem": "Course",
     "present": "Present",
-    "selectMonth": "Select month"
+    "selectMonth": "Select month",
+    "schoolLogo": "School Logo",
+    "uploadSchoolLogo": "Upload logo",
+    "changeSchoolLogo": "Change logo",
+    "removeSchoolLogo": "Remove logo",
+    "schoolLogoExtractedColor": "Extracted Accent",
+    "schoolLogoExtracting": "Extracting accent color…",
+    "schoolLogoNoColor": "No accent extracted; resume accent falls back to default",
+    "schoolLogoColorHint": "Applied to the resume accent (footer bar, section icons)",
+    "schoolLogoHint": "JPG / PNG, max 1MB. Accent color is auto-extracted (blank background excluded)",
+    "schoolLogoTooLarge": "School logo must be smaller than 1MB"
   },
   "template": {
     "template1": "Classic",
@@ -155,7 +168,8 @@
     "template3": "Centered",
     "template4": "Formal",
     "template5": "Clear Classic",
-    "template6": "Shadow Canon"
+    "template6": "Shadow Canon",
+    "template7": "Campus Fresh Graduate"
   },
   "templateTag": {
     "twoColumn": "Two-column",
@@ -264,7 +278,23 @@
     "tagFree": "Free",
     "tagReasoning": "Reasoning",
     "tagCode": "Code",
-    "tagChat": "Chat"
+    "tagChat": "Chat",
+    "tagLocal": "Local",
+    "customProviderTag": "Custom",
+    "addCustomProvider": "Add Custom Provider",
+    "customProviderName": "Provider Name",
+    "customProviderBaseUrl": "Base URL",
+    "customProviderBaseUrlHint": "OpenAI-compatible endpoint (no /v1 suffix)",
+    "customProviderModel": "Default Model ID",
+    "customProviderCreate": "Save & Configure",
+    "customProviderRequired": "Please fill in name, Base URL and model ID",
+    "customModelInput": "Enter model ID manually",
+    "localNoKey": "Local model — no API key. Test connectivity directly.",
+    "deleteCustomProvider": "Delete this provider",
+    "relayHint": "This provider does not allow direct browser access; requests are relayed via the AI Gateway. The address above is the upstream provider URL.",
+    "apiUrlHint": "Base URL, no /v1 suffix needed (e.g. https://api.deepseek.com); a trailing /v1 is stripped automatically",
+    "verifyCorsError": "Cannot reach this provider's API: likely a browser CORS restriction or network issue. Use a Custom Provider with a CORS-friendly relay URL, or check your network/proxy settings.",
+    "savedUnverified": "Provider saved, but the connectivity test did not pass. AI features will retry the connection on first use."
   },
   "importPDF": {
     "title": "AI Smart Parse PDF Resume",
@@ -286,7 +316,7 @@
     "retryStep": "Retry",
     "success": "Imported successfully",
     "errorTitle": "Parsing Failed",
-    "errorNoAI": "Please configure and verify AI provider in Settings first",
+    "errorNoAI": "Please configure an AI provider in Settings first",
     "errorNotPDF": "Please select a PDF file",
     "errorTooLarge": "File size cannot exceed 10MB",
     "errorInsufficientText": "Not enough text was detected in the PDF. Please make sure it is a text-based PDF, not a scanned image",
@@ -304,6 +334,12 @@
     "cancelConfirmNo": "Keep waiting"
   },
   "provider": {
-    "siliconflow": "SiliconFlow"
+    "siliconflow": "SiliconFlow",
+    "deepseek": "DeepSeek",
+    "mimo": "Xiaomi MiMo",
+    "qwen": "Qwen",
+    "moonshot": "Kimi",
+    "minimax": "MiniMax",
+    "opencode": "OpenCode Go"
   }
 }

@@ -1,5 +1,6 @@
 import i18n from '@/i18n';
 import { useAIStore } from '@/store/ai';
+import { getProviderPreset } from '@/config/ai-providers';
 import { generateTextStream } from './ai-generate';
 
 export type PolishOperation = 'optimize' | 'condense';
@@ -179,13 +180,9 @@ function estimateMaxTokens(html: string): number {
 }
 
 /**
- * AI 改写支持的模型列表（硅基流动供应商）
+ * 校验当前已选模型（多供应商通用，不做任何供应商白名单限制；
+ * 若供应商不支持 JSON Mode，由 parseResult 的防御性解析兜底）。
  */
-const POLISH_SUPPORTED_MODELS = [
-  'Qwen/Qwen3.5-4B',
-  'Qwen/Qwen3-8B',
-  'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B',
-];
 
 /**
  * 流式调用 AI 润色，每收到新内容就回调 onChunk(rawAccumulated)，完成后返回解析结果。
@@ -208,24 +205,22 @@ export async function polishHtmlStream(
     throw new Error(i18n.t('editor.polish.errorNoAI'));
   }
   const config = ai.getProviderConfig(ai.activeProviderId);
-  if (!config.apiKey || !config.verified) {
+  // 已保存配置即可使用；“verified”仅为上次检测通过的徽标，不拦截调用
+  if (!config.apiKey) {
     throw new Error(i18n.t('editor.polish.errorNoAI'));
   }
 
-  // 硅基流动供应商：自动切换到支持的模型
-  let modelToUse = config.selectedModel;
-  if (ai.activeProviderId === 'siliconflow' && !POLISH_SUPPORTED_MODELS.includes(config.selectedModel)) {
-    modelToUse = POLISH_SUPPORTED_MODELS[0]; // 默认切换到 Qwen3.5-4B
-    console.warn(
-      `[AI Polish] 硅基流动供应商选中的模型 "${config.selectedModel}" 不支持 AI 改写功能，已自动切换到 "${modelToUse}"`,
-    );
-  }
+  // 直接使用当前选中的模型（多供应商通用，不再做硅基流动白名单限制）
+  const modelToUse = config.selectedModel;
+
+  // 取 preset（含 relay 中继配置），供请求层决定直连还是经中转代理转发
+  const preset = getProviderPreset(ai.activeProviderId, ai.customProviders);
 
   const lang = i18n.language?.toLowerCase().startsWith('en') ? 'en' : 'zh';
   const systemPrompt = buildSystemPrompt(lang, operation, customInstruction);
 
   const raw = await generateTextStream(
-    { apiKey: config.apiKey, apiUrl: config.apiUrl, model: modelToUse },
+    { apiKey: config.apiKey, apiUrl: config.apiUrl, model: modelToUse, relay: preset?.relay },
     [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: trimmed },
@@ -236,7 +231,6 @@ export async function polishHtmlStream(
     {
       temperature: 0.7,
       response_format: { type: 'json_object' },
-      enable_thinking: false,
     },
   );
 

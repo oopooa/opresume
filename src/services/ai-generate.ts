@@ -1,4 +1,42 @@
 import i18n from '@/i18n';
+import type { AIProviderPreset } from '@/types';
+
+export interface AICallConfig {
+  apiKey: string;
+  apiUrl: string;
+  model: string;
+  /** 中转代理（CORS 中继）配置：存在时请求改经 relay.baseUrl 转发 */
+  relay?: AIProviderPreset['relay'];
+}
+
+/** 请求目标（请求地址 + 需要附加的中转头） */
+interface CallTarget {
+  url: string;
+  headers: Record<string, string>;
+}
+
+/**
+ * 解析请求目标：
+ * - 无 relay：直接请求 `${apiUrl}/v1/chat/completions`（各平台官方 OpenAI 兼容端点）
+ * - 有 relay：请求 `${relay.baseUrl}/v1/chat/completions`，附带 x-provider-id /
+ *   x-provider-options（OpenAI 兼容自定义供应商透传上游地址与密钥）
+ */
+export function resolveTarget(
+  config: AICallConfig,
+  pathSuffix: '/v1/chat/completions' | '/v1/models',
+): CallTarget {
+  if (!config.relay) {
+    return { url: `${config.apiUrl}${pathSuffix}`, headers: {} };
+  }
+  const headers: Record<string, string> = { 'x-provider-id': config.relay.providerId };
+  if (config.relay.optionsBaseUrl) {
+    headers['x-provider-options'] = JSON.stringify({
+      baseURL: config.apiUrl,
+      ...(config.apiKey ? { apiKey: config.apiKey } : {}),
+    });
+  }
+  return { url: `${config.relay.baseUrl}${pathSuffix}`, headers };
+}
 
 /**
  * 调用 AI 生成文本
@@ -8,24 +46,22 @@ import i18n from '@/i18n';
  * @throws 如果 API 调用失败
  */
 export async function generateText(
-  config: {
-    apiKey: string;
-    apiUrl: string;
-    model: string;
-  },
+  config: AICallConfig,
   messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
   signal?: AbortSignal,
   maxTokens?: number,
   extraBody?: Record<string, unknown>,
 ): Promise<string> {
-  const url = `${config.apiUrl}/v1/chat/completions`;
+  const target = resolveTarget(config, '/v1/chat/completions');
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(target.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${config.apiKey}`,
+        // 免 Key 供应商（Ollama 本地等）不携带 Authorization 头
+        ...(config.apiKey ? { 'Authorization': `Bearer ${config.apiKey}` } : {}),
+        ...target.headers,
       },
       body: JSON.stringify({
         model: config.model,
@@ -67,26 +103,24 @@ export async function generateText(
  * 以 SSE 流式方式调用 AI，每收到一个 delta 就回调 onChunk(accumulated)，返回完整文本
  */
 export async function generateTextStream(
-  config: {
-    apiKey: string;
-    apiUrl: string;
-    model: string;
-  },
+  config: AICallConfig,
   messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
   onChunk: (accumulated: string) => void,
   signal?: AbortSignal,
   maxTokens?: number,
   extraBody?: Record<string, unknown>,
 ): Promise<string> {
-  const url = `${config.apiUrl}/v1/chat/completions`;
+  const target = resolveTarget(config, '/v1/chat/completions');
 
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetch(target.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
+        // 免 Key 供应商（Ollama 本地等）不携带 Authorization 头
+        ...(config.apiKey ? { Authorization: `Bearer ${config.apiKey}` } : {}),
+        ...target.headers,
       },
       body: JSON.stringify({
         model: config.model,

@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useAIStore } from '@/store/ai';
 import { useResumeStore } from '@/store/resume';
-import { AI_PROVIDER_PRESETS } from '@/config/ai-providers';
+import { getProviderPreset } from '@/config/ai-providers';
 import { extractTextFromPDF } from '@/services/pdf-parser';
 import { generateText, extractJSON } from '@/services/ai-generate';
 import { mapAIJsonToResume, isValidAIResumeData } from '@/services/resume-mapper';
@@ -90,6 +90,7 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
   const save = useResumeStore((s) => s.save);
   const activeProviderId = useAIStore((s) => s.activeProviderId);
   const getProviderConfig = useAIStore((s) => s.getProviderConfig);
+  const customProviders = useAIStore((s) => s.customProviders);
 
   const [state, setState] = useState<ImportStage>({ step: 'upload' });
   const [dragging, setDragging] = useState(false);
@@ -136,12 +137,14 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
     }
 
     const providerConfig = getProviderConfig(activeProviderId);
-    if (!providerConfig.apiKey || !providerConfig.verified) {
+    // 已保存配置即可使用；“verified”仅为上次连通性检测通过的徽标，
+    // 不以此拦截（浏览器 CORS/网络问题可能导致检测失败，但配置本身有效）
+    if (!providerConfig.apiKey) {
       setState({ step: 'error', message: t('importPDF.errorNoAI'), recoverable: false });
       return;
     }
 
-    const preset = AI_PROVIDER_PRESETS[activeProviderId];
+    const preset = getProviderPreset(activeProviderId, customProviders);
     if (!preset) {
       setState({ step: 'error', message: t('importPDF.errorNoAI'), recoverable: false });
       return;
@@ -169,6 +172,7 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
           apiKey: providerConfig.apiKey,
           apiUrl: providerConfig.apiUrl,
           model: providerConfig.selectedModel,
+          relay: preset.relay,
         },
         [
           { role: 'system', content: SYSTEM_PROMPT },
@@ -199,7 +203,7 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
         failedStep: undefined,
       });
     }
-  }, [activeProviderId, getProviderConfig, t]);
+  }, [activeProviderId, getProviderConfig, customProviders, t]);
 
   /** 处理文件选择 */
   const handleFile = useCallback((file: File) => {

@@ -1,9 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AIProviderId, AIProviderConfig, AISettings } from '@/types';
+import type { AIProviderId, AIProviderConfig, AISettings, CustomProvider } from '@/types';
 import { getDefaultProviderConfig } from '@/config/ai-providers';
 
 interface AIStore extends AISettings {
+  /** 用户创建的自定义供应商列表（OpenAI 兼容端点） */
+  customProviders: CustomProvider[];
+  /** 新增或更新自定义供应商 */
+  upsertCustomProvider: (custom: CustomProvider) => void;
+  /** 删除自定义供应商（同时清理其配置与激活状态） */
+  removeCustomProvider: (id: string) => void;
   /** 更新供应商配置 */
   updateProviderConfig: (providerId: AIProviderId, config: Partial<AIProviderConfig>) => void;
   /** 设为当前引擎 */
@@ -22,11 +28,33 @@ export const useAIStore = create<AIStore>()(
       // State
       activeProviderId: null,
       providers: {},
+      customProviders: [],
 
       // Actions
+      upsertCustomProvider: (custom) =>
+        set((state) => {
+          const exists = state.customProviders.some((c) => c.id === custom.id);
+          return {
+            customProviders: exists
+              ? state.customProviders.map((c) => (c.id === custom.id ? { ...c, ...custom } : c))
+              : [...state.customProviders, custom],
+          };
+        }),
+
+      removeCustomProvider: (id) =>
+        set((state) => {
+          const providers = { ...state.providers };
+          delete providers[id];
+          return {
+            customProviders: state.customProviders.filter((c) => c.id !== id),
+            providers,
+            activeProviderId: state.activeProviderId === id ? null : state.activeProviderId,
+          };
+        }),
+
       updateProviderConfig: (providerId, config) =>
         set((state) => {
-          const existing = state.providers[providerId] ?? getDefaultProviderConfig(providerId);
+          const existing = state.providers[providerId] ?? getDefaultProviderConfig(providerId, state.customProviders);
           return {
             providers: {
               ...state.providers,
@@ -41,12 +69,12 @@ export const useAIStore = create<AIStore>()(
 
       getProviderConfig: (providerId) => {
         const state = get();
-        return state.providers[providerId] ?? getDefaultProviderConfig(providerId);
+        return state.providers[providerId] ?? getDefaultProviderConfig(providerId, state.customProviders);
       },
 
       setProviderVerified: (providerId, verified) =>
         set((state) => {
-          const existing = state.providers[providerId] ?? getDefaultProviderConfig(providerId);
+          const existing = state.providers[providerId] ?? getDefaultProviderConfig(providerId, state.customProviders);
           return {
             providers: {
               ...state.providers,
@@ -64,6 +92,7 @@ export const useAIStore = create<AIStore>()(
       partialize: (state) => ({
         activeProviderId: state.activeProviderId,
         providers: state.providers,
+        customProviders: state.customProviders,
       }),
     },
   ),
