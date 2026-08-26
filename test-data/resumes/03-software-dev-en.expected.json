@@ -1,0 +1,18 @@
+{
+  "file": "03-software-dev-en.pdf",
+  "basics": {
+    "name": "Chen Yu",
+    "email": "chen.yu@outlook.com",
+    "phone": "8613912345678",
+    "label": "Frontend Developer",
+    "city": "Shanghai"
+  },
+  "counts": {
+    "education": 1,
+    "work": 2,
+    "projects": 2,
+    "skills": 5,
+    "awards": 1
+  },
+  "notes": "逐条“技能+熟练度”格式，skills 应完整提取；含 GitHub 简介（extraFields）。"
+}

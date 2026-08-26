@@ -1,0 +1,13 @@
+{
+  "file": "01-dhu-cv-template.pdf",
+  "basics": {
+    "name": "王小明",
+    "email": "example@qq.com",
+    "phone": "12345678910",
+    "label": null,
+    "city": null
+  },
+  "counts": { "education": 1, "work": 1, "projects": 3, "skills": 0, "awards": 0 },
+  "countTolerance": 1,
+  "notes": "东华大学模板原稿：技能为「分类描述」格式（语言习得/工业工程/文档办公/算法编程），按 prompt 规则 6 应省略 skills；地点仅 XX 省（无城市）。"
+}

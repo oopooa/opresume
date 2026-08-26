@@ -22,7 +22,8 @@
 
 ### 🎨 Professional Typesetting Engine
 - **Multi-dimensional layout control**: Freely adjust margins, section spacing, and line height with sliders — no more Word formatting nightmares.
-- **Multiple classic templates**: 4+ carefully curated industry-standard templates (including ATS-friendly styles, single-column corporate layouts, etc.) with seamless one-click switching.
+- **Multiple classic templates**: 7+ carefully curated industry-standard templates (including ATS-friendly styles, single-column corporate layouts, a two-column layout, and a Campus Fresh Graduate layout) with seamless one-click switching.
+- **Campus Fresh Graduate template**: Built-in school badge/logo upload, section-specific Lucide icons, one-page A4 compact layout, and academic-style black-dot / numbered lists; ships with the Donghua University logo and a fresh-graduate sample by default.
 - **Theme color customization**: 8+ meticulously crafted preset color themes to match the visual tone of different industries.
 - **Smart auto-pagination**: Automatic visual page breaks when content exceeds A4 boundaries, with a modern floating page indicator.
 
@@ -105,7 +106,8 @@ npm run preview
 - [x] Internationalization (i18n) support
 - [x] AI-powered resume import
 - [x] AI rewrite
-- [ ] Multiple AI provider support
+- [x] Campus Fresh Graduate template (school logo upload, section icons, single-page A4 fit)
+- [x] Multiple AI provider support
 - [ ] AI resume scoring & analysis
 - [ ] Multiple resume management
 - [ ] Smart fit-to-page

@@ -1,0 +1,18 @@
+{
+  "file": "05-academic-cv-en.pdf",
+  "basics": {
+    "name": "Liu Min",
+    "email": "liu.min@dhu.edu.cn",
+    "phone": "862155550123",
+    "label": "Research Scientist",
+    "city": "Shanghai"
+  },
+  "counts": {
+    "education": 2,
+    "work": 1,
+    "projects": 0,
+    "skills": 3,
+    "awards": 2
+  },
+  "notes": "学术 CV：Publications 不在标准 chunks 内，应被忽略或进入 extraFields；重点核对教育与奖励。"
+}

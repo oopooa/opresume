@@ -19,3 +19,10 @@ Thumbs.db
 
 # npm
 .npm
+
+# AI 测试产物（由 scripts/*.ts 生成，可再生成）
+test-data/out/
+test-data/backups/
+
+# API Key 文件（严禁入库）
+*.keys.env

@@ -1,141 +1,164 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
   "basics": {
-    "name": "张三",
-    "label": "高级前端工程师",
-    "email": "zhangsan@example.com",
-    "phone": "13800000000"
-  },
-  "work": [
-    {
-      "name": "字节跳动",
-      "position": "高级前端工程师",
-      "startDate": "2023-04",
-      "endDate": "",
-      "highlights": [],
-      "x-op-id": "work-1",
-      "x-op-departmentName": "飞书前端团队",
-      "x-op-workDescHtml": "<ul>\n<li>负责飞书文档协同编辑模块的前端架构设计与核心功能开发，服务千万级日活用户</li>\n<li>主导编辑器性能优化专项，大文档渲染耗时降低 60%，滚动帧率稳定 60fps</li>\n<li>设计并落地前端微模块架构方案，支撑 20+ 业务插件的独立开发与热插拔</li>\n<li>推动团队 TypeScript 严格模式迁移，代码类型覆盖率从 45% 提升至 95%</li>\n</ul>"
-    },
-    {
-      "name": "蚂蚁集团",
-      "position": "高级前端工程师",
-      "startDate": "2021-07",
-      "endDate": "2023-03",
-      "highlights": [],
-      "x-op-id": "work-2",
-      "x-op-departmentName": "体验技术部",
-      "x-op-workDescHtml": "<ul>\n<li>参与 Ant Design 组件库维护与迭代，累计贡献 50+ PR，修复关键 bug 30+</li>\n<li>负责内部低代码平台前端开发，实现拖拽式页面搭建引擎，覆盖 200+ 内部应用</li>\n<li>主导前端工程化建设，搭建基于 Webpack 5 Module Federation 的微前端基座</li>\n<li>封装通用业务组件库，沉淀 40+ 高频业务组件，团队复用率达 85%</li>\n</ul>"
+    "name": "王小明",
+    "label": "机械结构工程师",
+    "email": "example@qq.com",
+    "phone": "123 4567 8910",
+    "location": {
+      "city": "上海",
+      "region": "上海市"
     }
-  ],
+  },
   "education": [
     {
-      "institution": "清华大学",
-      "area": "软件工程",
-      "studyType": "硕士",
-      "startDate": "2018-09",
-      "endDate": "2021-06",
-      "x-op-id": "edu-2"
+      "institution": "东华大学",
+      "area": "机械工程",
+      "studyType": "本科",
+      "startDate": "2022-09",
+      "endDate": "2026-06",
+      "x-op-id": "edu-1"
+    }
+  ],
+  "x-op-birthday": "2004-05-20",
+  "x-op-showJobTitle": false,
+  "x-op-courses": [
+    {
+      "id": "course-1",
+      "text": "机械设计，机械原理，材料力学，理论力学，机械制造技术基础"
     },
     {
-      "institution": "北京大学",
-      "area": "计算机科学与技术",
-      "studyType": "本科",
-      "startDate": "2014-09",
-      "endDate": "2018-06",
-      "x-op-id": "edu-1"
+      "id": "course-2",
+      "text": "机电一体化产品设计，控制工程基础，电子技术"
     }
   ],
   "projects": [
     {
-      "name": "飞书文档协同编辑器",
-      "description": "支持多人实时协同编辑的在线文档系统，基于 CRDT 算法实现冲突解决",
-      "startDate": "2023-06",
-      "endDate": "",
+      "name": "机械创新设计大赛 · 智能搬运小车",
       "roles": [
-        "前端架构师"
+        "核心成员"
       ],
+      "startDate": "2024-03",
+      "endDate": "2024-08",
+      "description": "面向智能仓储场景设计全向移动底盘与顶升移载方案，完成样机联调",
+      "x-op-projectContentHtml": "<ol><li><p>对比选定麦克纳姆轮全向底盘与丝杠同步顶升方案；</p></li><li><p>使用 SolidWorks 完成整车建模、虚拟装配与工程图输出；</p></li><li><p>完成电机选型与传动比校核，参与样机装配联调与现场演示。</p></li></ol>",
       "x-op-id": "proj-1",
-      "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>基于 Slate.js 二次开发富文本编辑器内核，支持 30+ 块级元素和 15+ 行内样式</p></li><li><p>实现基于 Yjs 的 CRDT 协同引擎，支撑 50 人同时在线编辑无冲突</p></li><li><p>设计虚拟滚动渲染方案，万行文档滚动帧率稳定 60fps，内存占用降低 70%</p></li><li><p>搭建编辑器插件系统，支持评论、@提及、任务清单等 20+ 扩展能力</p></li></ul>"
+      "x-op-type": "project"
     },
     {
-      "name": "低代码搭建平台",
-      "description": "面向内部运营的可视化页面搭建平台，降低非技术人员页面开发门槛",
-      "startDate": "2022-01",
-      "endDate": "2023-02",
+      "name": "铣床夹具设计",
       "roles": [
-        "前端负责人"
+        "课程设计"
       ],
+      "startDate": "2024-11",
+      "endDate": "2024-12",
+      "description": "针对典型连杆类零件完成专用铣床夹具设计与工艺分析。",
+      "x-op-projectContentHtml": "<ol><li><p>确定定位基准、夹紧与加工方案，Solidworks完成建模设计和图纸绘制；</p></li><li><p>计算夹紧力与定位误差，使用Motion进行简易仿真分析，编制使用说明书</p></li></ol><p></p>",
       "x-op-id": "proj-2",
-      "x-op-type": "project",
-      "x-op-projectContentHtml": "<ul><li><p>设计并实现拖拽式可视化编辑器，基于 @dnd-kit 实现组件拖入、排序和嵌套布局</p></li><li><p>实现 JSON Schema 驱动的动态属性面板，支持 15 种表单控件的自动渲染</p></li><li><p>开发出码引擎，将画布配置导出为可部署的 React 项目，代码可读性评分达 85+</p></li><li><p>搭建组件市场，支持第三方组件上传、版本管理和沙箱预览</p></li></ul>"
+      "x-op-type": "project"
+    },
+    {
+      "name": "毕业设计 · 关节部件有限元与轻量化",
+      "roles": [
+        "个人"
+      ],
+      "startDate": "2025-11",
+      "endDate": "2026-05",
+      "description": "对机器人关节关键部件开展建模、有限元分析与轻量化设计。",
+      "x-op-projectContentHtml": "<ol><li><p>完成部件三维建模，确定载荷边界条件与材料参数；</p></li><li><p>ANSYS 静强度、刚度与模态分析，定位应力集中与薄弱环节；</p></li><li><p>结合尺寸与拓扑优化改进结构，在满足强度要求下减重约 8%。</p></li></ol>",
+      "x-op-id": "proj-4",
+      "x-op-type": "project"
+    }
+  ],
+  "work": [
+    {
+      "name": "XX智能装备科技有限公司",
+      "position": "机械结构实习生",
+      "startDate": "2025-06",
+      "endDate": "2025-10",
+      "x-op-departmentName": "研发部",
+      "x-op-workDescHtml": "<ul><li><p>参与智能搬运装备单元结构设计，使用 SolidWorks 完成三维建模与工程图输出；</p></li><li><p>跟进样机装配与调试，协同电气、控制团队完成整机联调与问题闭环；</p></li><li><p>维护 BOM 与工艺文档，支持试制阶段的装配与尺寸问题处理。</p></li></ul>",
+      "x-op-id": "work-1"
     }
   ],
   "skills": [
     {
-      "name": "前端框架：React / Next.js、Vue / Nuxt",
-      "x-op-id": "skill-1",
-      "level": "精通",
-      "x-op-skillLevel": 90
+      "name": "SolidWorks",
+      "level": "三维建模、装配体设计与工程图",
+      "x-op-id": "skill-1"
     },
     {
-      "name": "工程化与类型：TypeScript、Webpack / Vite",
-      "x-op-id": "skill-2",
-      "level": "精通",
-      "x-op-skillLevel": 90
+      "name": "AutoCAD",
+      "level": "二维工程图与图纸标注",
+      "x-op-id": "skill-2"
     },
     {
-      "name": "服务端与样式：Node.js / Nest.js、Tailwind / CSS",
-      "x-op-id": "skill-3",
-      "level": "熟练",
-      "x-op-skillLevel": 80
+      "name": "ANSYS",
+      "level": "静力学、模态等基础仿真",
+      "x-op-id": "skill-3"
+    },
+    {
+      "name": "C/C++",
+      "level": "基础算法与结构体编程",
+      "x-op-id": "skill-4"
+    },
+    {
+      "name": "英语六级 · Office",
+      "level": "外文文献阅读、办公软件使用",
+      "x-op-id": "skill-5"
     }
   ],
   "awards": [
     {
-      "title": "字节跳动 2024 年度技术突破奖",
-      "date": "2024.01",
+      "title": "东华大学校级一等奖学金",
+      "date": "2023.09",
       "x-op-id": "award-1"
     },
     {
-      "title": "蚂蚁集团内部黑客马拉松一等奖",
-      "date": "2022.08",
+      "title": "全国大学生机械创新设计大赛 · 上海市三等奖",
+      "date": "2024.08",
       "x-op-id": "award-2"
-    }
-  ],
-  "publications": [
-    {
-      "name": "基于深度学习的前端性能优化研究",
-      "publisher": "计算机学报",
-      "releaseDate": "2023.06",
-      "x-op-type": "论文",
-      "x-op-identifier": "DOI: 10.1234/jcs.2023.06.001",
-      "x-op-id": "publication-1"
     },
     {
-      "name": "一种前端组件自动化测试方法及系统",
-      "publisher": "国家知识产权局",
-      "releaseDate": "2022.11",
-      "x-op-type": "发明专利",
-      "x-op-identifier": "CN202211234567.8",
-      "x-op-id": "publication-2"
+      "title": "大学生创新创业训练计划 · 省级立项",
+      "date": "2025.09",
+      "x-op-id": "award-3"
     }
   ],
   "x-op-avatar": {
+    "src": "/avatars/headshot.png",
+    "hidden": false,
     "width": 90,
-    "height": 126,
-    "borderRadius": 0,
-    "hidden": true
+    "height": 120,
+    "borderRadius": 0
   },
-  "x-op-birthday": "1995-07-27",
-  "x-op-ageHidden": true,
-  "x-op-workExpYear": "5",
+  "x-op-aboutmeHtml": "<ul><li><p>机械设计基础扎实，可独立完成从方案设计、三维建模到工程图输出的完整流程；</p></li><li><p>具备机械创新竞赛、创新创业项目与智能装备企业实习的完整实践链路，动手调试能力强；</p></li><li><p>学习能力强、注重细节，团队协作与沟通表达良好。</p></li></ul>",
   "x-op-customFields": [
     {
-      "key": "工作地点",
-      "value": "成都"
+      "key": "专业排名",
+      "value": "前 20%"
     }
   ],
-  "x-op-aboutmeHtml": "<ul><li>5 年前端开发经验，专注 React 技术栈与前端工程化，具备从 0 到 1 搭建中大型项目的能力</li><li>在富文本编辑器、可视化搭建、性能优化方向有深入实践，注重代码质量与团队协作</li><li>持续学习并乐于分享，对新技术保持敏感，善于通过工程化手段提升团队效率</li></ul>"
+  "x-op-moduleLayout": {
+    "template7": {
+      "sidebar": [],
+      "main": [
+        "educationList",
+        "campusCourses",
+        "projectList",
+        "workExpList",
+        "skillList",
+        "awardList",
+        "aboutme",
+        "achievementList"
+      ]
+    }
+  },
+  "x-op-theme": {
+    "color": "#A9021F",
+    "tagColor": "#A9021F"
+  },
+  "x-op-moduleHidden": {
+    "achievementList": true
+  }
 }

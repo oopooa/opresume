@@ -6,7 +6,7 @@
  *   教育经历第一条的学校名查内置离线品牌库，也可在“自定义字段”里填 `校徽链接` 指定）
  * - 右上角：证件照（`x-op-avatar`）
  * - 居中：姓名 + 联系信息
- * - 章节：主题色 Arrow 箭头 + 黑色标题 + 主题色分隔线（主体色从校徽图片提取，**先排除
+ * - 章节：主题色 Lucide 模块图标 + 黑色标题 + 主题色分隔线（主体色从校徽图片提取，**先排除
  *   空白/近白背景**再取主色；默认回退 #A9021F）
  * - 页脚：主题色横条（色条与章节箭头/分隔线共用 --campus-primary，随校徽主色自适应）
  *
@@ -19,6 +19,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { School } from 'lucide-react';
+import { DynamicIcon } from '@/components/DynamicIcon';
 import { toast } from 'sonner';
 import type { TemplateDefinition, StyleTokens } from '../types';
 import type { JsonResume } from '@/types/json-resume';
@@ -41,8 +42,8 @@ import { loadSchoolLogoImage, extractAccentColorFromImage } from '../modules/cam
 const LOGO_MAX_SIZE = 1024 * 1024;
 const LOGO_ACCEPTED_TYPES = new Set(['image/png', 'image/jpeg']);
 
-/** 校园模板默认校徽：清华大学 logo（本地静态资源） */
-const DEFAULT_SCHOOL_LOGO = '/school-logos/tsinghua-logo.jpg';
+/** 校园模板默认校徽：东华大学 logo（本地静态资源，随模板内置） */
+const DEFAULT_SCHOOL_LOGO = '/school-logos/dhu-logo.png';
 
 /* ------------------------------------------------------------------ */
 /*  校徽品牌解析：logo + 主体色（浏览器端，带模块级缓存）               */
@@ -104,7 +105,7 @@ function useSchoolBrand(config: JsonResume): { logoUrl: string; color: string } 
       }
 
       if (!cancelled) {
-        // 未命中任何来源时，使用模板默认校徽（清华）并尝试提取主色
+        // 未命中任何来源时，使用模板默认校徽（东华大学，本地内置）并尝试提取主色
         setBrand({ logoUrl: DEFAULT_SCHOOL_LOGO, color: ACCENT_FALLBACK });
         try {
           const img = await loadSchoolLogoImage(DEFAULT_SCHOOL_LOGO);
@@ -198,12 +199,13 @@ function Header({ config }: { config: JsonResume }) {
   const mask = usePrivacyMask();
   const showIcons = useUIStore((s) => s.showIcons);
   const age = calculateAge(config['x-op-birthday']);
-  const region = basics?.location?.region || basics?.location?.city;
+  const workPlace = basics?.location?.city || basics?.location?.region;
   const showAge = age !== null && !config['x-op-ageHidden'];
+  const showLabel = !!basics?.label && config['x-op-showJobTitle'] === true;
 
   const contactItem = (icon: string, children: ReactNode, href?: string) => (
     <span className="campus-contact-item">
-      {showIcons && <i className={`fa-solid ${icon} campus-contact-icon`} aria-hidden="true" />}
+      {showIcons && <DynamicIcon name={icon} className="campus-contact-icon h-3 w-3" />}
       {href ? (
         <a className="campus-contact-link" href={href}>{children}</a>
       ) : (
@@ -212,22 +214,88 @@ function Header({ config }: { config: JsonResume }) {
     </span>
   );
 
+  // ── 智能自动居中布局 ──────────────────────────────────────────
+  // 三种模式：
+  // 1. 不显示岗位，且隐藏年龄：地点/电话/邮箱/自定义直接在姓名下方一行居中；
+  // 2. 不显示岗位：年龄+地点一行，电话+邮箱+自定义一行（两行居中版式）；
+  // 3. 显示岗位：岗位放在姓名正下方，年龄/地点/电话/邮箱/自定义合并为一行居中。
+  const customFields = (config['x-op-customFields'] ?? []).filter(
+    (f) => (f.key ?? '').trim() || (f.value ?? '').trim(),
+  );
+
+  const hasLocation = !!workPlace;
+  const hasPhone = !!basics?.phone;
+  const hasEmail = !!basics?.email;
+  const hasCustom = customFields.length > 0;
+  const hasRow1 = showAge || hasLocation;
+  const hasRow2 = hasPhone || hasEmail || hasCustom;
+  const hasAnyContact = hasRow1 || hasRow2;
+
   return (
     <div className="campus-header">
-      <h1 className="campus-name">{mask(basics?.name, 'name') || ' '}</h1>
-      <div className="campus-contact">
-        {showAge && contactItem('fa-user', t('field.age', { age }))}
-        {region && contactItem('fa-location-dot', mask(region, 'workPlace'))}
+      {/* 姓名行：始终独立一行居中 */}
+      <div className="campus-header-name-row">
+        <h1 className="campus-name">{mask(basics?.name, 'name') || ' '}</h1>
       </div>
-      <div className="campus-contact">
-        {basics?.phone && contactItem('fa-phone', mask(basics.phone, 'mobile'))}
-        {basics?.email && contactItem('fa-envelope', mask(basics.email, 'email'), `mailto:${basics.email}`)}
-        {config['x-op-customFields']?.filter((f) => f.key.trim() || f.value.trim()).map((f, i) => (
-          <span key={`${f.key}-${i}`} className="campus-contact-item campus-contact-custom">
-            <span>{f.key}:{f.value}</span>
-          </span>
-        ))}
-      </div>
+
+      {/* 显示岗位时：岗位放在姓名正下方 */}
+      {showLabel && (
+        <div className="campus-header-role-line">
+          <span className="campus-header-role">{basics.label}</span>
+        </div>
+      )}
+
+      {/* 模式 3：显示岗位时，其余基础信息合并为一行 */}
+      {showLabel && hasAnyContact && (
+        <div className="campus-contact">
+          {showAge && contactItem('Cake', t('field.age', { age }))}
+          {workPlace && contactItem('MapPin', mask(workPlace, 'workPlace'))}
+          {basics?.phone && contactItem('Phone', mask(basics.phone, 'mobile'))}
+          {basics?.email && contactItem('Mail', mask(basics.email, 'email'), `mailto:${basics.email}`)}
+          {customFields.map((f, i) => (
+            <span key={`${f.key}-${i}`} className="campus-contact-item campus-contact-custom">
+              <span>{f.key}：{f.value}</span>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* 模式 2：不显示岗位时，沿用两行居中版式 */}
+      {!showLabel && showAge && (
+        <>
+          {hasRow1 && (
+            <div className="campus-contact">
+              {showAge && contactItem('Cake', t('field.age', { age }))}
+              {workPlace && contactItem('MapPin', mask(workPlace, 'workPlace'))}
+            </div>
+          )}
+          {hasRow2 && (
+            <div className="campus-contact">
+              {basics?.phone && contactItem('Phone', mask(basics.phone, 'mobile'))}
+              {basics?.email && contactItem('Mail', mask(basics.email, 'email'), `mailto:${basics.email}`)}
+              {customFields.map((f, i) => (
+                <span key={`${f.key}-${i}`} className="campus-contact-item campus-contact-custom">
+                  <span>{f.key}：{f.value}</span>
+                </span>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* 模式 1：不显示岗位且隐藏年龄时，剩余信息在姓名下方一行居中 */}
+      {!showLabel && !showAge && hasAnyContact && (
+        <div className="campus-contact">
+          {workPlace && contactItem('MapPin', mask(workPlace, 'workPlace'))}
+          {basics?.phone && contactItem('Phone', mask(basics.phone, 'mobile'))}
+          {basics?.email && contactItem('Mail', mask(basics.email, 'email'), `mailto:${basics.email}`)}
+          {customFields.map((f, i) => (
+            <span key={`${f.key}-${i}`} className="campus-contact-item campus-contact-custom">
+              <span>{f.key}：{f.value}</span>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -259,7 +327,7 @@ function Template7Shell({ config, mainContent, pageIndex = 0 }: {
         logoUrl ? (
           <button
             type="button"
-            className="campus-logo campus-editable-image print:hidden"
+            className="campus-logo campus-editable-image"
             onClick={(e) => { e.stopPropagation(); openEditor('profile'); }}
             aria-label={t('field.schoolLogo')}
           >
@@ -274,7 +342,7 @@ function Template7Shell({ config, mainContent, pageIndex = 0 }: {
       {isFirstPage && avatar?.src && !avatar.hidden && (
         <button
           type="button"
-          className="campus-photo campus-editable-image print:hidden"
+          className="campus-photo campus-editable-image"
           onClick={(e) => { e.stopPropagation(); openEditor('profile'); }}
           aria-label={t('field.avatar')}
         >

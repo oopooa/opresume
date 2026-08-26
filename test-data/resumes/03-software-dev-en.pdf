@@ -1,0 +1,95 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1321 >>
+stream
+BT
+/F1 11 Tf
+46 790 Td
+(Chen Yu) Tj
+0 -14 Td
+(Frontend Developer | Shanghai) Tj
+0 -14 Td
+(Email: chen.yu@outlook.com | Phone: +86 139 1234 5678 | GitHub: github.com/chenyu) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(EDUCATION) Tj
+0 -14 Td
+(Donghua University, Software Engineering, Bachelor) Tj
+0 -14 Td
+(2020-09 - 2024-06) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(WORK EXPERIENCE) Tj
+0 -14 Td
+(Alibaba Cloud, Frontend Engineer, 2022-06 - present) Tj
+0 -14 Td
+(- Built a design system with React and TypeScript, cutting UI development time by 30%) Tj
+0 -14 Td
+(- Led migration of legacy pages to Next.js and improved LCP by 40%) Tj
+0 -14 Td
+(ByteDance, Frontend Intern, 2021-06 - 2021-09) Tj
+0 -14 Td
+(- Developed dashboard components used by 20+ internal teams) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(PROJECTS) Tj
+0 -14 Td
+(Open Source Resume Editor \(2023-01 - 2023-06\)) Tj
+0 -14 Td
+(- Live preview and JSON importer, 800+ GitHub stars) Tj
+0 -14 Td
+(Mini Chat App \(2022-03 - 2022-05\)) Tj
+0 -14 Td
+(- Real-time chat with WebSocket, 5k demo users in one month) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(SKILLS) Tj
+0 -14 Td
+(JavaScript - 精通) Tj
+0 -14 Td
+(TypeScript - 熟练) Tj
+0 -14 Td
+(React - 熟练) Tj
+0 -14 Td
+(Node.js - 熟练) Tj
+0 -14 Td
+(CSS - 熟练) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(AWARDS) Tj
+0 -14 Td
+(ACM-ICPC Regional Bronze Medal, 2022-11) Tj
+0 -14 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001613 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1710
+%%EOF

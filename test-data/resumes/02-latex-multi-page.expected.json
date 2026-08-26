@@ -1,0 +1,13 @@
+{
+  "file": "02-latex-multi-page.pdf",
+  "basics": {
+    "name": null,
+    "email": "example@qq.com",
+    "phone": "12345678910",
+    "label": null,
+    "city": null
+  },
+  "counts": { "education": 1, "work": 1, "projects": 3, "skills": 0, "awards": 0 },
+  "countTolerance": 2,
+  "notes": "最难样本：LaTeX 简历，pdfjs 提取带图标字体名（MARS/CALENDAR-ALT/GRADUATION-CAP）与 XX 占位符噪声，姓名不可辨认（不比对 name）。评分重点：流程不崩溃 + email/phone 命中 + 节数在容差内。"
+}

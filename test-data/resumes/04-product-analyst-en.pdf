@@ -1,0 +1,83 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1120 >>
+stream
+BT
+/F1 11 Tf
+46 790 Td
+(Emily Zhang) Tj
+0 -14 Td
+(Senior Product Analyst | 10 years of experience) Tj
+0 -14 Td
+(Email: emily.zhang@gmail.com | Phone: +1 415 555 0132 | Location: Beijing) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(EDUCATION) Tj
+0 -14 Td
+(Fudan University, Master of Business Analytics, 2018-09 - 2020-06) Tj
+0 -14 Td
+(East China Normal University, Bachelor of Statistics, 2014-09 - 2018-06) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(WORK EXPERIENCE) Tj
+0 -14 Td
+(Meituan, Senior Product Analyst, 2020-07 - present) Tj
+0 -14 Td
+(- Led A/B testing framework across 12 product lines, +8% conversion) Tj
+0 -14 Td
+(JD.com, Product Analyst, 2018-07 - 2020-06) Tj
+0 -14 Td
+(- Built user retention dashboards with SQL and Tableau) Tj
+0 -14 Td
+(Kuaishou, Data Analyst Intern, 2017-06 - 2017-09) Tj
+0 -14 Td
+(- Analyzed 10M+ daily events to support recommendation tuning) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(SKILLS) Tj
+0 -14 Td
+(SQL - 精通) Tj
+0 -14 Td
+(Python - 熟练) Tj
+0 -14 Td
+(Tableau - 熟练) Tj
+0 -14 Td
+(A/B Testing - 熟练) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(AWARDS) Tj
+0 -14 Td
+(Best Analyst Award, Meituan Data Team, 2022-12) Tj
+0 -14 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001412 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1509
+%%EOF

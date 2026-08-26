@@ -70,7 +70,7 @@ export const BRAND_DB: Record<string, SchoolBrand> = {
   "辽宁大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/1/14/Liaoning_University_logo.png", color: "#2599B5" },
   "东北师范大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/9/93/Northeast_Normal_University_logo.svg", color: "#A9021F" },
   "哈尔滨工程大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/2/27/Harbin_Engineering_University_logo.svg", color: "#A9021F" },
-  "东华大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/2/2e/Donghua_University_logo.svg", color: "#A9021F" },
+  "东华大学": { logoUrl: "/school-logos/dhu-logo.png", color: "#A9021F" },
   "北京工业大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/a/ac/Beijing_University_of_Technology.svg", color: "#A9021F" },
   "浙江工业大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/20250423_Zhejiang_Gongye_Daxue.jpg/500px-20250423_Zhejiang_Gongye_Daxue.jpg", color: "#8CA3C1" },
   "南京师范大学": { logoUrl: "https://upload.wikimedia.org/wikipedia/zh/c/c1/Nanjing_Normal_University.svg", color: "#A9021F" },

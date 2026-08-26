@@ -154,10 +154,27 @@ export interface CustomModule {
   contentHtml: string;
 }
 
+/** 校园模板（template7）修读课程条目 */
+export interface CourseItem {
+  id?: string;
+  text?: string;
+}
+
+/** 用户上传的校徽（data URL 形式，随简历存 localStorage） */
+export interface SchoolLogo {
+  src?: string;
+  /** 是否在简历中隐藏校徽 */
+  hidden?: boolean;
+}
+
 export interface JsonResume extends JsonResumeBase {
   'x-op-avatar'?: Avatar;
+  'x-op-schoolLogo'?: SchoolLogo;
+  /** 校园模板修读课程（template7） */
+  'x-op-courses'?: CourseItem[];
   'x-op-birthday'?: string;
   'x-op-ageHidden'?: boolean;
+  'x-op-showJobTitle'?: boolean;
   'x-op-workExpYear'?: string;
   'x-op-customFields'?: Array<{ id?: string; key: string; value: string }>;
   'x-op-aboutmeHtml'?: string;

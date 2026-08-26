@@ -1,0 +1,83 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1133 >>
+stream
+BT
+/F1 11 Tf
+46 790 Td
+(Dr. Liu Min) Tj
+0 -14 Td
+(Research Scientist | Shanghai) Tj
+0 -14 Td
+(Email: liu.min@dhu.edu.cn | Phone: +86 21 5555 0123) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(EDUCATION) Tj
+0 -14 Td
+(PhD, Mechanical Engineering, Shanghai Jiao Tong University, 2016-09 - 2021-06) Tj
+0 -14 Td
+(BS, Mechanical Engineering, Donghua University, 2012-09 - 2016-06) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(RESEARCH EXPERIENCE) Tj
+0 -14 Td
+(Postdoctoral Researcher, DHU Robotics Lab, 2021-07 - present) Tj
+0 -14 Td
+(- Finite element analysis and topology optimization of robot joints) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(PUBLICATIONS \(selected\)) Tj
+0 -14 Td
+(Liu M. et al. Lightweight design of robot joints via topology optimization, JMSE, 2024) Tj
+0 -14 Td
+(Liu M. et al. Dynamic analysis of flexible manipulators, Mechanism and Machine Theory, 2022) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(AWARDS) Tj
+0 -14 Td
+(Best Paper Award, IFToMM World Congress 2023) Tj
+0 -14 Td
+(Excellent PhD Thesis, Shanghai Jiao Tong University, 2021) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(SKILLS) Tj
+0 -14 Td
+(ANSYS - 精通) Tj
+0 -14 Td
+(MATLAB - 熟练) Tj
+0 -14 Td
+(Python - 熟练) Tj
+0 -14 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001425 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1522
+%%EOF

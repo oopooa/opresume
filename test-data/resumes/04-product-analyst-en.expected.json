@@ -1,0 +1,18 @@
+{
+  "file": "04-product-analyst-en.pdf",
+  "basics": {
+    "name": "Emily Zhang",
+    "email": "emily.zhang@gmail.com",
+    "phone": "14155550132",
+    "label": "Senior Product Analyst",
+    "city": "Beijing"
+  },
+  "counts": {
+    "education": 2,
+    "work": 3,
+    "projects": 0,
+    "skills": 4,
+    "awards": 1
+  },
+  "notes": "多年经验（3 段工作、2 段教育、10 年工作年限 → workExpYear）。"
+}

@@ -47,7 +47,6 @@ export const schemas: ModuleSchema[] = [
     fields: [
       { key: 'name', labelKey: 'field.name', type: 'text' },
       { key: 'birthday', labelKey: 'field.birthday', type: 'date' },
-      { key: 'label', labelKey: 'field.positionTitle', type: 'text' },
       { key: 'phone', labelKey: 'field.mobile', type: 'tel' },
       { key: 'email', labelKey: 'field.email', type: 'text' },
       { key: 'workPlace', labelKey: 'field.workPlace', type: 'text' },
@@ -74,11 +73,12 @@ export const schemas: ModuleSchema[] = [
     titleKey: 'name',
     fields: [
       { key: 'name', labelKey: 'field.companyName', type: 'text' },
+      { key: 'position', labelKey: 'field.position', type: 'text' },
       { key: 'x-op-departmentName', labelKey: 'field.departmentName', type: 'text' },
       { key: 'startDate', labelKey: 'field.workTime', type: 'time-range', showPresent: true, endKey: 'endDate' },
       { key: 'x-op-workDescHtml', labelKey: 'field.workDesc', type: 'markdown' },
     ],
-    defaultItem: () => ({ 'x-op-id': uid('work'), name: '', 'x-op-departmentName': '', startDate: '', endDate: '', 'x-op-workDescHtml': '' }),
+    defaultItem: () => ({ 'x-op-id': uid('work'), name: '', position: '', 'x-op-departmentName': '', startDate: '', endDate: '', 'x-op-workDescHtml': '' }),
   },
   {
     module: 'projectList',
@@ -159,6 +159,15 @@ export const schemas: ModuleSchema[] = [
     fields: [
       { key: 'aboutmeHtml', labelKey: 'field.aboutmeDesc', type: 'markdown', hideLabel: true },
     ],
+  },
+  {
+    module: 'campusCourses',
+    dataKey: 'x-op-courses',
+    isList: true,
+    fields: [
+      { key: 'text', labelKey: 'field.courseItem', type: 'text' },
+    ],
+    defaultItem: () => ({ id: uid('course'), text: '' }),
   },
 ];
 

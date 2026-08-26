@@ -442,6 +442,7 @@ export const ICON_KEYWORDS: Record<string, string> = {
 /** 模块默认图标 */
 export const DEFAULT_MODULE_ICONS: Record<string, string> = {
   profile: 'IdCard',
+  campusCourses: 'BookOpen',
   educationList: 'GraduationCap',
   workExpList: 'Briefcase',
   projectList: 'FolderKanban',

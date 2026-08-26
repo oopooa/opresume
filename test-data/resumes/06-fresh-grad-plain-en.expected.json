@@ -1,0 +1,18 @@
+{
+  "file": "06-fresh-grad-plain-en.pdf",
+  "basics": {
+    "name": "Sun Hao",
+    "email": "sun.hao@163.com",
+    "phone": "13800001111",
+    "label": null,
+    "city": null
+  },
+  "counts": {
+    "education": 1,
+    "work": 1,
+    "projects": 1,
+    "skills": 0,
+    "awards": 0
+  },
+  "notes": "弱排版纯文本；技能为叙述句而非“技能+熟练度”逐条 → skills 应被省略（prompt 规则 6）。"
+}

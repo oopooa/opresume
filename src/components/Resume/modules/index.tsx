@@ -13,6 +13,7 @@ import { WorkListModule } from './WorkListModule';
 import { AboutMeModule } from './AboutMeModule';
 import { SkillModule } from './SkillModule';
 import { CustomModule } from './CustomModule';
+import { CAMPUS_EXTRA_MODULES, CAMPUS_STYLE_OVERRIDES, CAMPUS_TEMPLATE_ID } from './CampusModules';
 
 /** 内置模块组件映射表 */
 export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
@@ -25,6 +26,19 @@ export const MODULE_COMPONENTS: Record<string, ComponentType<ModuleProps>> = {
   aboutme: AboutMeModule,
   skillList: SkillModule,
 };
+
+/**
+ * 模板级模块解析：校徽单栏模板（template7）可覆盖共享模块的渲染（见 CampusModules.tsx）。
+ */
+export function getModuleComponent(templateId: string, key: string): ComponentType<ModuleProps> | undefined {
+  if (templateId === CAMPUS_TEMPLATE_ID) {
+    const dhu = CAMPUS_STYLE_OVERRIDES[key];
+    if (dhu) return dhu;
+    const extra = CAMPUS_EXTRA_MODULES[key];
+    if (extra) return extra;
+  }
+  return MODULE_COMPONENTS[key];
+}
 
 /** 判断模块 ID 是否为自定义模块（以 custom- 开头） */
 export function isCustomModule(key: string): boolean {
@@ -51,7 +65,7 @@ export function useTemplateModules(
       );
     }
 
-    const Mod = MODULE_COMPONENTS[key];
+    const Mod = getModuleComponent(def.id, key);
     if (!Mod) return null;
     return (
       <div key={key} className="resume-module" data-module-key={key}>
@@ -73,6 +87,7 @@ export function renderPageSlices(
   slices: PageSlice[],
   config: JsonResume,
   tokens: StyleTokens,
+  templateId?: string,
 ): ReactNode {
   return (
     <>
@@ -93,7 +108,7 @@ export function renderPageSlices(
           );
         }
 
-        const Mod = MODULE_COMPONENTS[slice.moduleKey];
+        const Mod = getModuleComponent(templateId ?? '', slice.moduleKey);
         if (!Mod) return null;
         const hasItems = slice.endItem > 0;
         return (

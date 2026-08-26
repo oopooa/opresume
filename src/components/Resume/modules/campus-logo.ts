@@ -5,19 +5,22 @@
  *   以便 Canvas 无污染读取像素）
  * - extractAccentColorFromImage: 从校徽图片提取主底色（#RRGGBB）
  *
- * 提取算法（先排除空白，再适配简历色条）：
- *   1. 降采样到最长边 ≤ 64px 的小画布
+ * 提取算法（先排除空白，再压成“深墨”主色，参照原 DHU 模板的深红色条）：
+ *   1. 最近邻降采样到最长边 ≤ 96px 的小画布（关闭平滑，保留校徽图形本身的纯色“墨点”，
+ *      避免细线稿与白色/透明边缘混色后把平均色拉浅）
  *   2. 空白背景检测：采样图片外圈 2px 环，多数派颜色视为背景色；
  *      背景为近白/近透明时，将该背景色（含容差）的像素整体排除 —— 避免白色底把
  *      统计结果拉向浅色，保证取到的是校徽图形本身的“墨色”
  *   3. 逐像素过滤：透明、近黑、近白、低饱和灰
- *   4. 15° 色相桶量化，按 像素数 × (0.35 + 平均饱和度) 取主色
- *   5. 有效彩色像素过少（纯空白/纯色图）→ 返回 null，由调用方回退默认色
+ *   4. 15° 色相桶量化；桶内按 不透明度 × 深度 加权累计（深色不透明像素占主导），
+ *      再按 像素数 × (0.35 + 平均饱和度) 取主色
+ *   5. HSL 压深：明度上限 0.33、最低饱和度 0.78 —— 产出与原模板一致的深红墨色（深且饱和）
+ *   6. 有效彩色像素过少（纯空白/纯色图）→ 返回 null，由调用方回退默认色
  */
 import { ACCENT_FALLBACK } from './campus-brands';
 
 /** 降采样画布最长边（px） */
-const MAX_DIM = 64;
+const MAX_DIM = 96;
 /** 空白背景容差（RGB 欧氏距离） */
 const BG_TOLERANCE = 42;
 /** 背景判定：平均通道 ≥ 该值时视为近白背景 */
@@ -46,8 +49,14 @@ function nearBackground(p: Rgb, bg: Rgb): boolean {
   return rgbDistance(p, bg) <= BG_TOLERANCE;
 }
 
-/** 将 HEX 颜色加深并略微降饱和，使校徽主色更适合简历深色色条/分隔线 */
-function darkenColor(hex: string, lightnessFactor = 0.78, saturationFactor = 0.92): string {
+/** 将主色压成深色、高饱和、不透明的“墨色”（参照原模板的深色主色条） */
+function darkenColor(
+  hex: string,
+  lightnessFactor = 0.8,
+  lightnessCap = 0.33,
+  minLightness = 0.14,
+  minSaturation = 0.78,
+): string {
   const normalized = hex.replace('#', '');
   if (normalized.length !== 6) return hex;
 
@@ -69,8 +78,9 @@ function darkenColor(hex: string, lightnessFactor = 0.78, saturationFactor = 0.9
     else h = ((r - g) / d + 4) / 6;
   }
 
-  const newL = Math.max(0.12, l * lightnessFactor);
-  const newS = Math.max(0, Math.min(1, s * saturationFactor));
+  // “深墨化”：明度只降不抬（保留本来就深的原色），并收敛到深色区间；饱和度补足到下限
+  const newL = l < minLightness ? l : Math.min(l * lightnessFactor, lightnessCap);
+  const newS = Math.max(s, minSaturation);
 
   const hueToRgb = (p: number, q: number, t: number) => {
     let tt = t;
@@ -105,6 +115,8 @@ export function extractAccentColorFromImage(img: HTMLImageElement): string | nul
     canvas.height = h;
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return null;
+    // 最近邻采样：保留校徽纯色墨点，避免平滑降采样把细线稿混成浅色
+    ctx.imageSmoothingEnabled = false;
     ctx.drawImage(img, 0, 0, w, h);
     const { data } = ctx.getImageData(0, 0, w, h);
 
@@ -172,10 +184,16 @@ export function extractAccentColorFromImage(img: HTMLImageElement): string | nul
         else hue = 60 * ((p.r / 255 - p.g / 255) / delta + 4);
         if (hue < 0) hue += 360;
       }
+      // 按 不透明度 × 深度 加权：深色不透明像素（墨色核心）比浅色边缘像素更主导
+      const weight = (p.a / 255) * (1.6 - l);
       const bucket = Math.round(hue / 15);
       const prev = buckets.get(bucket);
-      if (prev) { prev.r += p.r; prev.g += p.g; prev.b += p.b; prev.n += 1; prev.s += s; }
-      else buckets.set(bucket, { r: p.r, g: p.g, b: p.b, n: 1, s });
+      if (prev) {
+        prev.r += p.r * weight; prev.g += p.g * weight; prev.b += p.b * weight;
+        prev.n += weight; prev.s += s * weight;
+      } else {
+        buckets.set(bucket, { r: p.r * weight, g: p.g * weight, b: p.b * weight, n: weight, s: s * weight });
+      }
       useful += 1;
     }
 

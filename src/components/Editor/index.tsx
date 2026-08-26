@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
 import { useResumeStore } from '@/store/resume';
 import type { Avatar, ModuleLayout } from '@/types/resume';
-import type { JsonResume } from '@/types/json-resume';
+import type { JsonResume, SchoolLogo } from '@/types/json-resume';
 import {
   Sheet,
   SheetContent,
@@ -59,6 +59,7 @@ import { schemas, type ModuleSchema, getCustomModuleSchema } from './schemas';
 import { FormCreator } from './FormCreator';
 import { ListEditor } from './ListEditor';
 import { AvatarEditor } from './AvatarEditor';
+import { SchoolLogoEditor } from './SchoolLogoEditor';
 import { CustomFieldsEditor } from './CustomFieldsEditor';
 import { calculateAge } from '@/components/Resume/shared';
 import { getEffectiveLayout, isTwoColumnTemplate } from '@/config/layout';
@@ -263,10 +264,12 @@ function ProfileSection({
     email: config.basics?.email ?? '',
     workExpYear: config['x-op-workExpYear'] ?? '',
     workPlace: config.basics?.location?.city ?? '',
+    showJobTitle: config['x-op-showJobTitle'] ?? false,
   };
 
   const age = calculateAge(config['x-op-birthday']);
   const ageHidden = config['x-op-ageHidden'] ?? false;
+  const showJobTitle = config['x-op-showJobTitle'] ?? false;
   const birthdayIdx = schema.fields.findIndex((f) => f.key === 'birthday');
   const beforeFields = schema.fields.slice(0, birthdayIdx + 1);
   const afterFields = schema.fields.slice(birthdayIdx + 1);
@@ -287,6 +290,8 @@ function ProfileSection({
           result['x-op-birthday'] = value as string;
         } else if (key === 'ageHidden') {
           result['x-op-ageHidden'] = value as boolean;
+        } else if (key === 'showJobTitle') {
+          result['x-op-showJobTitle'] = value as boolean;
         } else if (key === 'workExpYear') {
           result['x-op-workExpYear'] = value as string;
         }
@@ -315,6 +320,11 @@ function ProfileSection({
     [update],
   );
 
+  const handleSchoolLogoChange = useCallback(
+    (logo: SchoolLogo) => update({ 'x-op-schoolLogo': logo }),
+    [update],
+  );
+
   const handleCustomFieldsChange = useCallback(
     (customFields: NonNullable<JsonResume['x-op-customFields']>) => {
       update({ 'x-op-customFields': customFields });
@@ -325,6 +335,7 @@ function ProfileSection({
   return (
     <div className="space-y-3">
       <AvatarEditor avatar={config['x-op-avatar']} onChange={handleAvatarChange} />
+      <SchoolLogoEditor logo={config['x-op-schoolLogo']} onChange={handleSchoolLogoChange} />
       <FormCreator fields={beforeFields} data={data} onChange={handleFieldChange} />
       <div className="space-y-1">
         <div className="flex items-center justify-between">
@@ -349,6 +360,31 @@ function ProfileSection({
         />
       </div>
       <FormCreator fields={afterFields} data={data} onChange={handleFieldChange} />
+
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <Label>
+            {t('field.positionTitle')}
+          </Label>
+          {!!data.label && (
+            <span
+              role="button"
+              tabIndex={0}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:bg-accent hover:text-gray-600"
+              aria-label={t(showJobTitle ? 'common.hide' : 'common.show')}
+              onClick={() => handleFieldChange({ showJobTitle: !showJobTitle })}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldChange({ showJobTitle: !showJobTitle }); }}
+            >
+              {showJobTitle ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+            </span>
+          )}
+        </div>
+        <Input
+          value={(data.label as string) || ''}
+          onChange={(e) => handleFieldChange({ label: e.target.value })}
+          placeholder={t('field.positionTitle')}
+        />
+      </div>
 
       <CustomFieldsEditor
         fields={config['x-op-customFields'] ?? []}

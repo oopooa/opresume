@@ -2,18 +2,18 @@
  * Campus Fresh Graduate（校园应届生）模板（template7）专用模块渲染器。
  *
  * 设计要点（对应 template/DHU_CV_Template.pdf）：
- * - 章节标题：主题色 Arrow 箭头 + 黑色加粗标题 + 主题色细分隔线
+ * - 章节标题：主题色 Lucide 图标 + 黑色加粗标题 + 主题色细分隔线
  * - 正文字体：Noto Sans SC（替代方正兰亭黑 FZLTHPro，免费可商用）
  * - 强调/标注字体：LXGW WenKai 霞鹜文楷（替代 FandolKai / 仿宋楷体风格，OFL 可商用）
  * - 教育经历：学校名加粗 + 右侧时间；专业与学历另起一行（学历用楷体）
  * - 项目/实践经验：标题行 = 项目名(加粗) + 角色(居中) + 时间(右)；`描述：`、`主要工作：` 楷体标注
- * - 工作经历：职位(加粗) + 公司(居中) + 时间(右)；正文为富文本要点
- * - 专业技能：主题色 Arrow 要点列表
+ * - 工作经历：公司(加粗) + 职位(居中) + 时间(右)；正文为富文本要点
+ * - 专业技能：黑色圆点要点列表（与 DHU 原稿一致）
  * - 主体色统一使用 CSS 变量 --campus-primary（由 LayoutShell 从校徽主色提取，见 template7.tsx）
  */
 import type { ComponentType } from 'react';
 import type { ModuleProps } from '../types';
-import type { JsonEducation, JsonWork, JsonProject, JsonSkill } from '@/types/json-resume';
+import type { CourseItem, JsonEducation, JsonWork, JsonProject, JsonSkill, JsonAward } from '@/types/json-resume';
 import { useTranslation } from 'react-i18next';
 import { RichContent } from '@/components/RichContent';
 import { DynamicIcon } from '@/components/DynamicIcon';
@@ -72,13 +72,24 @@ export function CampusSectionTitle({ title, icon, showIcons }: { title: string; 
 /*  通用小部件                                                         */
 /* ------------------------------------------------------------------ */
 
+/** 统一日期展示：YYYY-MM / YYYY-M / YYYY-MM-DD 转为 YYYY/MM / YYYY/MM/DD */
+function formatCampusDate(value?: string, presentLabel?: string): string {
+  if (!value) return '';
+  if (value === 'present' || value === '至今' || value === 'Present') {
+    return presentLabel ?? '至今';
+  }
+  const m = value.match(/^(\d{4})[-\/.](\d{1,2})(?:[-\/.](\d{1,2}))?$/);
+  if (m) {
+    const month = m[2].padStart(2, '0');
+    if (m[3]) return `${m[1]}/${month}/${m[3].padStart(2, '0')}`;
+    return `${m[1]}/${month}`;
+  }
+  return value;
+}
+
 function TimeRange({ startDate, endDate, presentLabel }: { startDate?: string; endDate?: string; presentLabel?: string }) {
   if (!startDate && !endDate) return null;
-  const display = (v?: string) => {
-    if (!v) return '';
-    if (v === 'present' || v === '至今' || v === 'Present') return presentLabel ?? '至今';
-    return v;
-  };
+  const display = (v?: string) => formatCampusDate(v, presentLabel);
   return (
     <span className="campus-date">
       {display(startDate)}{startDate && endDate ? ' - ' : ''}{display(endDate)}
@@ -136,12 +147,10 @@ function EducationRenderer({ config, itemRange, showTitle = true }: ModuleProps)
 /*  修读课程（campusCourses，数据：x-op-courses: {id,text}[]）             */
 /* ------------------------------------------------------------------ */
 
-interface CourseItem { id?: string; text?: string }
-
 function CoursesRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
   const { t } = useTranslation();
   const moduleIcon = useCampusModuleIcon('campusCourses');
-  const courses = (config as unknown as { 'x-op-courses'?: CourseItem[] })['x-op-courses'] ?? [];
+  const courses = config['x-op-courses'] ?? [];
   const all = courses as CourseItem[];
   if (isHidden(config, 'campusCourses') || !all.length) return null;
 
@@ -192,11 +201,15 @@ function ProjectRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
           const items = (proj['x-op-projectContentHtml'] ?? '').trim();
           return (
             <div key={proj['x-op-id'] ?? i} className="campus-item campus-project-item" data-item-index={offset + i}>
-              <div className="campus-item-head">
-                <span className="campus-project-dot" aria-hidden="true">•</span>
-                <span className="campus-bold campus-ellipsis">{proj.name}</span>
-                {proj.roles?.[0] && <span className="campus-role">{proj.roles[0]}</span>}
-                <TimeRange startDate={proj.startDate} endDate={proj.endDate} />
+              <div className="campus-item-head campus-item-head-with-role">
+                <div className="campus-head-left">
+                  <span className="campus-project-dot" aria-hidden="true">•</span>
+                  <span className="campus-bold campus-ellipsis">{proj.name}</span>
+                </div>
+                {proj.roles?.[0] && <span className="campus-role campus-head-center">{proj.roles[0]}</span>}
+                <div className="campus-head-right">
+                  <TimeRange startDate={proj.startDate} endDate={proj.endDate} />
+                </div>
               </div>
               {proj.description && (
                 <div className="campus-item-sub">
@@ -222,7 +235,7 @@ function ProjectRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
 
 /* ------------------------------------------------------------------ */
 /*  工作经历（workExpList 覆盖）                                       */
-/*  标题行：职位（加粗）+ 公司（居中）+ 时间（右）；富文本要点          */
+/*  标题行：公司（加粗）+ 岗位（居中）+ 时间（右）；富文本要点          */
 /* ------------------------------------------------------------------ */
 
 function WorkRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
@@ -242,10 +255,14 @@ function WorkRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
         )}
         {list.map((work, i) => (
           <div key={work['x-op-id'] ?? i} className="campus-item" data-item-index={offset + i}>
-            <div className="campus-item-head">
-              <span className="campus-bold campus-ellipsis">{work.position || work.name}</span>
-              {work.name && work.position && <span className="campus-role">{work.name}</span>}
-              <TimeRange startDate={work.startDate} endDate={work.endDate} />
+            <div className="campus-item-head campus-item-head-with-role">
+              <div className="campus-head-left">
+                <span className="campus-bold campus-ellipsis">{work.name || work.position}</span>
+              </div>
+              {work.position && <span className="campus-role campus-head-center">{work.position}</span>}
+              <div className="campus-head-right">
+                <TimeRange startDate={work.startDate} endDate={work.endDate} />
+              </div>
             </div>
             {work['x-op-workDescHtml'] && (
               <PolishHost className="campus-rich" itemIndex={offset + i}>
@@ -292,6 +309,40 @@ function SkillRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
   );
 }
 
+
+/* ------------------------------------------------------------------ */
+/*  荣誉奖项（awardList 覆盖）：与专业技能一致，使用 • 要点列表        */
+/* ------------------------------------------------------------------ */
+
+function AwardRenderer({ config, itemRange, showTitle = true }: ModuleProps) {
+  const { t } = useTranslation();
+  const moduleIcon = useCampusModuleIcon('awardList');
+  const all = (config.awards ?? []) as JsonAward[];
+  if (isHidden(config, 'awardList') || !all.length) return null;
+
+  const list = itemRange ? all.slice(itemRange[0], itemRange[1]) : all;
+  const offset = itemRange ? itemRange[0] : 0;
+
+  return (
+    <EditableSection module="awardList">
+      <section className="campus-section">
+        {showTitle && (
+          <CampusSectionTitle title={getTitle(config, 'awardList', t('module.awardList'))} icon={moduleIcon} />
+        )}
+        {list.map((award, i) => (
+          <div key={award['x-op-id'] ?? i} className="campus-item campus-bullet" data-item-index={offset + i}>
+            <span className="campus-bullet-dot" aria-hidden="true">•</span>
+            <span className="campus-bullet-text">
+              {award.title}
+              {award.date && <span className="campus-muted"> ({formatCampusDate(award.date)})</span>}
+            </span>
+          </div>
+        ))}
+      </section>
+    </EditableSection>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /*  模板级注册表：本模板对共享模块的渲染覆盖                           */
 /* ------------------------------------------------------------------ */
@@ -304,6 +355,7 @@ export const CAMPUS_STYLE_OVERRIDES: Record<string, ComponentType<ModuleProps>> 
   projectList: ProjectRenderer,
   workExpList: WorkRenderer,
   skillList: SkillRenderer,
+  awardList: AwardRenderer,
 };
 
 /** 本模板新增的模块（其他模板不引用，无副作用） */
