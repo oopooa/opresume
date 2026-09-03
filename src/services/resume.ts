@@ -1,22 +1,10 @@
 import type { JsonResume } from '@/types/json-resume';
-import { getSampleResume } from '@/config/sample-resume';
-import { detectBrowserLanguage, isDemoMode } from '@/i18n';
-
-const API_URL = '/api/resume';
-const LS_KEY = 'opresume-config';
-
-function isDev(): boolean {
-  return import.meta.env.DEV;
-}
-
-function getDefaultResume(lang?: string): JsonResume {
-  const detectedLang = lang || detectBrowserLanguage();
-  const sample = getSampleResume(detectedLang);
-  return {
-    ...sample,
-    'x-op-avatar': { ...(sample['x-op-avatar'] || {}), hidden: false }
-  };
-}
+import { isDemoMode } from '@/i18n';
+import {
+  getDefaultResume,
+  loadResumeLibrary,
+  saveActiveResume,
+} from '@/services/resume-library';
 
 function addCustomFieldIds(resume: JsonResume): JsonResume {
   if (!resume['x-op-customFields']) return resume;
@@ -38,12 +26,6 @@ function removeCustomFieldIds(resume: JsonResume): JsonResume {
       .map(({ id: _, ...rest }) => rest);
   }
   return cleaned;
-}
-
-function isJsonResume(data: unknown): data is JsonResume {
-  if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
-  const obj = data as Record<string, unknown>;
-  return 'basics' in obj || 'work' in obj || 'education' in obj;
 }
 
 function isRecord(data: unknown): data is Record<string, unknown> {
@@ -75,58 +57,22 @@ export async function loadResume(lang?: string): Promise<JsonResume> {
     return addCustomFieldIds(getDefaultResume(lang));
   }
 
-  let data: unknown;
-
-  if (isDev()) {
-    const res = await fetch(API_URL);
-    if (res.ok) {
-      data = await res.json();
-      if (isJsonResume(data)) {
-        return addCustomFieldIds(data);
-      }
+  try {
+    const library = await loadResumeLibrary(lang);
+    const active =
+      library.resumes.find((r) => r.meta.id === library.activeId) ?? library.resumes[0];
+    if (active) {
+      return addCustomFieldIds(active.data);
     }
-    // 开发模式下 API 失败，继续尝试其他来源
-  }
-
-  const cached = localStorage.getItem(LS_KEY);
-  if (cached) {
-    try {
-      const parsed = JSON.parse(cached);
-      if (isJsonResume(parsed)) {
-        return addCustomFieldIds(parsed);
-      }
-      localStorage.removeItem(LS_KEY);
-    } catch {
-      localStorage.removeItem(LS_KEY);
-    }
-  }
-
-  const res = await fetch('/data/resume.json');
-  if (!res.ok) {
-    return addCustomFieldIds(getDefaultResume(lang));
-  }
-  data = await res.json();
-  if (isJsonResume(data)) {
-    return addCustomFieldIds(data);
+  } catch {
+    // 简历库读取失败时回退到示例数据
   }
   return addCustomFieldIds(getDefaultResume(lang));
 }
 
 export async function saveResume(resume: JsonResume): Promise<void> {
   const cleaned = removeCustomFieldIds(resume);
-
-  if (isDev()) {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cleaned, null, 2),
-    });
-    if (!res.ok) {
-      throw new Error(`保存失败 (${res.status})`);
-    }
-  } else {
-    localStorage.setItem(LS_KEY, JSON.stringify(cleaned));
-  }
+  await saveActiveResume(cleaned);
 }
 
 export function exportResume(resume: JsonResume, filename?: string): void {

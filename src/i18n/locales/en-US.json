@@ -31,6 +31,27 @@
   "menu": {
     "description": "Navigation menu"
   },
+  "resumeManager": {
+    "title": "My Resumes",
+    "create": "New Resume",
+    "edit": "Edit",
+    "switchTo": "Use this resume",
+    "rename": "Rename",
+    "renamePlaceholder": "Enter resume name",
+    "duplicate": "Duplicate",
+    "copySuffix": "{{name}} copy",
+    "delete": "Delete",
+    "deleteTitle": "Delete Resume",
+    "deleteDesc": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "deleteConfirm": "Delete",
+    "defaultName": "My Resume",
+    "untitled": "Untitled Resume",
+    "switchSuccess": "Switched to \"{{name}}\"",
+    "createSuccess": "New resume created",
+    "duplicateSuccess": "Duplicate created",
+    "deleteSuccess": "Resume deleted",
+    "operationFailed": "Operation failed, please try again"
+  },
   "toolbar": {
     "template": "Template",
     "templateDesc": "Choose a template that suits your resume",

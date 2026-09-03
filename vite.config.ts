@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import { existsSync, unlinkSync, readFileSync } from 'fs';
 
 const DATA_FILE = path.resolve(__dirname, 'data/resume.json');
+const RESUMES_FILE = path.resolve(__dirname, 'data/resumes.json');
 const DATA_DIR = path.resolve(__dirname, 'data');
 const SAMPLE_FILE = path.resolve(__dirname, 'src/config/sample-resume.json');
 
@@ -28,10 +29,80 @@ async function readSampleAsUserData(): Promise<string> {
   return JSON.stringify(sample, null, 2);
 }
 
+/** 读取多简历库；首次访问时从旧版单简历文件迁移，或从示例数据初始化 */
+async function readResumesLibrary(): Promise<string> {
+  if (!existsSync(RESUMES_FILE)) {
+    let data: unknown = null;
+    if (existsSync(DATA_FILE)) {
+      try {
+        data = JSON.parse(await fs.readFile(DATA_FILE, 'utf-8'));
+      } catch {
+        data = null;
+      }
+    }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      data = JSON.parse(await readSampleAsUserData());
+    }
+    const now = Date.now();
+    const library = {
+      activeId: 'default',
+      resumes: [
+        { meta: { id: 'default', name: '我的简历', createdAt: now, updatedAt: now }, data },
+      ],
+    };
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.writeFile(RESUMES_FILE, JSON.stringify(library, null, 2), 'utf-8');
+  }
+  return fs.readFile(RESUMES_FILE, 'utf-8');
+}
+
 function resumeApiPlugin(): Plugin {
   return {
     name: 'resume-api',
     configureServer(server) {
+      // 多简历库。注意必须在 /api/resume 之前注册：connect 按前缀匹配，
+      // 先注册 /api/resume 会把 /api/resumes 的请求截获。
+      server.middlewares.use('/api/resumes', async (req, res) => {
+        try {
+          if (req.method === 'GET') {
+            const data = await readResumesLibrary();
+            res.setHeader('Content-Type', 'application/json');
+            res.end(data);
+            return;
+          }
+
+          if (req.method === 'POST') {
+            const body = await new Promise<string>((resolve, reject) => {
+              let data = '';
+              req.on('data', (chunk: Buffer) => { data += chunk; });
+              req.on('end', () => resolve(data));
+              req.on('error', reject);
+            });
+            try {
+              const parsed = JSON.parse(body);
+              if (!parsed || typeof parsed.activeId !== 'string' || !Array.isArray(parsed.resumes)) {
+                throw new Error('invalid library');
+              }
+            } catch {
+              res.statusCode = 400;
+              res.end(JSON.stringify({ error: '简历库数据格式无效' }));
+              return;
+            }
+            await fs.writeFile(RESUMES_FILE, body, 'utf-8');
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ ok: true }));
+            return;
+          }
+
+          res.statusCode = 405;
+          res.end();
+        } catch (e) {
+          res.statusCode = 500;
+          const msg = e instanceof Error ? e.message : '服务器内部错误';
+          res.end(JSON.stringify({ error: msg }));
+        }
+      });
+
       server.middlewares.use('/api/resume', async (req, res) => {
         try {
           if (req.method === 'GET') {

@@ -13,6 +13,8 @@ export type {
   JsonAward,
 } from './json-resume';
 
+export type { ResumeMeta, StoredResume, ResumeLibrary } from './resume-library';
+
 export type { ThemeConfig, PresetTheme, SpacingPreset, LayoutConfig } from './theme';
 
 export type {

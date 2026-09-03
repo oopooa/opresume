@@ -4,6 +4,7 @@ import { Palette, Check, ArrowRightLeft, Minus, Plus } from 'lucide-react';
 import { LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/ui';
+import { useResumeStore } from '@/store/resume';
 import { getSampleResume } from '@/config/sample-resume';
 import { TITLE_FONT_SIZE_RANGE, BODY_FONT_SIZE_RANGE } from '@/config/layout';
 import { Button } from '@/components/ui/button';
@@ -173,6 +174,8 @@ export function AppearanceDrawer() {
 
   const handleTemplateSelect = useCallback((key: string) => {
     setTemplate(key);
+    // 模板随简历保存：写入当前简历数据（标记未保存，随保存持久化）
+    useResumeStore.getState().update({ 'x-op-template': key });
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setTemplateDialogOpen(false), 350);
   }, [setTemplate]);

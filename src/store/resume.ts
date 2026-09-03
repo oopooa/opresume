@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import i18n from '@/i18n';
 import type { JsonResume } from '@/types/json-resume';
 import { loadResume, saveResume } from '@/services/resume';
+import { useUIStore } from '@/store/ui';
 
 function createEmptyResume(): JsonResume {
   return { basics: { name: '' } };
@@ -40,6 +41,12 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     try {
       const config = await loadResume();
       set({ config, loading: false, dirty: false });
+      // 模板随简历存储：加载（启动/切换简历）时把该简历的模板同步到 UI
+      const template = config['x-op-template'];
+      const ui = useUIStore.getState();
+      if (typeof template === 'string' && template && ui.template !== template) {
+        ui.setTemplate(template);
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : i18n.t('common.loadError');
       set({ loading: false, error: msg });

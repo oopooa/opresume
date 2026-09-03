@@ -8,6 +8,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { AIProviderSection } from '@/components/Settings';
+import { MyResumesSection } from '@/components/Resumes';
 
 export function MenuPanel() {
   const { t } = useTranslation();
@@ -37,8 +38,13 @@ export function MenuPanel() {
           </SheetDescription>
 
           <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="space-y-6 p-4">
-              <AIProviderSection />
+            <div className="divide-y divide-border">
+              <div className="px-4 py-3">
+                <MyResumesSection />
+              </div>
+              <div className="px-4 py-3">
+                <AIProviderSection />
+              </div>
             </div>
           </div>
         </SheetContent>

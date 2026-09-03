@@ -31,6 +31,27 @@
   "menu": {
     "description": "导航菜单"
   },
+  "resumeManager": {
+    "title": "我的简历",
+    "create": "新建简历",
+    "edit": "编辑",
+    "switchTo": "使用此简历",
+    "rename": "重命名",
+    "renamePlaceholder": "输入简历名称",
+    "duplicate": "复制",
+    "copySuffix": "{{name}} 副本",
+    "delete": "删除",
+    "deleteTitle": "删除简历",
+    "deleteDesc": "确定要删除「{{name}}」吗？此操作不可撤销。",
+    "deleteConfirm": "确认删除",
+    "defaultName": "我的简历",
+    "untitled": "未命名简历",
+    "switchSuccess": "已切换到「{{name}}」",
+    "createSuccess": "新简历已创建",
+    "duplicateSuccess": "副本已创建",
+    "deleteSuccess": "简历已删除",
+    "operationFailed": "操作失败，请重试"
+  },
   "toolbar": {
     "template": "模板",
     "templateDesc": "选择适合您的简历模板",

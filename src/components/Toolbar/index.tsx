@@ -50,6 +50,7 @@ export function Toolbar() {
   const { t } = useTranslation();
   const privacyMode = useUIStore((s) => s.privacyMode);
   const togglePrivacy = useUIStore((s) => s.togglePrivacy);
+  const setTemplate = useUIStore((s) => s.setTemplate);
   const config = useResumeStore((s) => s.config);
   const update = useResumeStore((s) => s.update);
   const reset = useResumeStore((s) => s.reset);
@@ -108,6 +109,9 @@ export function Toolbar() {
     try {
       const extended = await importResume(pendingFile);
       update(extended);
+      // 导入数据若带有模板设置，同步到 UI
+      const template = extended['x-op-template'];
+      if (typeof template === 'string' && template) setTemplate(template);
       await save();
       toast.success(t('toolbar.importSuccess'));
     } catch (error) {

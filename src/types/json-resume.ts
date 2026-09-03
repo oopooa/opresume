@@ -165,6 +165,7 @@ export interface JsonResume extends JsonResumeBase {
   'x-op-moduleLayout'?: Record<string, ModuleLayout>;
   'x-op-moduleHidden'?: Record<string, boolean>;
   'x-op-titleNameMap'?: Record<string, string>;
+  'x-op-template'?: string;
   'x-op-theme'?: ThemeConfig;
   'x-op-layout'?: LayoutConfig;
   'x-op-locales'?: Record<string, Partial<JsonResume>>;
