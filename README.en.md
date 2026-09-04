@@ -107,7 +107,7 @@ npm run preview
 - [x] AI rewrite
 - [ ] Multiple AI provider support
 - [ ] AI resume scoring & analysis
-- [ ] Multiple resume management
+- [x] Multiple resume management
 - [ ] Smart fit-to-page
 - [ ] More templates
 
