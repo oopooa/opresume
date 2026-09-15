@@ -154,6 +154,8 @@ src/
 
 ## ⭐ Star History
 
+如果优派简历对你有帮助，欢迎点个 ⭐ Star，你的支持是我们持续更新的动力~
+
 <div align="center">
 
 <a href="https://www.star-history.com/?repos=oopooa%2Fopresume&type=date&legend=top-left">

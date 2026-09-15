@@ -137,6 +137,8 @@ src/
 
 ## ⭐ Star History
 
+If you find this project helpful, please give it a ⭐ star! Your support motivates us to keep improving.
+
 <div align="center">
 
 <a href="https://www.star-history.com/?repos=oopooa%2Fopresume&type=date&legend=top-left">
