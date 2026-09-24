@@ -150,8 +150,6 @@ src/
   <img src="docs/images/wechat_group_qr.webp" alt="微信群二维码" width="300" />
 </div>
 
-也可以在 [GitHub Discussions](https://github.com/oopooa/opresume/discussions) 参与讨论。
-
 ---
 
 ## ⭐ Star History
