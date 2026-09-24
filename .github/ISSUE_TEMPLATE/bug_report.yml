@@ -1,97 +1,97 @@
-name: Bug 报告 (Bug Report)
-description: 提交一个 Bug 报告
+name: Bug Report
+description: Something not working right? Tell us about it!
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        感谢您提交 Bug 报告！请尽量填写以下信息，以便我们更快定位和修复问题。
+        Thanks for taking the time to report a bug! 🙏 The more details you share, the faster we can track it down — fill in whatever you can below.
 
   - type: textarea
     id: description
     attributes:
-      label: Bug 描述 (实际行为)
-      description: 简要描述你遇到的问题，即实际发生了什么错误？
-      placeholder: 清晰地描述这个 Bug 是什么。例如：导入 JSON 后页面白屏。
+      label: What happened?
+      description: Tell us briefly what went wrong — what actually happened?
+      placeholder: A clear description of the bug. e.g. The page goes blank after importing a JSON file.
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: 期望行为
-      description: 描述你期望发生的正常行为是什么。
-      placeholder: 期望能够成功渲染出简历内容，而不是报错。
+      label: What did you expect?
+      description: What should have happened instead?
+      placeholder: e.g. The resume should render correctly instead of throwing an error.
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: 复现步骤
-      description: 描述如何稳定复现这个问题。
+      label: Steps to reproduce
+      description: How can we reliably reproduce this issue?
       placeholder: |
-        1. 进入 '...'
-        2. 点击 '...'
-        3. 滚动到 '...'
-        4. 看到错误
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See the error
     validations:
       required: true
 
   - type: input
     id: version
     attributes:
-      label: OpResume 版本号
-      description: 您可以在页面 logo 旁边或者 package.json 中找到它。
-      placeholder: "例如: v1.0.0"
+      label: OpResume version
+      description: You can find it next to the logo on the page, or in package.json.
+      placeholder: "e.g. v1.0.0"
     validations:
       required: true
 
   - type: dropdown
     id: deploy
     attributes:
-      label: 使用方式
-      description: 你是如何运行 OpResume 的？
+      label: How are you running OpResume?
+      description: Which setup are you using?
       options:
-        - 在线网页体验 (opresume.pages.dev)
-        - 本地开发 (npm run dev)
-        - 本地静态部署 (npm run build)
+        - Online (opresume.pages.dev)
+        - Local dev server (npm run dev)
+        - Self-hosted static build (npm run build)
     validations:
       required: true
 
   - type: input
     id: browser
     attributes:
-      label: 浏览器
-      description: 你使用的浏览器及版本。
-      placeholder: "例如: Chrome 130, Safari 18, Firefox 135"
+      label: Browser
+      description: Which browser and version are you using?
+      placeholder: "e.g. Chrome 130, Safari 18, Firefox 135"
     validations:
       required: true
 
   - type: input
     id: os
     attributes:
-      label: 操作系统
-      description: 你使用的操作系统。
-      placeholder: "例如: macOS 15, Windows 11, Ubuntu 24.04"
+      label: OS
+      description: What's your operating system?
+      placeholder: "e.g. macOS 15, Windows 11, Ubuntu 24.04"
     validations:
       required: false
 
   - type: textarea
     id: screenshots
     attributes:
-      label: 截图或录屏 (推荐)
-      description: 如果有的话，请添加截图来帮助说明问题。
-      placeholder: 直接拖拽或粘贴截图到这里。
+      label: Screenshots or recordings (recommended)
+      description: Got a screenshot or a quick recording? It helps a ton — just drop it in.
+      placeholder: Drag & drop or paste your screenshots right here.
     validations:
       required: false
 
   - type: textarea
     id: context
     attributes:
-      label: 补充信息
-      description: 添加任何其他有助于定位问题的信息。
-      placeholder: 例如控制台 (Console) 的报错信息、涉及的特定 JSON 数据片段等。
+      label: Anything else?
+      description: Any other info that might help us out.
+      placeholder: e.g. console errors, the specific JSON snippet involved, etc.
     validations:
       required: false
