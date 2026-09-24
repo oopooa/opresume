@@ -1,160 +1,143 @@
 <div align="center">
 
-# 优派简历
+# OpResume
 
-**免登录、高颜值的在线简历生成器** — 数据仅本地存储，无泄漏风险，随时导出
+**No login, beautifully crafted online resume builder** — Data stored locally only, zero leak risk, export anytime
 
 [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<a href="https://linux.do" alt="LINUX DO"><img src="https://shorturl.at/ggSqS" /></a>
 
-简体中文 | [English](./README.en.md)
+[简体中文](./README.zh-CN.md) | English
 
-**[👉 即刻开始](https://opresume.pages.dev)**
+**[👉 Get Started](https://opresume.pages.dev)**
 
 <img src="docs/images/mockup.webp" alt="OpResume Preview" width="800" />
 
 </div>
 
-## ✨ 核心特性
+## ✨ Key Features
 
-### 🎨 专业的排版引擎
-- **多维度外观控制**：页边距、模块间距、行间距自由滑动调节，告别 Word 排版地狱。
-- **多套经典模板**：内置 4+ 套经过严格筛选的行业经典模板（涵盖大厂 ATS 风格、外企单栏风等），一键无缝切换。
-- **主题配色定制**：8+ 款精心调配的预设主题色，适应不同行业的视觉调性。
-- **自动智能分页**：内容超出 A4 纸范围时自动视觉分页，并带有现代化的悬浮页码指示器。
+### 🎨 Professional Typesetting Engine
+- **Multi-dimensional layout control**: Freely adjust margins, section spacing, and line height with sliders — no more Word formatting nightmares.
+- **Multiple classic templates**: 4+ carefully curated industry-standard templates (including ATS-friendly styles, single-column corporate layouts, etc.) with seamless one-click switching.
+- **Theme color customization**: 8+ meticulously crafted preset color themes to match the visual tone of different industries.
+- **Smart auto-pagination**: Automatic visual page breaks when content exceeds A4 boundaries, with a modern floating page indicator.
 
-### 🤖 AI 智能助手
-- **AI 导入简历**：上传 PDF 简历，AI 自动识别并填充信息，快速迁移现有简历。
-- **AI 智能改写**：一键优化简历内容，提升专业性与表达力。
+### 🤖 AI-Powered Assistant
+- **AI Resume Import**: Upload a PDF resume and let AI automatically extract and populate information for quick migration.
+- **AI Content Rewrite**: Optimize your resume content with one click to enhance professionalism and clarity.
 
-### 🚀 极致的用户体验
-- **所见即所得**：侧边栏抽屉式表单编辑，主画布实时渲染预览。
-- **隐私保护模式**：一键开启“打码模式”，自动隐藏姓名、手机、邮箱等敏感信息，方便简历在社区分享与 Review。
-- **丝滑拖拽排序**：基于 `@dnd-kit`，工作经历、项目描述等模块内的条目均可自由拖拽调整顺序。
-- **富文本与智能推算**：基于 Tiptap 的富文本编辑器支持加粗、列表与链接；系统还会根据生日和入职时间自动推算年龄与工作年限。
+### 🚀 Ultimate User Experience
+- **WYSIWYG editing**: Sidebar drawer-style form editing with real-time preview on the main canvas.
+- **Privacy protection mode**: One-click redaction mode that automatically masks name, phone, email, and other sensitive info — perfect for sharing resumes in communities for review.
+- **Smooth drag & drop sorting**: Powered by `@dnd-kit`, entries within work experience, project descriptions, and other sections can be freely reordered via drag and drop.
+- **Rich text & smart fields**: Tiptap-based rich text editor supports bold, lists, and links; the system can auto-calculate age and tenure from your dates — all optional, with one-click hiding to fit regional conventions.
 
-### 🔒 数据安全与导出
-- **免登录零上传**：所有数据仅存储在浏览器 `localStorage` 中，无后端、无数据库，隐私完全由你掌控。
-- **JSON 导入/导出**：一键导出完整简历配置为 JSON 文件，方便备份、迁移或跨设备使用；支持导入已有配置快速恢复。
-- **原生 PDF 导出**：基于浏览器原生 `window.print()` 实现高保真导出，文字可选中复制，**ATS 友好**。
+### 🔒 Data Security & Export
+- **No login, zero upload**: All data is stored exclusively in the browser's `localStorage` — no backend, no database, your privacy is fully in your hands.
+- **JSON import/export**: One-click export of your complete resume configuration as a JSON file for backup, migration, or cross-device use; import existing configurations to restore instantly.
+- **Native PDF export**: Uses the browser's native `window.print()` for high-fidelity export, with selectable text and **ATS-friendly** output.
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 环境要求
+### Prerequisites
 
 - [Node.js](https://nodejs.org) >= 18
 - npm >= 8
 
-### 安装与运行
+### Installation & Running
 
 ```bash
-# 1. 克隆项目
+# 1. Clone the repository
 git clone https://github.com/oopooa/opresume.git
 cd opresume
 
-# 2. 安装依赖
+# 2. Install dependencies
 npm install
 
-# 3. 启动开发服务器
+# 3. Start the dev server
 npm run dev
 ```
 
-浏览器访问 `http://localhost:5173`，即可开始编辑属于你的完美简历。
+Open `http://localhost:5173` in your browser and start crafting your perfect resume.
 
-### 构建与部署
+### Build & Deploy
 
 ```bash
-# 构建生产版本
+# Build for production
 npm run build
 
-# 预览构建结果
+# Preview the build
 npm run preview
 ```
 
 ---
 
-## 🏗️ 技术栈
+## 🏗️ Tech Stack
 
-| 类别 | 选型 |
-|------|------|
-| **基础框架** | React 18 + Vite 5 + TS 5 |
-| **UI 与样式** | Tailwind CSS 3 + shadcn/ui |
-| **状态管理** | Zustand 5 |
-| **富文本编辑** | Tiptap 3 |
-| **拖拽交互** | @dnd-kit |
-| **动画** | Framer Motion 11 |
-| **国际化** | react-i18next |
-
----
-
-## 🗺️ 产品规划
-
-- [x] 简历 JSON 数据导出导入
-- [x] 富文本编辑器
-- [x] 模块拖拽排序
-- [x] 双栏布局与模块分区拖拽
-- [x] 模板切换功能
-- [x] 自定义排版功能
-- [x] 智能分页（单栏模板）
-- [x] 隐私打码模式
-- [x] 国际化多语言支持
-- [x] AI 导入简历
-- [x] AI 改写
-- [ ] 多 AI 提供商支持
-- [ ] AI 简历评分与诊断
-- [x] 多份简历管理
-- [ ] 智能一页
-- [ ] 更多模板
+| Category | Choice |
+|----------|--------|
+| **Core Framework** | React 18 + Vite 5 + TS 5 |
+| **UI & Styling** | Tailwind CSS 3 + shadcn/ui |
+| **State Management** | Zustand 5 |
+| **Rich Text Editing** | Tiptap 3 |
+| **Drag & Drop** | @dnd-kit |
+| **Animation** | Framer Motion 11 |
+| **Internationalization** | react-i18next |
 
 ---
 
-## 📁 项目结构
+## 🗺️ Roadmap
+
+- [x] Resume JSON import/export
+- [x] Rich text editor
+- [x] Drag & drop module sorting
+- [x] Two-column layout with section drag & drop
+- [x] Template switching
+- [x] Custom typography settings
+- [x] Smart pagination (single-column templates)
+- [x] Privacy redaction mode
+- [x] Internationalization (i18n) support
+- [x] AI-powered resume import
+- [x] AI rewrite
+- [ ] Multiple AI provider support
+- [ ] AI resume scoring & analysis
+- [x] Multiple resume management
+- [ ] Smart fit-to-page
+- [ ] More templates
+
+---
+
+## 📁 Project Structure
 
 ```text
 src/
 ├── components/
-│   ├── Resume/            # 简历渲染核心引擎
-│   │   ├── templates/     # 🌟 多套模板（基于自动注册机制）
-│   │   └── modules/       # 基础模块渲染（经历、教育、技能等）
-│   ├── Editor/            # 侧边栏抽屉与动态表单
-│   ├── Toolbar/           # 顶部工具栏（外观控制/导出）
-│   ├── Settings/          # 设置面板（AI 提供商配置）
-│   └── ui/                # shadcn/ui 基础组件库
-├── config/                # 配置文件
-│   └── ai-providers/      # AI 提供商配置
-├── store/                 # Zustand 状态切片
-├── services/              # 业务逻辑（AI 生成/润色、PDF 解析、数据存储等）
-├── hooks/                 # 自定义 Hooks（分页计算、打码逻辑等）
-└── types/                 # 全局 TypeScript 接口定义
+│   ├── Resume/            # Core resume rendering engine
+│   │   ├── templates/     # 🌟 Multiple templates (auto-registered)
+│   │   └── modules/       # Base module renderers (experience, education, skills, etc.)
+│   ├── Editor/            # Sidebar drawer & dynamic forms
+│   ├── Toolbar/           # Top toolbar (appearance controls / export)
+│   ├── Settings/          # Settings panel (AI provider configuration, etc.)
+│   └── ui/                # shadcn/ui base component library
+├── config/                # Configuration files
+│   └── ai-providers/      # AI provider configurations
+├── store/                 # Zustand state slices
+├── services/              # Business logic (AI generation/polish, PDF parsing, data storage, etc.)
+├── hooks/                 # Custom hooks (pagination, redaction logic, etc.)
+└── types/                 # Global TypeScript type definitions
 ```
-
----
-
-## 💬 交流社区
-
-欢迎加入优派简历微信交流群，与社区小伙伴一起交流探讨。
-
-* **获取支持**：快速咨询使用问题，获取排版细节的调整建议。
-* **分享灵感**：展示你的专属简历配置，交流各种场景下的排版技巧。
-* **反馈需求**：随时提出你的改进建议或期待的新功能，一起把优派简历打磨得更好用。
-
-**加入方式**：
-
-<div align="left">
-  <img src="docs/images/wechat_group_qr.webp" alt="微信群二维码" width="300" />
-</div>
 
 ---
 
 ## ⭐ Star History
 
-如果优派简历对你有帮助，欢迎点个 ⭐ Star，你的支持是我们持续更新的动力~
+If you find this project helpful, please give it a star ⭐! Your support motivates us to keep improving.
 
 <div align="center">
 
@@ -165,11 +148,10 @@ src/
    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=oopooa/opresume&type=date&legend=top-left&sealed_token=qYSqFWlVjh9k8hylq4Fywx_c-yoIMsE7Tvf6vXvATjmJ6nvl3jivRMupEba9LrRm8O7CbKr9Ehk7vmjuKZd-TLPOEQr0o5cWuA3ZYzF_ZiAGp8-hdgmtC-Qn52_RDK6k5SEzADxFnRhr7YbBZcSkJEyLAFcX-xwOJipjFykfgYVmB_rhikJUYD9W0eMe" />
  </picture>
 </a>
-
 </div>
 
 ---
 
-## 📄 许可证
+## 📄 License
 
-本项目基于 [MIT 协议](LICENSE) 开源。欢迎 Fork、提交 PR 或提 Issue 探讨！
+This project is open-sourced under the [MIT License](LICENSE). Feel free to fork, submit PRs, or open issues!
