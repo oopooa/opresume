@@ -86,8 +86,7 @@ const PROGRESS_STEPS: readonly {
 
 export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
   const { t } = useTranslation();
-  const update = useResumeStore((s) => s.update);
-  const reset = useResumeStore((s) => s.reset);
+  const replace = useResumeStore((s) => s.replace);
   const save = useResumeStore((s) => s.save);
   const activeProviderId = useAIStore((s) => s.activeProviderId);
   const getProviderConfig = useAIStore((s) => s.getProviderConfig);
@@ -247,9 +246,7 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
   const handleConfirm = useCallback(async () => {
     if (state.step !== 'preview') return;
     try {
-      // 先清空旧数据，再写入新数据，确保完全替换而非合并
-      reset();
-      update(state.data);
+      replace(state.data);
       await save();
       toast.success(t('importPDF.success'));
       trackClarityEvent('resume_pdf_imported');
@@ -257,7 +254,7 @@ export function ImportPDFDialog({ open, onOpenChange }: ImportPDFDialogProps) {
     } catch {
       toast.error(t('common.saveError'));
     }
-  }, [state, reset, update, save, performClose, t]);
+  }, [state, replace, save, performClose, t]);
 
   /** 重试：回到上传阶段 */
   const handleRetry = useCallback(() => {
