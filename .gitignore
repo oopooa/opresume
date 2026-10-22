@@ -1,6 +1,9 @@
 # Claude 工作文件
 .claude
 
+# Qoder 工作目录
+.qoder
+
 # 依赖包和构建输出
 node_modules
 dist
